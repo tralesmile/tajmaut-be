@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using tajmautAPI.Interfaces;
+using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
 using tajmautAPI.Repositories;
 
@@ -12,24 +13,33 @@ namespace tajmautAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserRepository _users;
-        public UsersController(IUserRepository users)
+
+        private readonly IUserService _userService;
+
+        public UsersController(IUserService userService)
         {
-            _users=users;
+            _userService=userService;
         }
         [HttpGet]
         public async Task<ActionResult> GetAllUsers()
         {
-            var users = await _users.GetAllUsersAsync();
+            //get result from service
+            var users = await _userService.GetAllUsersAsync();
+
+            //check if there is any
             if(users != null)
                 return Ok(users);
             else
                 return BadRequest();
+
         }
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUserById(int id)
         {
-            var user = await _users.GetUserByIdAsync(id);
+            //get result from service
+            var user = await _userService.GetUserByIdAsync(id);
+
+            //check if there is any
             if(user != null)            
                 return Ok(user);
             else
@@ -39,33 +49,50 @@ namespace tajmautAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(UserPOST user)
         {
-            return Ok(await _users.CreateUserAsync(user));
+            //get result from service
+            var userCheck = await _userService.CreateUserAsync(user);
+
+            //check if there is any
+            if (userCheck != null)
+            {
+                return Ok(userCheck);
+            }
+            else
+            {
+                return BadRequest("Exists");
+            }
         }
         [HttpPut]
         public async Task<ActionResult> Put(UserPOST request, int id)
         {
-            var user = await _users.UpdateUserAsync(request, id);
+            //get result from service
+            var user = await _userService.UpdateUserAsync(request, id);
+
+            //check if updated
             if(user != null)
             {
-                return Ok();
+                return Ok("UPDATED");
             }
             else
             {
-                return NotFound();
+                return NotFound("NOT FOUND");
             }
 
         }
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
-            var user = await _users.DeleteUserAsync(id);
+            //get result from service
+            var user = await _userService.DeleteUserAsync(id);
+
+            //check if there is any
             if(user != null )
             {
-                return Ok();
+                return Ok("DELETED");
             }
             else
             {
-                return NotFound();
+                return NotFound("NOT FOUND");
             }
         }
 

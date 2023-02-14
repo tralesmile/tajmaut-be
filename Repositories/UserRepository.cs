@@ -16,7 +16,9 @@ namespace tajmautAPI.Repositories
         }
         public async Task<User> CreateUserAsync(UserPOST user)
         {
-            var newUser = new User
+
+            //create new user
+            return new User
             {
                 Email = user.Email,
                 Password = user.Password,
@@ -26,49 +28,35 @@ namespace tajmautAPI.Repositories
                 Phone = user.Phone,
                 City = user.City,
             };
-            _ctx.Users.Add(newUser);
-            await _ctx.SaveChangesAsync();
-            return newUser;
+
         }
 
         public async Task<User> DeleteUserAsync(int id)
         {
+            //find user
             var user = await _ctx.Users.FindAsync(id);
-            if (user != null)
-            {
-                _ctx.Users.Remove(user);
-                await _ctx.SaveChangesAsync();
-                return user;
-            }
-            return null;
+            
+            return user;
         }
 
         public async Task<List<User>> GetAllUsersAsync()
         {
+            //get all users to list
             return await _ctx.Users.ToListAsync();
         }
 
         public async Task<User> GetUserByIdAsync(int id)
         {
+            //search for user
             return await _ctx.Users.FirstOrDefaultAsync(user => user.UserId == id);
         }
 
         public async Task<User> UpdateUserAsync(UserPOST request, int id)
         {
+            //search for user
             var user = await _ctx.Users.FindAsync(id);
-            if (user != null)
-            {
-                user.Email = request.Email;
-                user.Password = request.Password;
-                user.FirstName = request.FirstName;
-                user.LastName = request.LastName;
-                user.Address = request.Address;
-                user.Phone = request.Phone;
-                user.City = request.City;
-                await _ctx.SaveChangesAsync();
-                return user;
-            }
-            return null;
+
+            return user;
         }
     }
 }

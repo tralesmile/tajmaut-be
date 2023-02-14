@@ -4,6 +4,8 @@ global using System.Collections.Generic;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Models;
 using tajmautAPI.Repositories;
+using tajmautAPI.Interfaces_Service;
+using tajmautAPI.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 var app = builder.Build();
 
