@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using Microsoft.Identity.Client;
+using System.Runtime.InteropServices;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -8,25 +9,21 @@ namespace tajmautAPI.Service
     public class UserService : IUserService
     {
         private readonly IUserRepository _repo;
-        private readonly tajmautDataContext _ctx;
-        public UserService(IUserRepository repo, tajmautDataContext ctx)
+        public UserService(IUserRepository repo)
         {
             _repo = repo;
-            _ctx = ctx;
         }
         public async Task<User> CreateUserAsync(UserPOST user)
         {
             //get user from repo
             var getUser = await _repo.CreateUserAsync(user);
-            //check for duplicates
-            var checkUser = await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == getUser.Email.ToLower());
+            //check for duplicates with a method that saves data
+            var checkUser = await _repo.CheckDuplicatesEmail(getUser.Email);
 
             //checking for duplicates
             if (checkUser == null)
             {
-                _ctx.Users.Add(getUser);
-                await _ctx.SaveChangesAsync();
-                return getUser;
+                return await _repo.AddEntity(getUser);
             }
             else
             {
@@ -44,9 +41,7 @@ namespace tajmautAPI.Service
             //check if there is any
             if (user != null)
             {
-                _ctx.Users.Remove(user);
-                await _ctx.SaveChangesAsync();
-                return user;
+                return await _repo.DeleteEntity(user);
             }
             else
             {
@@ -72,20 +67,17 @@ namespace tajmautAPI.Service
             //check if there is any
             if (getUser != null)
             {
-                getUser.Email = request.Email;
-                getUser.Password = request.Password;
-                getUser.FirstName = request.FirstName;
-                getUser.LastName = request.LastName;
-                getUser.Address = request.Address;
-                getUser.Phone = request.Phone;
-                getUser.City = request.City;
-                await _ctx.SaveChangesAsync();
-                return getUser;
+                //check for duplicates with a method that saves data
+                var checkUser = await _repo.CheckDuplicatesEmail(request.Email);
+
+                //checking for duplicates
+                if (checkUser == null)
+                {
+                    //update the user 
+                    return await _repo.SaveChanges(getUser, request);
+                }
             }
-            else
-            {
                 return null;
-            }
         }
     }
 }

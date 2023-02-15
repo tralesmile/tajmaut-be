@@ -75,7 +75,7 @@ namespace tajmautAPI.Controllers
             }
             else
             {
-                return NotFound("NOT FOUND");
+                return BadRequest();
             }
 
         }
