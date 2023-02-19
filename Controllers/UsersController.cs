@@ -59,10 +59,10 @@ namespace tajmautAPI.Controllers
             }
             else
             {
-                return BadRequest("Exists");
+                return BadRequest("User exists");
             }
         }
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult> Put(UserPOST request, int id)
         {
             //get result from service
@@ -79,7 +79,7 @@ namespace tajmautAPI.Controllers
             }
 
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             //get result from service

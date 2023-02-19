@@ -6,8 +6,9 @@ namespace tajmautAPI.Interfaces_Service
     {
         Task<List<User>> GetAllUsersAsync();
         Task<User> GetUserByIdAsync(int id);
-        Task<User> CreateUserAsync(UserPOST user);
+        Task<User> CreateUserAsync(UserPOST request);
         Task<User> UpdateUserAsync(UserPOST request, int id);
         Task<User> DeleteUserAsync(int id);
+
     }
 }
