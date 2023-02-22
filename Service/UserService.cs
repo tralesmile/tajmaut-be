@@ -1,5 +1,6 @@
 ﻿using Microsoft.Identity.Client;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -67,8 +68,8 @@ namespace tajmautAPI.Service
             //check if there is any
             if (getUser != null)
             {
-                //check for duplicates with a method that saves data
-                var checkUser = await _repo.CheckDuplicatesEmail(request.Email);
+                //check for duplicates
+                var checkUser = await _repo.CheckDuplicatesEmailWithId(request.Email,getUser.UserId);
 
                 //checking for duplicates
                 if (checkUser == null)
@@ -79,5 +80,6 @@ namespace tajmautAPI.Service
             }
                 return null;
         }
+
     }
 }

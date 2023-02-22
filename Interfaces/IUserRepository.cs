@@ -12,7 +12,7 @@ namespace tajmautAPI.Interfaces
         Task<User> GetUserByIdAsync(int id);
 
         //create user
-        Task<User> CreateUserAsync(UserPOST user);
+        Task<User> CreateUserAsync(UserPOST request);
 
         //update user
         Task<User> UpdateUserAsync(UserPOST request, int id);
@@ -26,6 +26,9 @@ namespace tajmautAPI.Interfaces
         //check if there is user with same email
         Task<User> CheckDuplicatesEmail(string email);
 
+        //check duplicates for updating
+        Task<User> CheckDuplicatesEmailWithId(string email,int id);
+
         //delete user from database
         Task<User> DeleteEntity (User user);
 
@@ -33,6 +36,7 @@ namespace tajmautAPI.Interfaces
         //request are the new changes
         Task<User> SaveChanges(User user, UserPOST request);
 
+        void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
 
 
     }

@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using tajmautAPI.Data;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Models;
@@ -22,20 +23,30 @@ namespace tajmautAPI.Repositories
             return await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         }
 
-        //create user
-        public async Task<User> CreateUserAsync(UserPOST user)
+        //check duplicates without the current user
+        public async Task<User> CheckDuplicatesEmailWithId(string email,int id)
         {
+            return await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.UserId != id);
+        }
+
+        //create user
+        public async Task<User> CreateUserAsync(UserPOST request)
+        {
+
+            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             //create new user
             return new User
             {
-                Email = user.Email,
-                Password = user.Password,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Address = user.Address,
-                Phone = user.Phone,
-                City = user.City,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Phone = request.Phone,
+                City = request.City,
+                Address = request.Address,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                //Password = request.Password,
             };
 
         }
@@ -97,15 +108,30 @@ namespace tajmautAPI.Repositories
         //save changes
         public async Task<User> SaveChanges(User user, UserPOST request)
         {
+            //hash the password
+            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            //create new user
             user.Email = request.Email;
-            user.Password = request.Password;
-            user.FirstName = request.FirstName;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            user.FirstName= request.FirstName;
             user.LastName = request.LastName;
             user.Address = request.Address;
             user.Phone = request.Phone;
             user.City = request.City;
             await _ctx.SaveChangesAsync();
             return user;
+        }
+
+        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            //password hash
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
         }
     }
 }
