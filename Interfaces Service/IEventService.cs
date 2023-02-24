@@ -1,4 +1,5 @@
-﻿using tajmautAPI.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using tajmautAPI.Models;
 
 namespace tajmautAPI.Interfaces_Service
 {
@@ -14,6 +15,6 @@ namespace tajmautAPI.Interfaces_Service
         Task<List<EventGET>> FilterEventsByCity(string city);
         Task<List<EventGET>> FilterEventsByDate(DateTime startDate, DateTime endDate);
         Task<List<EventGET>> GetEventsWithOtherData(List<Event> events);
-
+        Task<bool> CancelEvent(int id);
     }
 }

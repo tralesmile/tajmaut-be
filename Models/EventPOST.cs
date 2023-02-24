@@ -7,6 +7,6 @@
         public string Name { get; set; } = null;
         public string Description { get; set; } = null;
         public string EventImage { get; set; } = null;
-        public DateTime DateTime { get; set; } = 2000-01-01;
+        public DateTime DateTime { get; set; }
     }
 }
