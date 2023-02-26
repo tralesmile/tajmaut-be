@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using tajmautAPI.Interfaces_Service;
@@ -8,6 +9,7 @@ namespace tajmautAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EventsController : ControllerBase
     {
 
@@ -18,7 +20,7 @@ namespace tajmautAPI.Controllers
         }
 
         //get all db events
-        [HttpGet("GetAllEvents")]
+        [HttpGet("GetAllEvents"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> GetAllEvents()
         {
             var result = await _eventService.GetAllEvents();
@@ -31,7 +33,7 @@ namespace tajmautAPI.Controllers
         }
 
         //get event by id
-        [HttpGet("GetEventByID")]
+        [HttpGet("GetEventByID"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> GetEventById(int eventId)
         {
             var result = await _eventService.GetEventById(eventId);
@@ -44,7 +46,7 @@ namespace tajmautAPI.Controllers
         }
 
         //all events in a specific restaurant
-        [HttpGet("GetRestaurantEventsByRestaurantID")]
+        [HttpGet("GetRestaurantEventsByRestaurantID"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> GetAllEventsByRestaurant(int restaurantId)
         {
             var result = await _eventService.GetAllEventsByRestaurant(restaurantId);
@@ -57,7 +59,7 @@ namespace tajmautAPI.Controllers
         }
 
         //create event
-        [HttpPost("CreateEvent")]
+        [HttpPost("CreateEvent"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> CreateEvent(EventPOST request)
         {
             var checkResult = await _eventService.CreateEvent(request);
@@ -70,7 +72,7 @@ namespace tajmautAPI.Controllers
         }
 
         //update event
-        [HttpPut("UpdateEvent")]
+        [HttpPut("UpdateEvent"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> UpdateEvent(EventPOST request,int eventId)
         {
             var result = await _eventService.UpdateEvent(request, eventId);
@@ -83,7 +85,7 @@ namespace tajmautAPI.Controllers
         }
 
         //delete event
-        [HttpDelete("DeleteEventByID")]
+        [HttpDelete("DeleteEventByID"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> DeleteEvent(int eventId)
         {
             var result = await _eventService.DeleteEvent(eventId);
@@ -96,7 +98,7 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by category
-        [HttpGet("FilterEventsByCategory")]
+        [HttpGet("FilterEventsByCategory"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> FilterEventsByCategory(int categoryId)
         {
             var result = await _eventService.FilterEventsByCategory(categoryId);
@@ -109,7 +111,7 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by date
-        [HttpGet("FilterEventsByDate")]
+        [HttpGet("FilterEventsByDate"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> FilterEventsByDate(DateTime startDate,DateTime endDate)
         {
             var result = await _eventService.FilterEventsByDate(startDate, endDate);
@@ -122,7 +124,7 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by city
-        [HttpGet("FilterEventsByCity")]
+        [HttpGet("FilterEventsByCity"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> FilterEventsByCity(string city)
         {
             var result = await _eventService.FilterEventsByCity(city);
@@ -135,14 +137,14 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by restaurant rating
-        [HttpGet("FilterEventsByRestaurantRating")]
+        [HttpGet("FilterEventsByRestaurantRating"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> FilterEventsByRating()
         {
             return Ok();
         }
 
         //change event status ( cancel event or activate event )
-        [HttpPut("EventStatusChange")]
+        [HttpPut("EventStatusChange"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> CancelEvent(int eventId)
         {
             var result = await _eventService.CancelEvent(eventId);

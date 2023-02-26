@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
@@ -11,6 +12,7 @@ namespace tajmautAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
 
@@ -20,7 +22,8 @@ namespace tajmautAPI.Controllers
         {
             _userService=userService;
         }
-        [HttpGet]
+
+        [HttpGet, Authorize(Roles ="Admin")]
         public async Task<ActionResult> GetAllUsers()
         {
             //get result from service
@@ -33,7 +36,7 @@ namespace tajmautAPI.Controllers
                 return BadRequest();
 
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize]
         public async Task<ActionResult> GetUserById(int id)
         {
             //get result from service
@@ -46,7 +49,9 @@ namespace tajmautAPI.Controllers
                 return NotFound();
 
         }
-        [HttpPost]
+
+        //Allow everyone to acces this endpoint
+        [HttpPost, AllowAnonymous]
         public async Task<ActionResult> Create(UserPOST user)
         {
             //get result from service
@@ -62,7 +67,7 @@ namespace tajmautAPI.Controllers
                 return BadRequest("User exists");
             }
         }
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<ActionResult> Put(UserPOST request, int id)
         {
             //get result from service
@@ -79,7 +84,7 @@ namespace tajmautAPI.Controllers
             }
 
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"),Authorize]
         public async Task<ActionResult> Delete(int id)
         {
             //get result from service
