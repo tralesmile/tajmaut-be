@@ -12,8 +12,8 @@ using tajmautAPI.Data;
 namespace tajmautAPI.Migrations
 {
     [DbContext(typeof(tajmautDataContext))]
-    [Migration("20230219135037_updatePasswords")]
-    partial class updatePasswords
+    [Migration("20230224013326_isCanceledProp")]
+    partial class isCanceledProp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,6 +105,9 @@ namespace tajmautAPI.Migrations
 
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isCanceled")
+                        .HasColumnType("bit");
 
                     b.HasKey("EventId");
 

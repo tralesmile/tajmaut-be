@@ -103,6 +103,9 @@ namespace tajmautAPI.Migrations
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isCanceled")
+                        .HasColumnType("bit");
+
                     b.HasKey("EventId");
 
                     b.HasIndex("CategoryEventId");

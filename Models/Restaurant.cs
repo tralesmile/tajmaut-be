@@ -1,4 +1,6 @@
-﻿namespace tajmautAPI.Models
+﻿using System.Text.Json.Serialization;
+
+namespace tajmautAPI.Models
 {
     public class Restaurant
     {
