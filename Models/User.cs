@@ -13,6 +13,9 @@
         public string City { get; set; } = null!;
         public string Address { get; set; } = null!;
 
+        //default user registration
+        public string Role { get; set; } = "User";
+
         //1-N Relationships
         public List<Comment> Comments { get; set; }
         public List<OnlineReservation> OnlineReservations { get; set; }
