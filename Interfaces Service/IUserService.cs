@@ -9,6 +9,7 @@ namespace tajmautAPI.Interfaces_Service
         Task<User> CreateUserAsync(UserPOST request);
         Task<User> UpdateUserAsync(UserPOST request, int id);
         Task<User> DeleteUserAsync(int id);
+        bool ValidateEmailPhoneRegex(string phoneRegex,string emailRegex);
 
     }
 }

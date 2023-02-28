@@ -23,16 +23,8 @@ namespace tajmautAPI.Service
             //check for duplicates with a method that saves data
             var checkUser = await _repo.CheckDuplicatesEmail(getUser.Email);
 
-            //validate email with regex
-            string pattern = @"^[a-zA-Z0-9._%+-]+@(hotmail|yahoo|gmail|outlook)\.(com|net|org|mk)$";
-            bool isValidEmail = Regex.IsMatch(getUser.Email, pattern);
-
-            //validate phone with regex
-            string phonePattern = @"^(07[0-9]|080)[-\s]?\d{3}[-\s]?\d{3}$";
-            bool isValidPhone = Regex.IsMatch(getUser.Phone, phonePattern);
-
-            //check email and phone
-            if (isValidPhone && isValidEmail)
+            //check email and phone Regex
+            if (ValidateEmailPhoneRegex(getUser.Phone,getUser.Email))
             {
                 //checking for duplicates
                 if (checkUser == null)
@@ -81,16 +73,8 @@ namespace tajmautAPI.Service
                 //check for duplicates
                 var checkUser = await _repo.CheckDuplicatesEmailWithId(request.Email,getUser.UserId);
 
-                //validate email with regex
-                string pattern = @"^[a-zA-Z0-9._%+-]+@(hotmail|yahoo|gmail|outlook)\.(com|net|org|mk)$";
-                bool isValidEmail = Regex.IsMatch(getUser.Email, pattern);
-
-                //validate phone with regex
-                string phonePattern = @"^(07[0-9]|080)\d{7}$";
-                bool isValidPhone = Regex.IsMatch(getUser.Phone, pattern);
-
                 //check email and phone
-                if (isValidPhone && isValidEmail)
+                if (ValidateEmailPhoneRegex(request.Phone, request.Email))
                 {
                     //checking for duplicates
                     if (checkUser == null)
@@ -103,5 +87,23 @@ namespace tajmautAPI.Service
                 return null;
         }
 
+        public bool ValidateEmailPhoneRegex(string phoneRegex, string emailRegex)
+        {
+
+            //validate email with regex
+            string pattern = @"^[a-zA-Z0-9._%+-]+@(hotmail|yahoo|gmail|outlook)\.(com|net|org|mk)$";
+            bool isValidEmail = Regex.IsMatch(emailRegex, pattern);
+
+            //validate phone with regex
+            string phonePattern = @"^(07[0-9]|080)[-\s]?\d{3}[-\s]?\d{3}$";
+            bool isValidPhone = Regex.IsMatch(phoneRegex, phonePattern);
+
+            if (isValidPhone && isValidEmail)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
