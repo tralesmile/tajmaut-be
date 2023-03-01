@@ -64,7 +64,7 @@ namespace tajmautAPI.Controllers
             }
             else
             {
-                return BadRequest("User exists");
+                return BadRequest();
             }
         }
         [HttpPut("{id}"), Authorize]

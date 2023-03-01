@@ -1,6 +1,7 @@
 ﻿using Microsoft.Identity.Client;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -18,19 +19,20 @@ namespace tajmautAPI.Service
         {
             //get user from repo
             var getUser = await _repo.CreateUserAsync(user);
+
             //check for duplicates with a method that saves data
             var checkUser = await _repo.CheckDuplicatesEmail(getUser.Email);
 
-            //checking for duplicates
-            if (checkUser == null)
+            //check email and phone Regex
+            if (ValidateEmailRegex(getUser.Email))
             {
-                return await _repo.AddEntity(getUser);
+                //checking for duplicates
+                if (checkUser == null)
+                {
+                    return await _repo.AddEntity(getUser);
+                }
             }
-            else
-            {
-                return null;
-            }
-
+            return null;
 
         }
 
@@ -71,15 +73,33 @@ namespace tajmautAPI.Service
                 //check for duplicates
                 var checkUser = await _repo.CheckDuplicatesEmailWithId(request.Email,getUser.UserId);
 
-                //checking for duplicates
-                if (checkUser == null)
+                //check email and phone
+                if (ValidateEmailRegex(request.Email))
                 {
-                    //update the user 
-                    return await _repo.SaveChanges(getUser, request);
+                    //checking for duplicates
+                    if (checkUser == null)
+                    {
+                        //update the user 
+                        return await _repo.SaveChanges(getUser, request);
+                    }
                 }
             }
                 return null;
         }
 
+        public bool ValidateEmailRegex(string emailRegex)
+        {
+
+            //validate email with regex
+            string pattern = @"^[a-zA-Z0-9._%+-]+@(hotmail|yahoo|gmail|outlook)\.(com|net|org|mk)$";
+            bool isValidEmail = Regex.IsMatch(emailRegex, pattern);
+
+            if (isValidEmail)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
