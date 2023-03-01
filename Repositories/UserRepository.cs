@@ -41,9 +41,6 @@ namespace tajmautAPI.Repositories
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                Phone = request.Phone,
-                City = request.City,
-                Address = request.Address,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 //Password = request.Password,
@@ -117,9 +114,6 @@ namespace tajmautAPI.Repositories
             user.PasswordSalt = passwordSalt;
             user.FirstName= request.FirstName;
             user.LastName = request.LastName;
-            user.Address = request.Address;
-            user.Phone = request.Phone;
-            user.City = request.City;
             await _ctx.SaveChangesAsync();
             return user;
         }
