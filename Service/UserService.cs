@@ -24,7 +24,7 @@ namespace tajmautAPI.Service
             var checkUser = await _repo.CheckDuplicatesEmail(getUser.Email);
 
             //check email and phone Regex
-            if (ValidateEmailPhoneRegex(getUser.Phone,getUser.Email))
+            if (ValidateEmailRegex(getUser.Email))
             {
                 //checking for duplicates
                 if (checkUser == null)
@@ -74,7 +74,7 @@ namespace tajmautAPI.Service
                 var checkUser = await _repo.CheckDuplicatesEmailWithId(request.Email,getUser.UserId);
 
                 //check email and phone
-                if (ValidateEmailPhoneRegex(request.Phone, request.Email))
+                if (ValidateEmailRegex(request.Email))
                 {
                     //checking for duplicates
                     if (checkUser == null)
@@ -87,18 +87,14 @@ namespace tajmautAPI.Service
                 return null;
         }
 
-        public bool ValidateEmailPhoneRegex(string phoneRegex, string emailRegex)
+        public bool ValidateEmailRegex(string emailRegex)
         {
 
             //validate email with regex
             string pattern = @"^[a-zA-Z0-9._%+-]+@(hotmail|yahoo|gmail|outlook)\.(com|net|org|mk)$";
             bool isValidEmail = Regex.IsMatch(emailRegex, pattern);
 
-            //validate phone with regex
-            string phonePattern = @"^(07[0-9]|080)[-\s]?\d{3}[-\s]?\d{3}$";
-            bool isValidPhone = Regex.IsMatch(phoneRegex, phonePattern);
-
-            if (isValidPhone && isValidEmail)
+            if (isValidEmail)
             {
                 return true;
             }
