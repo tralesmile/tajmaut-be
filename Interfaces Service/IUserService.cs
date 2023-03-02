@@ -11,6 +11,7 @@ namespace tajmautAPI.Interfaces_Service
         Task<UserRESPONSE> CreateUserAsync(UserPostREQUEST request);
         Task<UserRESPONSE> UpdateUserAsync(UserPostREQUEST request, int id);
         Task<UserRESPONSE> DeleteUserAsync(int id);
+        int GetMe();
 
     }
 }

@@ -67,7 +67,8 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IHelperValidationClassRepository, HelperValidationClassRepository>();
 builder.Services.AddScoped<IHelperValidationClassService, HelperValidationClassService>();
 
-
+//httpcontextaccessor
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();

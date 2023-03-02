@@ -47,7 +47,7 @@ namespace tajmautAPI.Service
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim("ID",user.UserId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier,user.UserId),
                 new Claim("First Name",user.FirstName),
                 new Claim("Last Name",user.LastName),
                 new Claim(ClaimTypes.Email, user.Email),

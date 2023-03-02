@@ -2,6 +2,7 @@
 using Microsoft.Identity.Client;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using tajmautAPI.Interfaces;
@@ -17,10 +18,12 @@ namespace tajmautAPI.Service
         private readonly IUserRepository _repo;
         private readonly IHelperValidationClassService _helperClass;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IUserRepository repo,IHelperValidationClassService helperClass,IMapper mapper)
+        public UserService(IUserRepository repo,IHelperValidationClassService helperClass,IMapper mapper,IHttpContextAccessor httpContextAccessor)
         {
             _mapper= mapper;
+            _httpContextAccessor = httpContextAccessor;
             _repo = repo;
             _helperClass = helperClass;
         }
@@ -67,6 +70,16 @@ namespace tajmautAPI.Service
         {
             var result = await _repo.GetAllUsersAsync();
             return _mapper.Map<List<UserRESPONSE>>(result);
+        }
+
+        public int GetMe()
+        {
+            var result = string.Empty;
+            if(_httpContextAccessor.HttpContext!=null)
+            {
+                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            return int.Parse(result);
         }
 
         public async Task<UserRESPONSE> GetUserByIdAsync(int id)
