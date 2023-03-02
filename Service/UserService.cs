@@ -18,12 +18,10 @@ namespace tajmautAPI.Service
         private readonly IUserRepository _repo;
         private readonly IHelperValidationClassService _helperClass;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IUserRepository repo,IHelperValidationClassService helperClass,IMapper mapper,IHttpContextAccessor httpContextAccessor)
+        public UserService(IUserRepository repo,IHelperValidationClassService helperClass,IMapper mapper)
         {
             _mapper= mapper;
-            _httpContextAccessor = httpContextAccessor;
             _repo = repo;
             _helperClass = helperClass;
         }
@@ -74,12 +72,7 @@ namespace tajmautAPI.Service
 
         public int GetMe()
         {
-            var result = string.Empty;
-            if(_httpContextAccessor.HttpContext!=null)
-            {
-                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            }
-            return int.Parse(result);
+            return _helperClass.GetMe();
         }
 
         public async Task<UserRESPONSE> GetUserByIdAsync(int id)

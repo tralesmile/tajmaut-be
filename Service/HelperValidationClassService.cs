@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Security.Claims;
+using System.Text.RegularExpressions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -9,9 +10,12 @@ namespace tajmautAPI.Service
     {
 
         private readonly IHelperValidationClassRepository _helperRepo;
-        public HelperValidationClassService(IHelperValidationClassRepository helperRepo)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public HelperValidationClassService(IHelperValidationClassRepository helperRepo, IHttpContextAccessor httpContextAccessor)
         {
-            _helperRepo= helperRepo;
+            _helperRepo = helperRepo;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<User> CheckDuplicatesEmail(string email)
@@ -47,6 +51,36 @@ namespace tajmautAPI.Service
             }
 
             return false;
+        }
+
+        public int GetMe()
+        {
+            var result = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            return int.Parse(result);
+        }
+
+        public string GetCurrentUserEmail()
+        {
+            var result = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            }
+            return result;
+        }
+
+        public string GetCurrentUserRole()
+        {
+            var result = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            }
+            return result;
         }
     }
 }

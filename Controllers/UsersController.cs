@@ -105,8 +105,8 @@ namespace tajmautAPI.Controllers
             }
         }
 
-        [HttpGet("GetCurrentUserEmail"), Authorize]
-        public ActionResult<string> GetCurrentUserEmail()
+        [HttpGet("GetCurrentUserID"), Authorize]
+        public ActionResult<int> GetCurrentUserEmail()
         {
             var userEmail = _userService.GetMe();
             return Ok(userEmail);
