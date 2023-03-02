@@ -5,26 +5,30 @@ using System.Text.RegularExpressions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Service
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _repo;
-        public UserService(IUserRepository repo)
+        private readonly IHelperValidationClassService _helperClass;
+
+        public UserService(IUserRepository repo,IHelperValidationClassService helperClass)
         {
             _repo = repo;
+            _helperClass = helperClass;
         }
-        public async Task<User> CreateUserAsync(UserPOST user)
+        public async Task<User> CreateUserAsync(UserPostREQUEST user)
         {
             //get user from repo
             var getUser = await _repo.CreateUserAsync(user);
 
             //check for duplicates with a method that saves data
-            var checkUser = await _repo.CheckDuplicatesEmail(getUser.Email);
+            var checkUser = await _helperClass.CheckDuplicatesEmail(getUser.Email);
 
             //check email and phone Regex
-            if (ValidateEmailRegex(getUser.Email))
+            if (_helperClass.ValidateEmailRegex(getUser.Email))
             {
                 //checking for duplicates
                 if (checkUser == null)
@@ -62,7 +66,7 @@ namespace tajmautAPI.Service
             return await _repo.GetUserByIdAsync(id);
         }
 
-        public async Task<User> UpdateUserAsync(UserPOST request, int id)
+        public async Task<User> UpdateUserAsync(UserPostREQUEST request, int id)
         {
             //get result from repo
             var getUser = await _repo.UpdateUserAsync(request,id);
@@ -71,10 +75,10 @@ namespace tajmautAPI.Service
             if (getUser != null)
             {
                 //check for duplicates
-                var checkUser = await _repo.CheckDuplicatesEmailWithId(request.Email,getUser.UserId);
+                var checkUser = await _helperClass.CheckDuplicatesEmailWithId(request.Email,getUser.UserId);
 
                 //check email and phone
-                if (ValidateEmailRegex(request.Email))
+                if (_helperClass.ValidateEmailRegex(request.Email))
                 {
                     //checking for duplicates
                     if (checkUser == null)
@@ -87,19 +91,5 @@ namespace tajmautAPI.Service
                 return null;
         }
 
-        public bool ValidateEmailRegex(string emailRegex)
-        {
-
-            //validate email with regex
-            string pattern = @"^[a-zA-Z0-9._%+-]+@(hotmail|yahoo|gmail|outlook)\.(com|net|org|mk)$";
-            bool isValidEmail = Regex.IsMatch(emailRegex, pattern);
-
-            if (isValidEmail)
-            {
-                return true;
-            }
-
-            return false;
-        }
     }
 }

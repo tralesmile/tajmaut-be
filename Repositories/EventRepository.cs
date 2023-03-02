@@ -2,6 +2,7 @@
 using tajmautAPI.Data;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Repositories
 {
@@ -48,7 +49,7 @@ namespace tajmautAPI.Repositories
         }
 
         //create event
-        public async Task<Event> CreateEvent(EventPOST request)
+        public async Task<Event> CreateEvent(EventPostREQUEST request)
         {
             //check if category and restaurant exist
             if(await CheckIdRestaurant(request.RestaurantId) && await CheckIdCategory(request.CategoryEventId))
@@ -115,7 +116,7 @@ namespace tajmautAPI.Repositories
         }
 
         //save updates in DB
-        public async Task<Event> SaveUpdatesEventDB(Event getEvent,EventPOST request)
+        public async Task<Event> SaveUpdatesEventDB(Event getEvent,EventPostREQUEST request)
         {
             getEvent.RestaurantId= request.RestaurantId;
             getEvent.CategoryEventId= request.CategoryEventId;
@@ -157,7 +158,7 @@ namespace tajmautAPI.Repositories
         }
 
         //update event by id
-        public async Task<Event> UpdateEvent(EventPOST request, int eventId)
+        public async Task<Event> UpdateEvent(EventPostREQUEST request, int eventId)
         {
             return await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
         }

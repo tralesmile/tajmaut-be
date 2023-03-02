@@ -2,6 +2,8 @@
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
+using tajmautAPI.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Service
 {
@@ -24,7 +26,7 @@ namespace tajmautAPI.Service
         }
 
         //create event
-        public async Task<Event> CreateEvent(EventPOST request)
+        public async Task<Event> CreateEvent(EventPostREQUEST request)
         {
             var getResult = await _repo.CreateEvent(request);
 
@@ -48,7 +50,7 @@ namespace tajmautAPI.Service
         }
 
         //filter events by category
-        public async Task<List<EventGET>> FilterEventsByCategory(int categoryId)
+        public async Task<List<EventGetRESPONSE>> FilterEventsByCategory(int categoryId)
         {
             //check if category exists
             if(await _repo.CheckIdCategory(categoryId))
@@ -65,7 +67,7 @@ namespace tajmautAPI.Service
         }
 
         //filter events by city
-        public async Task<List<EventGET>> FilterEventsByCity(string city)
+        public async Task<List<EventGetRESPONSE>> FilterEventsByCity(string city)
         {
             //filter
             var result = await _repo.FilterEventsInCity(city);
@@ -74,7 +76,7 @@ namespace tajmautAPI.Service
         }
 
         //filter events by date from-to
-        public async Task<List<EventGET>> FilterEventsByDate(DateTime startDate, DateTime endDate)
+        public async Task<List<EventGetRESPONSE>> FilterEventsByDate(DateTime startDate, DateTime endDate)
         {
             var allEvents = await _repo.GetAllEvents();
 
@@ -85,14 +87,14 @@ namespace tajmautAPI.Service
         }
 
         //get all events to list
-        public async Task<List<EventGET>> GetAllEvents()
+        public async Task<List<EventGetRESPONSE>> GetAllEvents()
         {
             var getResult = await _repo.GetAllEvents();
             return await GetEventsWithOtherData(getResult);
         }
 
         //get events from specific restaurant
-        public async Task<List<EventGET>> GetAllEventsByRestaurant(int restaurantId)
+        public async Task<List<EventGetRESPONSE>> GetAllEventsByRestaurant(int restaurantId)
         {
             var allEvents = await _repo.GetAllEvents();
 
@@ -103,7 +105,7 @@ namespace tajmautAPI.Service
         }
 
         //get event by id
-        public async Task<List<EventGET>> GetEventById(int eventId)
+        public async Task<List<EventGetRESPONSE>> GetEventById(int eventId)
         {
             var result = await _repo.GetEventById(eventId);
 
@@ -112,14 +114,14 @@ namespace tajmautAPI.Service
         }
 
         //get other data for the events in sorted list
-        public async Task<List<EventGET>> GetEventsWithOtherData(List<Event> events)
+        public async Task<List<EventGetRESPONSE>> GetEventsWithOtherData(List<Event> events)
         {
             if (events != null)
             {
                 //date
                 var now = DateTime.Now;
 
-                var eventsGet = new List<EventGET>();
+                var eventsGet = new List<EventGetRESPONSE>();
 
                 //check status and add events
                 foreach (var ev in events)
@@ -141,7 +143,7 @@ namespace tajmautAPI.Service
                     }
 
                     //add event
-                    eventsGet.Add(new EventGET
+                    eventsGet.Add(new EventGetRESPONSE
                     {
                         EventId = ev.EventId,
                         CategoryEventId = ev.CategoryEventId,
@@ -167,7 +169,7 @@ namespace tajmautAPI.Service
         }
 
         //update event
-        public async Task<Event> UpdateEvent(EventPOST request, int eventId)
+        public async Task<Event> UpdateEvent(EventPostREQUEST request, int eventId)
         {
             var resultEvent = await _repo.UpdateEvent(request, eventId);
 

@@ -1,4 +1,5 @@
 ﻿using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Interfaces
 {
@@ -12,10 +13,10 @@ namespace tajmautAPI.Interfaces
         Task<User> GetUserByIdAsync(int id);
 
         //create user
-        Task<User> CreateUserAsync(UserPOST request);
+        Task<User> CreateUserAsync(UserPostREQUEST request);
 
         //update user
-        Task<User> UpdateUserAsync(UserPOST request, int id);
+        Task<User> UpdateUserAsync(UserPostREQUEST request, int id);
 
         //delete user
         Task<User> DeleteUserAsync(int id);
@@ -23,18 +24,12 @@ namespace tajmautAPI.Interfaces
         //add new user to database
         Task<User> AddEntity(User user);
 
-        //check if there is user with same email
-        Task<User> CheckDuplicatesEmail(string email);
-
-        //check duplicates for updating
-        Task<User> CheckDuplicatesEmailWithId(string email,int id);
-
         //delete user from database
         Task<User> DeleteEntity (User user);
 
         //save the changes
         //request are the new changes
-        Task<User> SaveChanges(User user, UserPOST request);
+        Task<User> SaveChanges(User user, UserPostREQUEST request);
 
         void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
 

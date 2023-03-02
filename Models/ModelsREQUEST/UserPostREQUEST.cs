@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace tajmautAPI.Models
+namespace tajmautAPI.Models.ModelsREQUEST
 {
-    public class UserPOST
+    public class UserPostREQUEST
     {
         [Required]
         public string Email { get; set; } = null!;
@@ -12,6 +12,5 @@ namespace tajmautAPI.Models
         public string FirstName { get; set; } = null!;
         [Required]
         public string LastName { get; set; } = null!;
-
     }
 }

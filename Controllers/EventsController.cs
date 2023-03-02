@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Controllers
 {
@@ -60,7 +61,7 @@ namespace tajmautAPI.Controllers
 
         //create event
         [HttpPost("CreateEvent"), Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult> CreateEvent(EventPOST request)
+        public async Task<ActionResult> CreateEvent(EventPostREQUEST request)
         {
             var checkResult = await _eventService.CreateEvent(request);
 
@@ -73,7 +74,7 @@ namespace tajmautAPI.Controllers
 
         //update event
         [HttpPut("UpdateEvent"), Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult> UpdateEvent(EventPOST request,int eventId)
+        public async Task<ActionResult> UpdateEvent(EventPostREQUEST request,int eventId)
         {
             var result = await _eventService.UpdateEvent(request, eventId);
 

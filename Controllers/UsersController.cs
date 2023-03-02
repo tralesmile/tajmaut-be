@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Repositories;
 
 namespace tajmautAPI.Controllers
@@ -36,6 +37,7 @@ namespace tajmautAPI.Controllers
                 return BadRequest();
 
         }
+
         [HttpGet("{id}"), Authorize]
         public async Task<ActionResult> GetUserById(int id)
         {
@@ -52,7 +54,7 @@ namespace tajmautAPI.Controllers
 
         //Allow everyone to acces this endpoint
         [HttpPost, AllowAnonymous]
-        public async Task<ActionResult> Create(UserPOST user)
+        public async Task<ActionResult> Create(UserPostREQUEST user)
         {
             //get result from service
             var userCheck = await _userService.CreateUserAsync(user);
@@ -67,8 +69,9 @@ namespace tajmautAPI.Controllers
                 return BadRequest();
             }
         }
+
         [HttpPut("{id}"), Authorize]
-        public async Task<ActionResult> Put(UserPOST request, int id)
+        public async Task<ActionResult> Put(UserPostREQUEST request, int id)
         {
             //get result from service
             var user = await _userService.UpdateUserAsync(request, id);
@@ -84,6 +87,7 @@ namespace tajmautAPI.Controllers
             }
 
         }
+
         [HttpDelete("{id}"),Authorize]
         public async Task<ActionResult> Delete(int id)
         {

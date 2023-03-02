@@ -38,6 +38,7 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
+
 //middleware
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -61,6 +62,8 @@ builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IHelperValidationClassRepository, HelperValidationClassRepository>();
+builder.Services.AddScoped<IHelperValidationClassService, HelperValidationClassService>();
 
 
 

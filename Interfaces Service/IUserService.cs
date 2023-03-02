@@ -1,4 +1,5 @@
 ﻿using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Interfaces_Service
 {
@@ -6,10 +7,9 @@ namespace tajmautAPI.Interfaces_Service
     {
         Task<List<User>> GetAllUsersAsync();
         Task<User> GetUserByIdAsync(int id);
-        Task<User> CreateUserAsync(UserPOST request);
-        Task<User> UpdateUserAsync(UserPOST request, int id);
+        Task<User> CreateUserAsync(UserPostREQUEST request);
+        Task<User> UpdateUserAsync(UserPostREQUEST request, int id);
         Task<User> DeleteUserAsync(int id);
-        bool ValidateEmailRegex(string emailRegex);
 
     }
 }
