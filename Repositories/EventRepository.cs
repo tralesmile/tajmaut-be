@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using tajmautAPI.Data;
 using tajmautAPI.Interfaces;
+using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
 
@@ -9,9 +10,12 @@ namespace tajmautAPI.Repositories
     public class EventRepository : IEventRepository
     {
         private readonly tajmautDataContext _ctx;
-        public EventRepository(tajmautDataContext ctx)
+        private readonly IHelperValidationClassService _helper;
+
+        public EventRepository(tajmautDataContext ctx,IHelperValidationClassService helper)
         {
             _ctx = ctx;
+            _helper = helper;
         }
 
         //add event to DB
@@ -24,35 +28,11 @@ namespace tajmautAPI.Repositories
             return eventDB;
         }
 
-        //check if category exists in DB
-        public async Task<bool> CheckIdCategory(int id)
-        {
-            var check = await _ctx.CategoryEvents.FirstOrDefaultAsync(cat => cat.CategoryEventId == id);
-
-            if (check != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        //check if restaurant exists in DB
-        public async Task<bool> CheckIdRestaurant(int id)
-        {
-            var check = await _ctx.Restaurants.FirstOrDefaultAsync(res => res.RestaurantId== id);
-
-            if(check != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
         //create event
         public async Task<Event> CreateEvent(EventPostREQUEST request)
         {
             //check if category and restaurant exist
-            if(await CheckIdRestaurant(request.RestaurantId) && await CheckIdCategory(request.CategoryEventId))
+            if(await _helper.CheckIdRestaurant(request.RestaurantId) && await _helper.CheckIdCategory(request.CategoryEventId))
             {
                 return new Event
                 {

@@ -24,6 +24,16 @@ namespace tajmautAPI.Service
             return await _helperRepo.CheckDuplicatesEmailWithId(email, id);
         }
 
+        public async Task<bool> CheckIdCategory(int id)
+        {
+            return await (_helperRepo.CheckIdCategory(id));
+        }
+
+        public async Task<bool> CheckIdRestaurant(int id)
+        {
+            return await _helperRepo.CheckIdRestaurant(id);
+        }
+
         public bool ValidateEmailRegex(string emailRegex)
         {
 

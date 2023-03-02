@@ -12,11 +12,13 @@ namespace tajmautAPI.Service
     {
         private readonly IEventRepository _repo;
         private readonly IMapper _mapper;
+        private readonly IHelperValidationClassService _helper;
 
-        public EventService(IEventRepository repo,IMapper mapper)
+        public EventService(IEventRepository repo,IMapper mapper, IHelperValidationClassService helper)
         {
             _repo = repo;
             _mapper = mapper;
+            _helper = helper;
         }
 
         //change status of event (canceled or active)
@@ -59,7 +61,7 @@ namespace tajmautAPI.Service
         public async Task<List<EventGetRESPONSE>> FilterEventsByCategory(int categoryId)
         {
             //check if category exists
-            if(await _repo.CheckIdCategory(categoryId))
+            if(await _helper.CheckIdCategory(categoryId))
             {
                 var resultEvents = await _repo.GetAllEvents();
 
@@ -182,7 +184,7 @@ namespace tajmautAPI.Service
             if (resultEvent != null)
             {
                 //check if restaurant and category exist
-                if (await _repo.CheckIdCategory(request.CategoryEventId) && await _repo.CheckIdRestaurant(request.RestaurantId))
+                if (await _helper.CheckIdCategory(request.CategoryEventId) && await _helper.CheckIdRestaurant(request.RestaurantId))
                 {
                     var result = await _repo.SaveUpdatesEventDB(resultEvent, request);
                     return _mapper.Map<EventRESPONSE>(result);

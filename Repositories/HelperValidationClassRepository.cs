@@ -24,5 +24,29 @@ namespace tajmautAPI.Repositories
         {
             return await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.UserId != id);
         }
+
+        //check if category exists in DB
+        public async Task<bool> CheckIdCategory(int id)
+        {
+            var check = await _ctx.CategoryEvents.FirstOrDefaultAsync(cat => cat.CategoryEventId == id);
+
+            if (check != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //check if restaurant exists in DB
+        public async Task<bool> CheckIdRestaurant(int id)
+        {
+            var check = await _ctx.Restaurants.FirstOrDefaultAsync(res => res.RestaurantId == id);
+
+            if (check != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

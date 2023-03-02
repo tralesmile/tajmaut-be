@@ -12,5 +12,7 @@ namespace tajmautAPI.Interfaces_Service
 
         //check duplicates for updating
         Task<User> CheckDuplicatesEmailWithId(string email, int id);
+        Task<bool> CheckIdRestaurant(int id);
+        Task<bool> CheckIdCategory(int id);
     }
 }

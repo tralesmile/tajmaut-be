@@ -6,8 +6,6 @@ namespace tajmautAPI.Interfaces
     public interface IEventRepository
     {
         Task<Event> CreateEvent(EventPostREQUEST request);
-        Task<bool> CheckIdRestaurant(int id);
-        Task<bool> CheckIdCategory(int id);
         Task<Event> AddToDB(Event eventDB);
         Task<List<Event>> GetAllEvents();
         Task<List<Event>> GetEventById(int eventId);
