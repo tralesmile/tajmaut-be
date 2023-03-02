@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -10,9 +11,12 @@ namespace tajmautAPI.Service
     public class EventService : IEventService
     {
         private readonly IEventRepository _repo;
-        public EventService(IEventRepository repo)
+        private readonly IMapper _mapper;
+
+        public EventService(IEventRepository repo,IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         //change status of event (canceled or active)
@@ -26,25 +30,27 @@ namespace tajmautAPI.Service
         }
 
         //create event
-        public async Task<Event> CreateEvent(EventPostREQUEST request)
+        public async Task<EventRESPONSE> CreateEvent(EventPostREQUEST request)
         {
             var getResult = await _repo.CreateEvent(request);
 
             if(getResult != null)
             {
-                return await _repo.AddToDB(getResult);
+                var result = await _repo.AddToDB(getResult);
+                return _mapper.Map<EventRESPONSE>(result);
             }
             return null;
         }
 
         //delete event by id
-        public async Task<Event> DeleteEvent(int eventId)
+        public async Task<EventRESPONSE> DeleteEvent(int eventId)
         {
             var result = await _repo.DeleteEvent(eventId);
 
             if(result != null)
             {
-                return await _repo.DeleteEventDB(result);
+                var returnResult = await _repo.DeleteEventDB(result);
+                return _mapper.Map<EventRESPONSE>(returnResult);
             }
             return null;
         }
@@ -156,7 +162,7 @@ namespace tajmautAPI.Service
                         RestaurantName = restaurant.Name,
                         RestaurantPhone = restaurant.Phone,
                         StatusEvent = statusEvent,
-                    }); ;
+                    });
 
                 }
 
@@ -169,7 +175,7 @@ namespace tajmautAPI.Service
         }
 
         //update event
-        public async Task<Event> UpdateEvent(EventPostREQUEST request, int eventId)
+        public async Task<EventRESPONSE> UpdateEvent(EventPostREQUEST request, int eventId)
         {
             var resultEvent = await _repo.UpdateEvent(request, eventId);
 
@@ -177,7 +183,10 @@ namespace tajmautAPI.Service
             {
                 //check if restaurant and category exist
                 if (await _repo.CheckIdCategory(request.CategoryEventId) && await _repo.CheckIdRestaurant(request.RestaurantId))
-                    return await _repo.SaveUpdatesEventDB(resultEvent, request);
+                {
+                    var result = await _repo.SaveUpdatesEventDB(resultEvent, request);
+                    return _mapper.Map<EventRESPONSE>(result);
+                }
             }
             return null;
         }

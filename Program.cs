@@ -38,6 +38,8 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
+//automapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 //middleware
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

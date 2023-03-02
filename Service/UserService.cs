@@ -1,4 +1,6 @@
-﻿using Microsoft.Identity.Client;
+﻿using AutoMapper;
+using Microsoft.Identity.Client;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
@@ -6,6 +8,7 @@ using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
+using tajmautAPI.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Service
 {
@@ -13,13 +16,15 @@ namespace tajmautAPI.Service
     {
         private readonly IUserRepository _repo;
         private readonly IHelperValidationClassService _helperClass;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository repo,IHelperValidationClassService helperClass)
+        public UserService(IUserRepository repo,IHelperValidationClassService helperClass,IMapper mapper)
         {
+            _mapper= mapper;
             _repo = repo;
             _helperClass = helperClass;
         }
-        public async Task<User> CreateUserAsync(UserPostREQUEST user)
+        public async Task<UserRESPONSE> CreateUserAsync(UserPostREQUEST user)
         {
             //get user from repo
             var getUser = await _repo.CreateUserAsync(user);
@@ -33,14 +38,15 @@ namespace tajmautAPI.Service
                 //checking for duplicates
                 if (checkUser == null)
                 {
-                    return await _repo.AddEntity(getUser);
+                    var result = await _repo.AddEntity(getUser);
+                    return _mapper.Map<UserRESPONSE>(result);
                 }
             }
             return null;
 
         }
 
-        public async Task<User> DeleteUserAsync(int id)
+        public async Task<UserRESPONSE> DeleteUserAsync(int id)
         {
             //get result from repo
             var user = await _repo.DeleteUserAsync(id);
@@ -48,7 +54,8 @@ namespace tajmautAPI.Service
             //check if there is any
             if (user != null)
             {
-                return await _repo.DeleteEntity(user);
+                var result = await _repo.DeleteEntity(user);
+                return _mapper.Map<UserRESPONSE>(result);
             }
             else
             {
@@ -56,17 +63,19 @@ namespace tajmautAPI.Service
             }
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<UserRESPONSE>> GetAllUsersAsync()
         {
-            return await _repo.GetAllUsersAsync();
+            var result = await _repo.GetAllUsersAsync();
+            return _mapper.Map<List<UserRESPONSE>>(result);
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<UserRESPONSE> GetUserByIdAsync(int id)
         {
-            return await _repo.GetUserByIdAsync(id);
+            var result = await _repo.GetUserByIdAsync(id);
+            return _mapper.Map<UserRESPONSE>(result);
         }
 
-        public async Task<User> UpdateUserAsync(UserPostREQUEST request, int id)
+        public async Task<UserRESPONSE> UpdateUserAsync(UserPostREQUEST request, int id)
         {
             //get result from repo
             var getUser = await _repo.UpdateUserAsync(request,id);
@@ -84,7 +93,8 @@ namespace tajmautAPI.Service
                     if (checkUser == null)
                     {
                         //update the user 
-                        return await _repo.SaveChanges(getUser, request);
+                        var result = await _repo.SaveChanges(getUser, request);
+                        return _mapper.Map<UserRESPONSE>(result);
                     }
                 }
             }

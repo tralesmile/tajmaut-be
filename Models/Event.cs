@@ -23,7 +23,9 @@ namespace tajmautAPI.Models
         //escape serialization
         [JsonIgnore]
         public virtual CategoryEvent CategoryEvent { get; set; } = null!;
+
         //1-N Relationships
+        [JsonIgnore]
         public List<OnlineReservation> OnlineReservations { get; set; }
 
 

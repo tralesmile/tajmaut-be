@@ -1,15 +1,16 @@
 ﻿using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
+using tajmautAPI.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Interfaces_Service
 {
     public interface IUserService
     {
-        Task<List<User>> GetAllUsersAsync();
-        Task<User> GetUserByIdAsync(int id);
-        Task<User> CreateUserAsync(UserPostREQUEST request);
-        Task<User> UpdateUserAsync(UserPostREQUEST request, int id);
-        Task<User> DeleteUserAsync(int id);
+        Task<List<UserRESPONSE>> GetAllUsersAsync();
+        Task<UserRESPONSE> GetUserByIdAsync(int id);
+        Task<UserRESPONSE> CreateUserAsync(UserPostREQUEST request);
+        Task<UserRESPONSE> UpdateUserAsync(UserPostREQUEST request, int id);
+        Task<UserRESPONSE> DeleteUserAsync(int id);
 
     }
 }
