@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using tajmautAPI.Data;
 using tajmautAPI.Interfaces;
+using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
 
@@ -12,9 +13,11 @@ namespace tajmautAPI.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly tajmautDataContext _ctx;
-        public UserRepository(tajmautDataContext ctx)
+        private readonly IHelperValidationClassService _helperClass;
+        public UserRepository(tajmautDataContext ctx,IHelperValidationClassService helperClass)
         {
             _ctx= ctx;
+            _helperClass= helperClass;
         }
 
         //create user
@@ -31,7 +34,8 @@ namespace tajmautAPI.Repositories
                 LastName = request.LastName,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                //Password = request.Password,
+                ModifiedAt= DateTime.Now,
+                CreatedAt= DateTime.Now,
             };
 
         }
@@ -95,13 +99,16 @@ namespace tajmautAPI.Repositories
         {
             //hash the password
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
+            var currentUserID = _helperClass.GetMe();
             //create new user
             user.Email = request.Email;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.FirstName= request.FirstName;
             user.LastName = request.LastName;
+            user.ModifiedAt = DateTime.Now;
+            user.ModifiedBy = currentUserID;
+
             await _ctx.SaveChangesAsync();
             return user;
         }

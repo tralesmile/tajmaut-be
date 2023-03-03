@@ -34,6 +34,7 @@ namespace tajmautAPI.Repositories
             //check if category and restaurant exist
             if(await _helper.CheckIdRestaurant(request.RestaurantId) && await _helper.CheckIdCategory(request.CategoryEventId))
             {
+                var currentUserID = _helper.GetMe();
                 return new Event
                 {
                     RestaurantId= request.RestaurantId,
@@ -42,6 +43,10 @@ namespace tajmautAPI.Repositories
                     Description= request.Description,
                     EventImage= request.EventImage,
                     DateTime= request.DateTime,
+                    CreatedAt= DateTime.Now,
+                    ModifiedAt= DateTime.Now,
+                    ModifiedBy= currentUserID,
+                    CreatedBy= currentUserID,
                 };
 
             }
@@ -98,12 +103,15 @@ namespace tajmautAPI.Repositories
         //save updates in DB
         public async Task<Event> SaveUpdatesEventDB(Event getEvent,EventPostREQUEST request)
         {
+            var currentUserID = _helper.GetMe();
             getEvent.RestaurantId= request.RestaurantId;
             getEvent.CategoryEventId= request.CategoryEventId;
             getEvent.Description= request.Description;
             getEvent.EventImage= request.EventImage;
             getEvent.DateTime= request.DateTime;
             getEvent.Name= request.Name;
+            getEvent.ModifiedBy = currentUserID;
+            getEvent.ModifiedAt = DateTime.Now;
 
             await _ctx.SaveChangesAsync();
 

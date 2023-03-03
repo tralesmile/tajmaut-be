@@ -1,4 +1,6 @@
-﻿namespace tajmautAPI.Models
+﻿using Microsoft.AspNetCore.SignalR;
+
+namespace tajmautAPI.Models
 {
     public class User
     {
@@ -12,6 +14,9 @@
 
         //default user registration
         public string Role { get; set; } = "User";
+        public DateTime ModifiedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int ModifiedBy { get; set; }
 
         //1-N Relationships
         public List<Comment> Comments { get; set; }

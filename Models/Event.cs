@@ -11,7 +11,11 @@ namespace tajmautAPI.Models
         public string Description { get; set; } = null!;
         public string EventImage { get; set; } = null!;
         public DateTime DateTime { get; set; }
-        
+        public DateTime ModifiedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int CreatedBy { get; set; }
+        public int ModifiedBy { get; set; }
+
         //updates if event is canceled
         public bool isCanceled { get; set; } = false;
 
