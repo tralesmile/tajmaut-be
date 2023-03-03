@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
@@ -24,117 +25,195 @@ namespace tajmautAPI.Controllers
         [HttpGet("GetAllEvents"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> GetAllEvents()
         {
-            var result = await _eventService.GetAllEvents();
-
-            if(result == null || result.Count()==0)
+            try
             {
-                return NotFound();
+                var result = await _eventService.GetAllEvents();
+                return Ok(result);
             }
-            return Ok(result);
+            catch(Exception ex)
+            {
+                if(ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //get event by id
         [HttpGet("GetEventByID"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> GetEventById(int eventId)
         {
-            var result = await _eventService.GetEventById(eventId);
 
-            if(result== null || result.Count()==0)
+            try
             {
-                return BadRequest();
+                var result = await _eventService.GetEventById(eventId);
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if(ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //all events in a specific restaurant
         [HttpGet("GetRestaurantEventsByRestaurantID"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> GetAllEventsByRestaurant(int restaurantId)
         {
-            var result = await _eventService.GetAllEventsByRestaurant(restaurantId);
 
-            if(result== null || result.Count()==0)
+            try
             {
-                return BadRequest();
+                var result = await _eventService.GetAllEventsByRestaurant(restaurantId);
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //create event
         [HttpPost("CreateEvent"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> CreateEvent(EventPostREQUEST request)
         {
-            var checkResult = await _eventService.CreateEvent(request);
 
-            if(checkResult != null)
+            try
             {
-                return Ok(checkResult);
+                var result = await _eventService.CreateEvent(request);
+                return Ok(result);
             }
-            return BadRequest("Errors Occured!");
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //update event
         [HttpPut("UpdateEvent"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> UpdateEvent(EventPostREQUEST request,int eventId)
         {
-            var result = await _eventService.UpdateEvent(request, eventId);
 
-            if(result!=null)
+            try
             {
+                var result = await _eventService.UpdateEvent(request,eventId);
                 return Ok(result);
             }
-            return BadRequest();
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //delete event
         [HttpDelete("DeleteEventByID"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> DeleteEvent(int eventId)
         {
-            var result = await _eventService.DeleteEvent(eventId);
 
-            if(result == null)
+            try
             {
-                return BadRequest();
+                var result = await _eventService.DeleteEvent(eventId);
+                return Ok("Event Deleted");
             }
-            return Ok("Event Deleted!");
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //filter events by category
         [HttpGet("FilterEventsByCategory"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> FilterEventsByCategory(int categoryId)
         {
-            var result = await _eventService.FilterEventsByCategory(categoryId);
 
-            if(result==null || result.Count()==0)
+            try
             {
-                return BadRequest();
+                var result = await _eventService.FilterEventsByCategory(categoryId);
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //filter events by date
         [HttpGet("FilterEventsByDate"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> FilterEventsByDate(DateTime startDate,DateTime endDate)
         {
-            var result = await _eventService.FilterEventsByDate(startDate, endDate);
 
-            if(result==null || result.Count()==0)
+            try
             {
-                return BadRequest();
+                var result = await _eventService.FilterEventsByDate(startDate,endDate);
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //filter events by city
         [HttpGet("FilterEventsByCity"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> FilterEventsByCity(string city)
         {
-            var result = await _eventService.FilterEventsByCity(city);
 
-            if(result==null || result.Count()==0)
+            try
             {
-                return BadRequest();
+                var result = await _eventService.FilterEventsByCity(city);
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
 
         //filter events by restaurant rating
@@ -148,13 +227,22 @@ namespace tajmautAPI.Controllers
         [HttpPut("EventStatusChange"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> CancelEvent(int eventId)
         {
-            var result = await _eventService.CancelEvent(eventId);
 
-            if (!result)
+            try
             {
-                return BadRequest("Bad Request!");
+                var result = await _eventService.CancelEvent(eventId);
+                return Ok(result);
             }
-            return Ok("Event status changed!");
+            catch (Exception ex)
+            {
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+            }
+
+            return StatusCode(500);
+
         }
     }
 }

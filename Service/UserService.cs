@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -42,13 +43,25 @@ namespace tajmautAPI.Service
                     var result = await _repo.AddEntity(getUser);
                     return _mapper.Map<UserRESPONSE>(result);
                 }
+                else
+                {
+                    throw new CustomBadRequestException($"User exists");
+                }
             }
-            return null;
+            else
+            {
+                throw new CustomBadRequestException($"Wrong email address!");
+            }
+            throw new CustomBadRequestException($"Invalid input");
 
         }
 
         public async Task<UserRESPONSE> DeleteUserAsync(int id)
         {
+
+            if (id < 0)
+                throw new CustomBadRequestException("Invalid ID");
+
             //get result from repo
             var user = await _repo.DeleteUserAsync(id);
 
@@ -60,14 +73,17 @@ namespace tajmautAPI.Service
             }
             else
             {
-                return null;
+                throw new CustomNotFoundException($"User with ID {id} not found.");
             }
+            throw new CustomBadRequestException("Invalid input");
         }
 
         public async Task<List<UserRESPONSE>> GetAllUsersAsync()
         {
             var result = await _repo.GetAllUsersAsync();
-            return _mapper.Map<List<UserRESPONSE>>(result);
+            if(result!= null)
+                return _mapper.Map<List<UserRESPONSE>>(result);
+            throw new CustomNotFoundException("No data found!");
         }
 
         public int GetMe()
@@ -77,8 +93,23 @@ namespace tajmautAPI.Service
 
         public async Task<UserRESPONSE> GetUserByIdAsync(int id)
         {
+            //if id is smaller than 0
+            if(id < 0)
+            {
+                throw new CustomBadRequestException($"Invalid ID");
+            }
+
+            //get result
             var result = await _repo.GetUserByIdAsync(id);
-            return _mapper.Map<UserRESPONSE>(result);
+
+            //if is true
+            if(result != null)
+            {
+                return _mapper.Map<UserRESPONSE>(result);
+            }
+
+            //if not found
+            throw new CustomNotFoundException($"User with ID {id} not found.");
         }
 
         public async Task<UserRESPONSE> UpdateUserAsync(UserPostREQUEST request, int id)
@@ -102,9 +133,21 @@ namespace tajmautAPI.Service
                         var result = await _repo.SaveChanges(getUser, request);
                         return _mapper.Map<UserRESPONSE>(result);
                     }
+                    else
+                    {
+                        throw new CustomBadRequestException($"User exists!");
+                    }
+                }
+                else
+                {
+                    throw new CustomBadRequestException($"Invalid email!");
                 }
             }
-                return null;
+            else
+            {
+                throw new CustomNotFoundException($"User with ID {id} not found.");
+            }
+                throw new CustomBadRequestException($"Invalid input");
         }
 
     }

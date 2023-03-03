@@ -31,9 +31,8 @@ namespace tajmautAPI.Repositories
         //create event
         public async Task<Event> CreateEvent(EventPostREQUEST request)
         {
-            //check if category and restaurant exist
-            if(await _helper.CheckIdRestaurant(request.RestaurantId) && await _helper.CheckIdCategory(request.CategoryEventId))
-            {
+
+            //get current user id
                 var currentUserID = _helper.GetMe();
                 return new Event
                 {
@@ -48,9 +47,6 @@ namespace tajmautAPI.Repositories
                     ModifiedBy= currentUserID,
                     CreatedBy= currentUserID,
                 };
-
-            }
-            return null;
         }
 
         //delete event
