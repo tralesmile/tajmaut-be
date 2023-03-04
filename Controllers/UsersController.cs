@@ -116,6 +116,9 @@ namespace tajmautAPI.Controllers
                     return BadRequest(ex.Message);
                 if(ex is CustomNotFoundException)
                     return NotFound(ex.Message);
+                if (ex is CustomUnauthorizedException)
+                    return Unauthorized(ex.Message);
+
             }
 
             return StatusCode(500);
@@ -142,6 +145,8 @@ namespace tajmautAPI.Controllers
                     return NotFound(ex.Message);
                 if(ex is CustomBadRequestException)
                     return BadRequest(ex.Message);
+                if (ex is CustomUnauthorizedException)
+                    return Unauthorized(ex.Message);
             }
 
             return StatusCode(500);

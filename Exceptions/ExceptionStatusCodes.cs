@@ -8,6 +8,7 @@ namespace tajmautAPI.Exceptions
         {
             { typeof(CustomNotFoundException), HttpStatusCode.NotFound },
             { typeof(CustomBadRequestException), HttpStatusCode.BadRequest },
+            { typeof(CustomUnauthorizedException), HttpStatusCode.Unauthorized },
         };
 
         public static HttpStatusCode GetExceptionStatusCode(Exception exception)
