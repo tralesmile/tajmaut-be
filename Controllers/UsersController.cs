@@ -127,6 +127,7 @@ namespace tajmautAPI.Controllers
 
         [HttpDelete("{id}"),Authorize]
         public async Task<ActionResult> Delete(int id)
+
         {
             //get result from service
             var user = await _userService.DeleteUserAsync(id);
