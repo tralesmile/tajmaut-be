@@ -47,12 +47,9 @@ namespace tajmautAPI.Service
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim("ID",user.UserId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString()),
                 new Claim("First Name",user.FirstName),
                 new Claim("Last Name",user.LastName),
-                new Claim("City",user.City),
-                new Claim("Address",user.Address),
-                new Claim("Phone",user.Phone),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role),
             };

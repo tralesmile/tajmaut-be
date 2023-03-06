@@ -4,33 +4,24 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using tajmautAPI.Data;
 using tajmautAPI.Interfaces;
+using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
-
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private readonly tajmautDataContext _ctx;
-        public UserRepository(tajmautDataContext ctx)
+        private readonly IHelperValidationClassService _helperClass;
+        public UserRepository(tajmautDataContext ctx,IHelperValidationClassService helperClass)
         {
             _ctx= ctx;
-        }
-
-        //check duplicates
-        public async Task<User> CheckDuplicatesEmail(string email)
-        {
-            return await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
-        }
-
-        //check duplicates without the current user
-        public async Task<User> CheckDuplicatesEmailWithId(string email,int id)
-        {
-            return await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.UserId != id);
+            _helperClass= helperClass;
         }
 
         //create user
-        public async Task<User> CreateUserAsync(UserPOST request)
+        public async Task<User> CreateUserAsync(UserPostREQUEST request)
         {
 
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -41,12 +32,10 @@ namespace tajmautAPI.Repositories
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                Phone = request.Phone,
-                City = request.City,
-                Address = request.Address,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                //Password = request.Password,
+                ModifiedAt= DateTime.Now,
+                CreatedAt= DateTime.Now,
             };
 
         }
@@ -97,7 +86,7 @@ namespace tajmautAPI.Repositories
         }
 
         //update user
-        public async Task<User> UpdateUserAsync(UserPOST request, int id)
+        public async Task<User> UpdateUserAsync(UserPostREQUEST request, int id)
         {
             //search for user
             var user = await _ctx.Users.FindAsync(id);
@@ -106,20 +95,20 @@ namespace tajmautAPI.Repositories
         }
 
         //save changes
-        public async Task<User> SaveChanges(User user, UserPOST request)
+        public async Task<User> SaveChanges(User user, UserPostREQUEST request)
         {
             //hash the password
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
+            var currentUserID = _helperClass.GetMe();
             //create new user
             user.Email = request.Email;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.FirstName= request.FirstName;
             user.LastName = request.LastName;
-            user.Address = request.Address;
-            user.Phone = request.Phone;
-            user.City = request.City;
+            user.ModifiedAt = DateTime.Now;
+            user.ModifiedBy = currentUserID;
+
             await _ctx.SaveChangesAsync();
             return user;
         }

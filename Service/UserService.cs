@@ -1,105 +1,189 @@
-﻿using Microsoft.Identity.Client;
+﻿using AutoMapper;
+using Microsoft.Identity.Client;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
+using tajmautAPI.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Service
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _repo;
-        public UserService(IUserRepository repo)
+        private readonly IHelperValidationClassService _helperClass;
+        private readonly IMapper _mapper;
+
+        public UserService(IUserRepository repo,IHelperValidationClassService helperClass,IMapper mapper)
         {
+            _mapper= mapper;
             _repo = repo;
+            _helperClass = helperClass;
         }
-        public async Task<User> CreateUserAsync(UserPOST user)
+        public async Task<UserRESPONSE> CreateUserAsync(UserPostREQUEST user)
         {
             //get user from repo
             var getUser = await _repo.CreateUserAsync(user);
 
             //check for duplicates with a method that saves data
-            var checkUser = await _repo.CheckDuplicatesEmail(getUser.Email);
+            var checkUser = await _helperClass.CheckDuplicatesEmail(getUser.Email);
 
             //check email and phone Regex
-            if (ValidateEmailRegex(getUser.Email))
+            if (_helperClass.ValidateEmailRegex(getUser.Email))
             {
                 //checking for duplicates
                 if (checkUser == null)
                 {
-                    return await _repo.AddEntity(getUser);
+                    var result = await _repo.AddEntity(getUser);
+                    return _mapper.Map<UserRESPONSE>(result);
                 }
-            }
-            return null;
-
-        }
-
-        public async Task<User> DeleteUserAsync(int id)
-        {
-            //get result from repo
-            var user = await _repo.DeleteUserAsync(id);
-
-            //check if there is any
-            if (user != null)
-            {
-                return await _repo.DeleteEntity(user);
+                else
+                {
+                    throw new CustomBadRequestException($"User exists");
+                }
             }
             else
             {
-                return null;
+                throw new CustomBadRequestException($"Wrong email address!");
             }
+            throw new CustomBadRequestException($"Invalid input");
+
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<UserRESPONSE> DeleteUserAsync(int id)
         {
-            return await _repo.GetAllUsersAsync();
-        }
 
-        public async Task<User> GetUserByIdAsync(int id)
-        {
-            return await _repo.GetUserByIdAsync(id);
-        }
+            if (id < 0)
+                throw new CustomBadRequestException("Invalid ID");
 
-        public async Task<User> UpdateUserAsync(UserPOST request, int id)
-        {
-            //get result from repo
-            var getUser = await _repo.UpdateUserAsync(request,id);
+            var currentUserID = _helperClass.GetMe();
+            var currentUserRole = _helperClass.GetCurrentUserRole();
 
-            //check if there is any
-            if (getUser != null)
+            //current user can make changes and Admins
+            if ((id == currentUserID) || (currentUserRole == "Admin"))
             {
-                //check for duplicates
-                var checkUser = await _repo.CheckDuplicatesEmailWithId(request.Email,getUser.UserId);
+                //get result from repo
+                var user = await _repo.DeleteUserAsync(id);
 
-                //check email and phone
-                if (ValidateEmailRegex(request.Email))
+                //check if there is any
+                if (user != null)
                 {
-                    //checking for duplicates
-                    if (checkUser == null)
-                    {
-                        //update the user 
-                        return await _repo.SaveChanges(getUser, request);
-                    }
+                    var result = await _repo.DeleteEntity(user);
+                    return _mapper.Map<UserRESPONSE>(result);
+                }
+                else
+                {
+                    throw new CustomNotFoundException($"User with ID {id} not found.");
                 }
             }
-                return null;
+            else
+            {
+                throw new CustomUnauthorizedException($"Unauthorized User!");
+            }
+            throw new CustomBadRequestException("Invalid input");
         }
 
-        public bool ValidateEmailRegex(string emailRegex)
+        public async Task<List<UserRESPONSE>> GetAllUsersAsync()
         {
+            var result = await _repo.GetAllUsersAsync();
+            if(result!= null)
+                return _mapper.Map<List<UserRESPONSE>>(result);
+            throw new CustomNotFoundException("No data found!");
+        }
 
-            //validate email with regex
-            string pattern = @"^[a-zA-Z0-9._%+-]+@(hotmail|yahoo|gmail|outlook)\.(com|net|org|mk)$";
-            bool isValidEmail = Regex.IsMatch(emailRegex, pattern);
+        public int GetMe()
+        {
+            return _helperClass.GetMe();
+        }
 
-            if (isValidEmail)
+        public async Task<UserRESPONSE> GetUserByIdAsync(int id)
+        {
+            //if id is smaller than 0
+            if(id < 0)
             {
-                return true;
+                throw new CustomBadRequestException($"Invalid ID");
             }
 
-            return false;
+            var currentUserID = _helperClass.GetMe();
+            var currentUserRole = _helperClass.GetCurrentUserRole();
+            //current user can make changes and Admins
+            if ((id == currentUserID) || (currentUserRole == "Admin"))
+            {
+
+                //get result
+                var result = await _repo.GetUserByIdAsync(id);
+
+                //if is true
+                if (result != null)
+                {
+                    return _mapper.Map<UserRESPONSE>(result);
+                }
+            }
+            else
+            {
+                throw new CustomUnauthorizedException($"Unauthorized User!");
+            }
+            //if not found
+            throw new CustomNotFoundException($"User with ID {id} not found.");
         }
+
+        public async Task<UserRESPONSE> UpdateUserAsync(UserPostREQUEST request, int id)
+        {
+            if(id < 0)
+            {
+                throw new CustomBadRequestException($"Invalid ID");
+            }
+            var currentUserID = _helperClass.GetMe();
+            var currentUserRole = _helperClass.GetCurrentUserRole();
+            //current user can make changes and Admins
+            if ((id == currentUserID) || (currentUserRole == "Admin"))
+            {
+                //get result from repo
+                var getUser = await _repo.UpdateUserAsync(request, id);
+
+                //check if there is any
+                if (getUser != null)
+                {
+                    //check for duplicates
+                    var checkUser = await _helperClass.CheckDuplicatesEmailWithId(request.Email, getUser.UserId);
+
+                    //check email and phone
+                    if (_helperClass.ValidateEmailRegex(request.Email))
+                    {
+                        //checking for duplicates
+                        if (checkUser == null)
+                        {
+                            //update the user 
+                            var result = await _repo.SaveChanges(getUser, request);
+                            return _mapper.Map<UserRESPONSE>(result);
+                        }
+                        else
+                        {
+                            throw new CustomBadRequestException($"User exists!");
+                        }
+                    }
+                    else
+                    {
+                        throw new CustomBadRequestException($"Invalid email!");
+                    }
+                }
+                else
+                {
+                    throw new CustomNotFoundException($"User with ID {id} not found.");
+                }
+            }
+            else
+            {
+                throw new CustomUnauthorizedException($"Unauthorized User!");
+            }
+                throw new CustomBadRequestException($"Invalid input");
+        }
+
     }
 }

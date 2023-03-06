@@ -1,16 +1,21 @@
 ﻿using System.Runtime.CompilerServices;
 using tajmautAPI.Data;
 using tajmautAPI.Interfaces;
+using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Repositories
 {
     public class EventRepository : IEventRepository
     {
         private readonly tajmautDataContext _ctx;
-        public EventRepository(tajmautDataContext ctx)
+        private readonly IHelperValidationClassService _helper;
+
+        public EventRepository(tajmautDataContext ctx,IHelperValidationClassService helper)
         {
             _ctx = ctx;
+            _helper = helper;
         }
 
         //add event to DB
@@ -23,36 +28,12 @@ namespace tajmautAPI.Repositories
             return eventDB;
         }
 
-        //check if category exists in DB
-        public async Task<bool> CheckIdCategory(int id)
-        {
-            var check = await _ctx.CategoryEvents.FirstOrDefaultAsync(cat => cat.CategoryEventId == id);
-
-            if (check != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        //check if restaurant exists in DB
-        public async Task<bool> CheckIdRestaurant(int id)
-        {
-            var check = await _ctx.Restaurants.FirstOrDefaultAsync(res => res.RestaurantId== id);
-
-            if(check != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
         //create event
-        public async Task<Event> CreateEvent(EventPOST request)
+        public async Task<Event> CreateEvent(EventPostREQUEST request)
         {
-            //check if category and restaurant exist
-            if(await CheckIdRestaurant(request.RestaurantId) && await CheckIdCategory(request.CategoryEventId))
-            {
+
+            //get current user id
+                var currentUserID = _helper.GetMe();
                 return new Event
                 {
                     RestaurantId= request.RestaurantId,
@@ -61,10 +42,11 @@ namespace tajmautAPI.Repositories
                     Description= request.Description,
                     EventImage= request.EventImage,
                     DateTime= request.DateTime,
+                    CreatedAt= DateTime.Now,
+                    ModifiedAt= DateTime.Now,
+                    ModifiedBy= currentUserID,
+                    CreatedBy= currentUserID,
                 };
-
-            }
-            return null;
         }
 
         //delete event
@@ -115,14 +97,17 @@ namespace tajmautAPI.Repositories
         }
 
         //save updates in DB
-        public async Task<Event> SaveUpdatesEventDB(Event getEvent,EventPOST request)
+        public async Task<Event> SaveUpdatesEventDB(Event getEvent,EventPostREQUEST request)
         {
+            var currentUserID = _helper.GetMe();
             getEvent.RestaurantId= request.RestaurantId;
             getEvent.CategoryEventId= request.CategoryEventId;
             getEvent.Description= request.Description;
             getEvent.EventImage= request.EventImage;
             getEvent.DateTime= request.DateTime;
             getEvent.Name= request.Name;
+            getEvent.ModifiedBy = currentUserID;
+            getEvent.ModifiedAt = DateTime.Now;
 
             await _ctx.SaveChangesAsync();
 
@@ -157,7 +142,7 @@ namespace tajmautAPI.Repositories
         }
 
         //update event by id
-        public async Task<Event> UpdateEvent(EventPOST request, int eventId)
+        public async Task<Event> UpdateEvent(EventPostREQUEST request, int eventId)
         {
             return await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
         }

@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using tajmautAPI.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,9 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
+//automapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
 //middleware
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -61,9 +65,12 @@ builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IHelperValidationClassRepository, HelperValidationClassRepository>();
+builder.Services.AddScoped<IHelperValidationClassService, HelperValidationClassService>();
 
 
-
+//httpcontextaccessor
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -81,6 +88,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+//custom exception middleware
+app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.MapControllers();
 

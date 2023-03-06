@@ -1,6 +1,6 @@
-﻿namespace tajmautAPI.Models
+﻿namespace tajmautAPI.Models.ModelsREQUEST
 {
-    public class EventPOST
+    public class EventPostREQUEST
     {
         public int RestaurantId { get; set; } = 0;
         public int CategoryEventId { get; set; } = 0;
