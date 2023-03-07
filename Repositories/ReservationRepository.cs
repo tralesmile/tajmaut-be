@@ -17,6 +17,7 @@ namespace tajmautAPI.Repositories
             _helper= helper;
         }
 
+        //create reservations and save to DB
         public async Task<OnlineReservation> CreateReservation(ReservationREQUEST request)
         {
             var currentUserID = _helper.GetMe();
@@ -40,6 +41,7 @@ namespace tajmautAPI.Repositories
             return reservation;
         }
 
+        //delete reservation
         public async Task<bool> DeleteReservation(OnlineReservation onlineReservation)
         {
             _ctx.OnlineReservations.Remove(onlineReservation);
@@ -47,6 +49,7 @@ namespace tajmautAPI.Repositories
             return true;
         }
 
+        //all reservations by user
         public async Task<List<OnlineReservation>> GetAllGetReservationsByUser(int userId)
         {
             var check = await _ctx.OnlineReservations.Where(us=>us.UserId== userId).ToListAsync();
@@ -57,11 +60,13 @@ namespace tajmautAPI.Repositories
             return null;
         }
 
+        //all reservations
         public async Task<List<OnlineReservation>> GetAllReservations()
         {
             return await _ctx.OnlineReservations.ToListAsync();
         }
 
+        //reservation by id
         public async Task<OnlineReservation> GetReservationByID(int reservationId)
         {
             var check = await _ctx.OnlineReservations.FindAsync(reservationId);
@@ -72,6 +77,7 @@ namespace tajmautAPI.Repositories
             return null;
         }
 
+        //if reservation exists
         public async Task<bool> ReservationExistsID(int reservationId)
         {
             var check = await _ctx.OnlineReservations.FindAsync(reservationId);

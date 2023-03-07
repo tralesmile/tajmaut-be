@@ -26,6 +26,7 @@ namespace tajmautAPI.Service
             _repo = repo;
             _helperClass = helperClass;
         }
+
         public async Task<UserRESPONSE> CreateUserAsync(UserPostREQUEST user)
         {
             //get user from repo
