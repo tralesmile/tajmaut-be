@@ -11,5 +11,9 @@ namespace tajmautAPI.Interfaces
         Task<User> CheckDuplicatesEmailWithId(string email, int id);
         Task<bool> CheckIdRestaurant(int id);
         Task<bool> CheckIdCategory(int id);
+        Task<bool> CheckIdEvent(int id);
+        Task<bool> CheckIdEventActivity(int id);
+        Task<bool> CheckIdEventDate(int id);
+
     }
 }

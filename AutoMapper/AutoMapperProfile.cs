@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.AutoMapper
@@ -10,6 +11,7 @@ namespace tajmautAPI.AutoMapper
         {
             CreateMap<User, UserRESPONSE>();
             CreateMap<Event, EventRESPONSE>();
+            CreateMap<OnlineReservation, ReservationRESPONSE>();
         }
     }
 }

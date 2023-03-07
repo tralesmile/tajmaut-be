@@ -82,5 +82,32 @@ namespace tajmautAPI.Service
             }
             return result;
         }
+
+        public async Task<bool> CheckIdEvent(int id)
+        {
+            return await _helperRepo.CheckIdEvent(id);
+        }
+
+        public async Task<bool> CheckIdEventActivity(int id)
+        {
+            return await _helperRepo.CheckIdEventActivity(id);
+        }
+
+        public async Task<bool> CheckIdEventDate(int id)
+        {
+            return await _helperRepo.CheckIdEventDate(id);
+        }
+
+        public bool ValidatePhoneRegex(string phone)
+        {
+            string pattern = @"^(?:07[0-9]|08[0]|080)[0-9]{6}$";
+            bool isValidPhone = Regex.IsMatch(phone, pattern);
+
+            if (isValidPhone)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
