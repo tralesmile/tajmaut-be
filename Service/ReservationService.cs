@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using OpenQA.Selenium;
 using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
@@ -89,6 +91,126 @@ namespace tajmautAPI.Service
             }
 
             throw new CustomBadRequestException($"Invalid input");
+        }
+
+        public async Task<string> DeleteReservation(int reservationId)
+        {
+            if(await _repo.ReservationExistsID(reservationId))
+            {
+                var currentUserID = _helper.GetMe();
+                var currentUserRole = _helper.GetCurrentUserRole();
+                var currentReservation = await _repo.GetReservationByID(reservationId);
+                if(currentUserID==currentReservation.UserId || currentUserRole=="Admin" || currentUserRole=="Manager")
+                {
+                    var check = await _repo.DeleteReservation(currentReservation);
+                    if(check)
+                    {
+                        return "Reservation Deleted";
+                    }
+                }
+                else
+                {
+                    throw new CustomUnauthorizedException("Unauthorized USER");
+                }
+            }
+            throw new CustomNotFoundException("Reservation Not Found");
+        }
+
+        public async Task<List<ReservationRESPONSE>> GetAllReservations()
+        {
+            var currentUserRole = _helper.GetCurrentUserRole();
+            if(currentUserRole == "Admin")
+            {
+                var listReservations = await _repo.GetAllReservations();
+                if(listReservations.Count() > 0) 
+                {
+                    return _mapper.Map<List<ReservationRESPONSE>>(listReservations);
+                }
+                else
+                {
+                    throw new CustomNotFoundException($"No reservations found");
+                }
+            }
+            throw new CustomUnauthorizedException($"Unauthorized User");
+        }
+
+        public async Task<List<ReservationRESPONSE>> GetReservationsByEvent(int eventId)
+        {
+            if(eventId>0)
+            {
+                var currentUserRole = _helper.GetCurrentUserRole();
+                if (currentUserRole == "Admin" || currentUserRole == "Manager")
+                {
+                    if (await _helper.CheckIdEvent(eventId))
+                    {
+                        var listReservations = await _repo.GetAllReservations();
+                        if (listReservations.Count() > 0)
+                        {
+                            var eventReservations = listReservations.Where(e => e.EventId == eventId).ToList();
+                            if (eventReservations.Count() > 0)
+                            {
+                                return _mapper.Map<List<ReservationRESPONSE>>(eventReservations);
+                            }
+                            else
+                            {
+                                throw new CustomNotFoundException("This event has no reservations");
+                            }
+                        }
+                        else
+                        {
+                            throw new CustomNotFoundException("No reservations found");
+                        }
+                    }
+                    else
+                    {
+                        throw new CustomNotFoundException("Event Not Found");
+                    }
+                }
+                else
+                {
+                    throw new CustomUnauthorizedException("Unauthorized User");
+                }
+            }
+            throw new CustomBadRequestException("Invalid event ID");
+        }
+
+        public async Task<List<ReservationRESPONSE>> GetReservationsByUser(int userId)
+        {
+
+            if (userId < 0)
+                throw new CustomBadRequestException("Invalid UserId");
+
+            if(await _helper.CheckIdUser(userId))
+            {
+                var currentUserID = _helper.GetMe();
+                var currentUserRole = _helper.GetCurrentUserRole();
+                if (userId == currentUserID || currentUserRole == "Admin" || currentUserRole == "Manager")
+                {
+                    var allReservations = await _repo.GetAllReservations();
+                    if (allReservations.Count() > 0 || allReservations != null)
+                    {
+                        var userReservations = allReservations.Where(us=>us.UserId== userId).ToList();
+                        if(userReservations.Count()>0)
+                        {
+                            return _mapper.Map<List<ReservationRESPONSE>>(userReservations);
+                        }
+                        else
+                        {
+                            throw new CustomNotFoundException("This user has no reservations!");
+                        }
+
+                    }
+                    else
+                    {
+                        throw new CustomNotFoundException("No reservations found!");
+                    }
+                }
+                else
+                {
+                    throw new CustomUnauthorizedException("Unauthorized User");
+                }
+            }
+            throw new CustomNotFoundException("User Not Found!");
         }
     }
 }

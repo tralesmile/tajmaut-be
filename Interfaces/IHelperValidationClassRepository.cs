@@ -14,6 +14,7 @@ namespace tajmautAPI.Interfaces
         Task<bool> CheckIdEvent(int id);
         Task<bool> CheckIdEventActivity(int id);
         Task<bool> CheckIdEventDate(int id);
+        Task<bool> CheckIdUser(int id);
 
     }
 }

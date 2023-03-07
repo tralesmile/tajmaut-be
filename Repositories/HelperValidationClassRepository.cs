@@ -81,5 +81,16 @@ namespace tajmautAPI.Repositories
             }
             return false;
         }
+
+        //check if user exists
+        public async Task<bool> CheckIdUser(int id)
+        {
+            var check = await _ctx.Users.FindAsync(id);
+            if (check != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -109,5 +109,10 @@ namespace tajmautAPI.Service
             }
             return false;
         }
+
+        public async Task<bool> CheckIdUser(int id)
+        {
+            return await _helperRepo.CheckIdUser(id);
+        }
     }
 }

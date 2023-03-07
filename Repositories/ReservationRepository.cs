@@ -39,5 +39,47 @@ namespace tajmautAPI.Repositories
 
             return reservation;
         }
+
+        public async Task<bool> DeleteReservation(OnlineReservation onlineReservation)
+        {
+            _ctx.OnlineReservations.Remove(onlineReservation);
+            await _ctx.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<OnlineReservation>> GetAllGetReservationsByUser(int userId)
+        {
+            var check = await _ctx.OnlineReservations.Where(us=>us.UserId== userId).ToListAsync();
+            if(check.Count()>0)
+            {
+                return check;
+            }
+            return null;
+        }
+
+        public async Task<List<OnlineReservation>> GetAllReservations()
+        {
+            return await _ctx.OnlineReservations.ToListAsync();
+        }
+
+        public async Task<OnlineReservation> GetReservationByID(int reservationId)
+        {
+            var check = await _ctx.OnlineReservations.FindAsync(reservationId);
+            if (check != null)
+            {
+                return check;
+            }
+            return null;
+        }
+
+        public async Task<bool> ReservationExistsID(int reservationId)
+        {
+            var check = await _ctx.OnlineReservations.FindAsync(reservationId);
+            if(check!= null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

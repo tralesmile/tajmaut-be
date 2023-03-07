@@ -21,6 +21,8 @@ namespace tajmautAPI.Interfaces_Service
         Task<bool> CheckIdEventActivity(int id);
         Task<bool> CheckIdEventDate(int id);
         bool ValidatePhoneRegex(string phone);
+        Task<bool> CheckIdUser(int id);
+
 
     }
 }

@@ -24,7 +24,23 @@ namespace tajmautAPI.Controllers
         [HttpGet("GetAllReservations") ,Authorize(Roles ="Admin")]
         public async Task<ActionResult> GetAllReservations()
         {
-            return Ok();
+            var result = await _reservationService.GetAllReservations();
+            try
+            {
+                if (result.Count() > 0)
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                if(ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if(ex is CustomUnauthorizedException)
+                    return Unauthorized(ex.Message);
+            }
+
+            return StatusCode(500);
         }
 
         [HttpGet("GetReservationsByRestaurant"),Authorize(Roles ="Admin,Manager")]
@@ -36,19 +52,45 @@ namespace tajmautAPI.Controllers
         [HttpGet("GetReservationsByEvent"),Authorize(Roles ="Admin,Manager")]
         public async Task<ActionResult> GetReservationsByEvent(int eventId)
         {
-            return Ok();
+            var result = await _reservationService.GetReservationsByEvent(eventId);
+            try
+            {
+                if (result.Count() > 0)
+                    return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                if(ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if(ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+                if(ex is CustomUnauthorizedException)
+                    return Unauthorized(ex.Message);
+            }
+
+            return StatusCode(500);
         }
 
         [HttpGet("GetReservationsByUser"),Authorize(Roles ="Admin,Manager,User")]
         public async Task<ActionResult> GetReservationsByUser(int userId)
         {
-            return Ok();
-        }
+            var result = await _reservationService.GetReservationsByUser(userId);
+            try
+            {
+                if (result.Count() > 0 || result!=null)
+                    return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                if(ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+                if(ex is CustomUnauthorizedException)
+                    return Unauthorized(ex.Message);
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+            }
 
-        [HttpPut("ChangeReservationStatus"),Authorize(Roles = "Admin,User,Manager")]
-        public async Task<ActionResult> ChangeReservationStatus(int reservationId)
-        {
-            return Ok();
+            return StatusCode(500);
         }
 
         [HttpPost("CreateReservation"),Authorize(Roles ="Admin,Manager,User")]
@@ -76,16 +118,28 @@ namespace tajmautAPI.Controllers
             return StatusCode(500);
         }
 
-        [HttpPut("UpdateReservation"),Authorize(Roles ="User,Admin,Manager")]
-        public async Task<ActionResult> UpdateReservation(ReservationREQUEST request,int reservationId)
-        {
-            return Ok();
-        }
-
         [HttpDelete("DeleteReservation"),Authorize(Roles ="Admin,User,Manager")]
         public async Task<ActionResult> DeleteReservation(int reservationId)
         {
-            return Ok();
+            var result = await _reservationService.DeleteReservation(reservationId);
+            try
+            {
+                if(result!=null || result!="")
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                if(ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+                if(ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if(ex is CustomUnauthorizedException)
+                    return Unauthorized(ex.Message);
+            }
+
+            return StatusCode(500);
         }
     }
 }
