@@ -56,7 +56,7 @@ namespace tajmautAPI.Service
 
                                         var currentUserRole = _helper.GetCurrentUserRole();
                                         //check if current user is the entered user || role is admin,manager
-                                        if (request.UserId == currentUserID || request.UserId!=0 || currentUserRole == "Admin" || currentUserRole == "Manager")
+                                        if (request.UserId == currentUserID || currentUserRole == "Admin" || currentUserRole == "Manager")
                                         {
                                             var result = await _repo.CreateReservation(request);
 
