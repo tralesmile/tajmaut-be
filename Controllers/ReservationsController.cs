@@ -67,24 +67,19 @@ namespace tajmautAPI.Controllers
             return StatusCode(500);
         }
 
-        //get reservations by event - admin,manager access
+        //get reservations by event - admin,manager access - service response
         [HttpGet("GetReservationsByEvent"),Authorize(Roles ="Admin,Manager")]
         public async Task<ActionResult> GetReservationsByEvent(int eventId)
         {
             var result = await _reservationService.GetReservationsByEvent(eventId);
             try
             {
-                if (result.Count() > 0)
+                if (result.Data.Count() > 0)
                     return Ok(result);
             }
             catch (Exception ex)
             {
-                if(ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if(ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
-                if(ex is CustomUnauthorizedException)
-                    return Unauthorized(ex.Message);
+                return StatusCode((int)result.StatusCode, result);
             }
 
             return StatusCode(500);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OpenQA.Selenium;
+using System.Net;
 using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
@@ -157,11 +158,16 @@ namespace tajmautAPI.Service
             throw new CustomUnauthorizedException($"Unauthorized User");
         }
 
-        //all reservations by event
-        public async Task<List<ReservationRESPONSE>> GetReservationsByEvent(int eventId)
+        //all reservations by event - service response
+        public async Task<ServiceResponse<List<ReservationRESPONSE>>> GetReservationsByEvent(int eventId)
         {
+            //service response
+            var serviceResponse = new ServiceResponse<List<ReservationRESPONSE>>();
+            serviceResponse.Data = null;
+            serviceResponse.Success = false;
+
             //if the id is valid
-            if(eventId>0)
+            if (eventId>0)
             {
                 var currentUserRole = _helper.GetCurrentUserRole();
                 //admin or manager can access the reservations on specific event
@@ -179,29 +185,45 @@ namespace tajmautAPI.Service
 
                             if (eventReservations.Count() > 0)
                             {
-                                return _mapper.Map<List<ReservationRESPONSE>>(eventReservations);
+                                var responseData =  _mapper.Map<List<ReservationRESPONSE>>(eventReservations);
+                                serviceResponse.Data = responseData;
+                                serviceResponse.Success = true;
+                                serviceResponse.Message = $"Success";
+                                serviceResponse.StatusCode = HttpStatusCode.OK;
+                                return serviceResponse;
                             }
                             else
                             {
-                                throw new CustomNotFoundException("This event has no reservations");
+                                serviceResponse.Message = $"This event has no reservations";
+                                serviceResponse.StatusCode = HttpStatusCode.NotFound;
+                                return serviceResponse;
                             }
                         }
                         else
                         {
-                            throw new CustomNotFoundException("No reservations found");
+                            serviceResponse.Message = $"No reservations found";
+                            serviceResponse.StatusCode = HttpStatusCode.NotFound;
+                            return serviceResponse;
                         }
                     }
                     else
                     {
-                        throw new CustomNotFoundException("Event Not Found");
+                        serviceResponse.Message = $"Event Not Found";
+                        serviceResponse.StatusCode = HttpStatusCode.NotFound;
+                        return serviceResponse;
                     }
                 }
                 else
                 {
-                    throw new CustomUnauthorizedException("Unauthorized User");
+                    serviceResponse.Message = $"Unauthorized User";
+                    serviceResponse.StatusCode = HttpStatusCode.Unauthorized;
+                    return serviceResponse;
                 }
             }
-            throw new CustomBadRequestException("Invalid event ID");
+            serviceResponse.Message = $"Invalid ID input";
+            serviceResponse.StatusCode = HttpStatusCode.BadRequest;
+            return serviceResponse;
+            
         }
 
         //all reservations by restaurant
