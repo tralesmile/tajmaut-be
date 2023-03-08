@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace tajmautAPI.Models
 {
@@ -12,18 +13,34 @@ namespace tajmautAPI.Models
 
         public int EventId { get; set; }
 
+        [Required]
         public int NumberGuests { get; set; }
 
-        public DateTime Date { get; set; }
+        [Required]
+        public string Phone { get; set; } = null!;
 
-        public TimeSpan Time { get; set; }
+        [Required]
+        public string FullName { get; set; } = null!;
+
+        public DateTime ModifiedAt { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public int CreatedBy { get; set; }
+
+        public int ModifiedBy { get; set; }
+
+        public bool IsActive { get; set; } = false;
 
         //N-1 Relationship
 
+        [JsonIgnore]
         public virtual Event Event { get; set; } = null!;
 
+        [JsonIgnore]
         public virtual Restaurant Restaurant { get; set; } = null!;
 
+        [JsonIgnore]
         public virtual User User { get; set; } = null!;
     }
 }

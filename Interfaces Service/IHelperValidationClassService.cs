@@ -17,6 +17,12 @@ namespace tajmautAPI.Interfaces_Service
         int GetMe();
         string GetCurrentUserEmail();
         string GetCurrentUserRole();
+        Task<bool> CheckIdEvent(int id);
+        Task<bool> CheckIdEventActivity(int id);
+        Task<bool> CheckIdEventDate(int id);
+        bool ValidatePhoneRegex(string phone);
+        Task<bool> CheckIdUser(int id);
+
 
     }
 }

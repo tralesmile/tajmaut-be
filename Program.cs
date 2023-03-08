@@ -67,6 +67,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IHelperValidationClassRepository, HelperValidationClassRepository>();
 builder.Services.AddScoped<IHelperValidationClassService, HelperValidationClassService>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 
 //httpcontextaccessor

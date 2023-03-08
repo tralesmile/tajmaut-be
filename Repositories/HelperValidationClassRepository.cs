@@ -37,11 +37,55 @@ namespace tajmautAPI.Repositories
             return false;
         }
 
+        //check if event exists
+        public async Task<bool> CheckIdEvent(int id)
+        {
+            var check = await _ctx.Events.FirstOrDefaultAsync(res=>res.EventId == id);
+            if(check!=null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //check if events is canceled
+        public async Task<bool> CheckIdEventActivity(int id)
+        {
+            var check = await _ctx.Events.FirstOrDefaultAsync(eve=>eve.EventId == id);
+            if(check.isCanceled)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        //check event date
+        public async Task<bool> CheckIdEventDate(int id)
+        {
+            var check = await _ctx.Events.FirstOrDefaultAsync(eve=>eve.EventId==id && eve.DateTime>DateTime.Now);
+            if(check!=null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         //check if restaurant exists in DB
         public async Task<bool> CheckIdRestaurant(int id)
         {
             var check = await _ctx.Restaurants.FirstOrDefaultAsync(res => res.RestaurantId == id);
 
+            if (check != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //check if user exists
+        public async Task<bool> CheckIdUser(int id)
+        {
+            var check = await _ctx.Users.FindAsync(id);
             if (check != null)
             {
                 return true;
