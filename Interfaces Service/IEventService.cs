@@ -18,5 +18,6 @@ namespace tajmautAPI.Interfaces_Service
         Task<List<EventGetRESPONSE>> FilterEventsByDate(DateTime startDate, DateTime endDate);
         Task<List<EventGetRESPONSE>> GetEventsWithOtherData(List<Event> events);
         Task<bool> CancelEvent(int id);
+        Task<List<EventGetRESPONSE>> GetNumberOfEvents(int numEvents);
     }
 }

@@ -219,5 +219,22 @@ namespace tajmautAPI.Controllers
             return StatusCode(500);
 
         }
+
+        [HttpGet("GetNumberOfEvents"),Authorize(Roles ="Manager,Admin,User")]
+        public async Task<ActionResult> GetNumberOfEvents(int numEvents)
+        {
+            try
+            {
+                var result = await _eventService.GetNumberOfEvents(numEvents);
+                if(result.Count()>0)
+                    return Ok(result);
+            }
+            catch (CustomException ex)
+            {
+                return StatusCode((int)ex.StatusCode, ex.Message);
+            }
+
+            return StatusCode(500);
+        }
     }
 }

@@ -316,6 +316,74 @@ namespace tajmautAPI.Service
             return null;
         }
 
+        //get number of events
+        public async Task<List<EventGetRESPONSE>> GetNumberOfEvents(int numEvents)
+        {
+            try
+            {
+                //get all events
+                var allEvents = await _repo.GetAllEvents();
+
+                //check if any
+                if(allEvents.Count()>0)
+                {
+                    var now = DateTime.Now;
+                    //upcoming events filter
+                    var upcomingEvents = allEvents.Where(x=>x.DateTime>now).OrderBy(x=>x.DateTime).ToList();
+
+                    //check if any
+                    if (upcomingEvents.Count() > 0)
+                    {
+
+                        var getEvents = new List<EventGetRESPONSE>();
+
+                        foreach (var ev in upcomingEvents)
+                        {
+                            if (!ev.isCanceled)
+                            {
+                                //get the event restaurant
+                                var restaurant = await _repo.GetRestaurantById(ev.RestaurantId);
+
+                                getEvents.Add(new EventGetRESPONSE
+                                {
+                                    EventId = ev.EventId,
+                                    CategoryEventId = ev.CategoryEventId,
+                                    RestaurantId = ev.RestaurantId,
+                                    Name = ev.Name,
+                                    Description = ev.Description,
+                                    EventImage = ev.EventImage,
+                                    DateTime = ev.DateTime,
+                                    isCanceled = ev.isCanceled,
+                                    RestaurantName = restaurant.Name,
+                                    RestaurantPhone = restaurant.Phone,
+                                    StatusEvent = "Upcoming",
+                                });
+                            }
+                        }
+
+                        //sord events by date
+                        getEvents.Sort((x, y) => x.DateTime.CompareTo(y.DateTime));
+
+                        //take num events
+                        var getNumEvents = getEvents.Take(numEvents).ToList();
+
+                        return getNumEvents;
+
+                    }
+                    else
+                    {
+                        throw new CustomException(HttpStatusCode.NotFound,$"No upcoming events");
+                    }
+                }
+            }
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+        }
+
         //update event
         public async Task<EventRESPONSE> UpdateEvent(EventPostREQUEST request, int eventId)
         {
@@ -353,5 +421,6 @@ namespace tajmautAPI.Service
 
             throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
+
     }
 }
