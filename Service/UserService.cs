@@ -202,13 +202,17 @@ namespace tajmautAPI.Service
             try
             {
                 var currentUserID = _helperClass.GetMe();
+                //check if admin or the current user
                 if (currentUserID == id || _helperClass.CheckUserAdmin())
                 {
+                    //check if user exists
                     if (await _helperClass.CheckIdUser(id))
                     {
+                        //check old password
                         if (await _repo.CheckOldPassword(request.OldPassword, id))
                         {
                             var currentUser = await _repo.GetUserByIdAsync(id);
+                            //new == confirm pass
                             if (request.NewPassword == request.ConfirmPassword)
                             {
                                 var resultUser = await _repo.UpdatePassword(currentUser, request.NewPassword);

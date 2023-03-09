@@ -6,7 +6,7 @@ namespace tajmautAPI.Exceptions
     public class CustomException : Exception
     {
 
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
         public HttpStatusCode StatusCode { get; set; }
 
         public CustomException(HttpStatusCode statusCode,string message)

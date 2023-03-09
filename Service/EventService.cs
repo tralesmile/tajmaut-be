@@ -50,9 +50,11 @@ namespace tajmautAPI.Service
                 //check if category and restaurant exist
                 if (await _helper.CheckIdRestaurant(request.RestaurantId))
                 {
+                    //if category exists
                     if (await _helper.CheckIdCategory(request.CategoryEventId))
                     {
                         var getResult = await _repo.CreateEvent(request);
+                        //
                         if (getResult != null)
                         {
                             var result = await _repo.AddToDB(getResult);
@@ -401,6 +403,7 @@ namespace tajmautAPI.Service
                         //check if restaurant and category exist
                         if (await _helper.CheckIdCategory(request.CategoryEventId))
                         {
+                            //if restaurant exists
                             if (await _helper.CheckIdRestaurant(request.RestaurantId))
                             {
                                 var result = await _repo.SaveUpdatesEventDB(resultEvent, request);

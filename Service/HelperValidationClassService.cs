@@ -20,26 +20,31 @@ namespace tajmautAPI.Service
             _httpContextAccessor = httpContextAccessor;
         }
 
+        //check duplicates email
         public async Task<User> CheckDuplicatesEmail(string email)
         {
             return await _helperRepo.CheckDuplicatesEmail(email);
         }
 
+        //check duplicates of email
         public async Task<User> CheckDuplicatesEmailWithId(string email, int id)
         {
             return await _helperRepo.CheckDuplicatesEmailWithId(email, id);
         }
 
+        //check if category exists
         public async Task<bool> CheckIdCategory(int id)
         {
             return await (_helperRepo.CheckIdCategory(id));
         }
 
+        //check if restaurant exists
         public async Task<bool> CheckIdRestaurant(int id)
         {
             return await _helperRepo.CheckIdRestaurant(id);
         }
 
+        //validate email
         public bool ValidateEmailRegex(string emailRegex)
         {
 
@@ -55,6 +60,7 @@ namespace tajmautAPI.Service
             throw new CustomException(HttpStatusCode.BadRequest, $"Invalid Email");
         }
 
+        //get current user id
         public int GetMe()
         {
             var result = string.Empty;
@@ -65,6 +71,7 @@ namespace tajmautAPI.Service
             return int.Parse(result);
         }
 
+        //get currnet user email from token
         public string GetCurrentUserEmail()
         {
             var result = string.Empty;
@@ -75,6 +82,7 @@ namespace tajmautAPI.Service
             return result;
         }
 
+        //get current user role from token
         public string GetCurrentUserRole()
         {
             var result = string.Empty;
@@ -85,21 +93,25 @@ namespace tajmautAPI.Service
             return result;
         }
 
+        //check if events exists
         public async Task<bool> CheckIdEvent(int id)
         {
             return await _helperRepo.CheckIdEvent(id);
         }
 
+        //check event activity
         public async Task<bool> CheckIdEventActivity(int id)
         {
             return await _helperRepo.CheckIdEventActivity(id);
         }
 
+        //check date event
         public async Task<bool> CheckIdEventDate(int id)
         {
             return await _helperRepo.CheckIdEventDate(id);
         }
 
+        //validate phone
         public bool ValidatePhoneRegex(string phone)
         {
             string pattern = @"^(?:07[0-9]|08[0]|080)[0-9]{6}$";
@@ -112,6 +124,7 @@ namespace tajmautAPI.Service
             throw new CustomException(HttpStatusCode.BadRequest, $"Invalid phone number!");
         }
 
+        //check if user exists
         public async Task<bool> CheckIdUser(int id)
         {
             bool result=  await _helperRepo.CheckIdUser(id);
@@ -123,11 +136,13 @@ namespace tajmautAPI.Service
             throw new CustomException(HttpStatusCode.NotFound, $"User not found");
         }
 
+        //check if reservations exists
         public async Task<OnlineReservation> CheckIdReservation(int id)
         {
             return await _helperRepo.CheckIdReservation(id);
         }
 
+        //current user admin?
         public bool CheckUserAdmin()
         {
             string check = GetCurrentUserRole();
@@ -137,6 +152,7 @@ namespace tajmautAPI.Service
             throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Admin");
         }
 
+        //user or manager current user
         public bool CheckUserAdminOrManager()
         {
             string check = GetCurrentUserRole();
@@ -148,6 +164,7 @@ namespace tajmautAPI.Service
             throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Admin or Manager");
         }
 
+        //check if current user is manager
         public bool CheckUserManager()
         {
             string check = GetCurrentUserRole();
@@ -157,6 +174,7 @@ namespace tajmautAPI.Service
             throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Manager");
         }
 
+        //validate id input
         public bool ValidateId(int id)
         {
             if (id > 0)

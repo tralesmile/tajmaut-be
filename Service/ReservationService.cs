@@ -291,6 +291,7 @@ namespace tajmautAPI.Service
             {
 
                 var checkReservation = await _helper.CheckIdReservation(reservationId);
+
                 if (checkReservation != null)
                 {
                     if (await _repo.ChangeReservationStatus(checkReservation))
