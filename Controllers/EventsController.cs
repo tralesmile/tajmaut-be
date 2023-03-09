@@ -30,10 +30,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.GetAllEvents();
                 return Ok(result);
             }
-            catch(Exception ex)
+            catch (CustomException ex)
             {
-                if(ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -50,12 +49,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.GetEventById(eventId);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if(ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -72,12 +68,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.GetAllEventsByRestaurant(restaurantId);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -92,14 +85,14 @@ namespace tajmautAPI.Controllers
             try
             {
                 var result = await _eventService.CreateEvent(request);
-                return Ok(result);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -116,12 +109,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.UpdateEvent(request,eventId);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -138,12 +128,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.DeleteEvent(eventId);
                 return Ok("Event Deleted");
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -160,12 +147,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.FilterEventsByCategory(categoryId);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -182,12 +166,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.FilterEventsByDate(startDate,endDate);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -204,12 +185,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.FilterEventsByCity(city);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -233,12 +211,9 @@ namespace tajmautAPI.Controllers
                 var result = await _eventService.CancelEvent(eventId);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);

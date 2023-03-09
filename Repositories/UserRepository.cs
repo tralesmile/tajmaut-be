@@ -1,8 +1,10 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Security.Cryptography;
 using tajmautAPI.Data;
+using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -57,22 +59,38 @@ namespace tajmautAPI.Repositories
         {
             //find user
             var user = await _ctx.Users.FindAsync(id);
+            if(user != null)
+            {
+                return user;
+            }
             
-            return user;
+            throw new CustomException(HttpStatusCode.NotFound,$"User not found");
         }
 
         //get all users
         public async Task<List<User>> GetAllUsersAsync()
         {
             //get all users to list
-            return await _ctx.Users.ToListAsync();
+            var check = await _ctx.Users.ToListAsync();
+            if(check!=null)
+            {
+                return check;
+            }
+
+            throw new CustomException(HttpStatusCode.NotFound, $"No users found");
         }
         
         //get user by id
         public async Task<User> GetUserByIdAsync(int id)
         {
             //search for user
-            return await _ctx.Users.FirstOrDefaultAsync(user => user.UserId == id);
+            var check = await _ctx.Users.FirstOrDefaultAsync(user => user.UserId == id);
+            if(check!=null)
+            {
+                return check;
+            }
+
+            throw new CustomException(HttpStatusCode.NotFound,$"User not found");
         }
 
         //save to database
@@ -90,8 +108,11 @@ namespace tajmautAPI.Repositories
         {
             //search for user
             var user = await _ctx.Users.FindAsync(id);
-
-            return user;
+            if(user != null)
+            {
+                return user;
+            }
+            throw new CustomException(HttpStatusCode.NotFound, $"User not found");
         }
 
         //save changes
@@ -125,7 +146,7 @@ namespace tajmautAPI.Repositories
             var currentUser = await _ctx.Users.FindAsync(id);
             if (currentUser == null || !VerifyPasswordHash(oldPassword, currentUser.PasswordHash, currentUser.PasswordSalt))
             {
-                return false;
+                throw new CustomException(HttpStatusCode.BadRequest, $"Invalid old password");
             }
             return true;
         }

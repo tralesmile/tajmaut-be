@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Identity.Client;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
@@ -29,80 +30,89 @@ namespace tajmautAPI.Service
 
         public async Task<UserRESPONSE> CreateUserAsync(UserPostREQUEST user)
         {
-            //get user from repo
-            var getUser = await _repo.CreateUserAsync(user);
-
-            //check for duplicates with a method that saves data
-            var checkUser = await _helperClass.CheckDuplicatesEmail(getUser.Email);
-
-            //check email and phone Regex
-            if (_helperClass.ValidateEmailRegex(getUser.Email))
+            try
             {
-                //checking for duplicates
-                if (checkUser == null)
+                //get user from repo
+                var getUser = await _repo.CreateUserAsync(user);
+
+                //check for duplicates with a method that saves data
+                var checkUser = await _helperClass.CheckDuplicatesEmail(getUser.Email);
+
+                //check email and phone Regex
+                if (_helperClass.ValidateEmailRegex(getUser.Email))
                 {
-                    if (user.Password == user.ConfirmPassword)
+                    //checking for duplicates
+                    if (checkUser == null)
                     {
-                        var result = await _repo.AddEntity(getUser);
-                        return _mapper.Map<UserRESPONSE>(result);
-                    }
-                    else
-                    {
-                        throw new CustomBadRequestException($"Passwords do not match!");
+                        if (user.Password == user.ConfirmPassword)
+                        {
+                            var result = await _repo.AddEntity(getUser);
+                            return _mapper.Map<UserRESPONSE>(result);
+                        }
+                        else
+                        {
+                            throw new CustomException(HttpStatusCode.BadRequest,$"Passwords do not match!");
+                        }
                     }
                 }
-                else
-                {
-                    throw new CustomBadRequestException($"User exists");
-                }
             }
-            else
+            catch (CustomException ex)
             {
-                throw new CustomBadRequestException($"Wrong email address!");
+                throw;
             }
-            throw new CustomBadRequestException($"Invalid input");
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
 
         }
 
         public async Task<UserRESPONSE> DeleteUserAsync(int id)
         {
-
-            if (id < 0)
-                throw new CustomBadRequestException("Invalid ID");
-
-            var currentUserID = _helperClass.GetMe();
-            var currentUserRole = _helperClass.GetCurrentUserRole();
-
-            //current user can make changes and Admins
-            if ((id == currentUserID) || (currentUserRole == "Admin"))
+            try
             {
-                //get result from repo
-                var user = await _repo.DeleteUserAsync(id);
+                if (_helperClass.ValidateId(id))
+                {
+                    var currentUserID = _helperClass.GetMe();
+                    var currentUserRole = _helperClass.GetCurrentUserRole();
 
-                //check if there is any
-                if (user != null)
-                {
-                    var result = await _repo.DeleteEntity(user);
-                    return _mapper.Map<UserRESPONSE>(result);
-                }
-                else
-                {
-                    throw new CustomNotFoundException($"User with ID {id} not found.");
+                    //current user can make changes and Admins
+                    if ((id == currentUserID) || _helperClass.CheckUserAdmin())
+                    {
+                        //get result from repo
+                        var user = await _repo.DeleteUserAsync(id);
+
+                        //check if there is any
+                        if (user != null)
+                        {
+                            var result = await _repo.DeleteEntity(user);
+                            return _mapper.Map<UserRESPONSE>(result);
+                        }
+                    }
                 }
             }
-            else
+            catch (CustomException ex)
             {
-                throw new CustomUnauthorizedException($"Unauthorized User!");
+                throw;
             }
-            throw new CustomBadRequestException("Invalid input");
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         public async Task<List<UserRESPONSE>> GetAllUsersAsync()
         {
-            var result = await _repo.GetAllUsersAsync();
-            if (result != null)
-                return _mapper.Map<List<UserRESPONSE>>(result);
-            throw new CustomNotFoundException("No data found!");
+            try
+            {
+                var result = await _repo.GetAllUsersAsync();
+                if (result != null)
+                {
+                    return _mapper.Map<List<UserRESPONSE>>(result);
+                }
+            }
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         public int GetMe()
@@ -112,119 +122,112 @@ namespace tajmautAPI.Service
 
         public async Task<UserRESPONSE> GetUserByIdAsync(int id)
         {
-            //if id is smaller than 0
-            if (id < 0)
+            try
             {
-                throw new CustomBadRequestException($"Invalid ID");
-            }
-
-            var currentUserID = _helperClass.GetMe();
-            var currentUserRole = _helperClass.GetCurrentUserRole();
-            //current user can make changes and Admins
-            if ((id == currentUserID) || (currentUserRole == "Admin"))
-            {
-
-                //get result
-                var result = await _repo.GetUserByIdAsync(id);
-
-                //if is true
-                if (result != null)
+                //if id is smaller than 0
+                if (_helperClass.ValidateId(id))
                 {
-                    return _mapper.Map<UserRESPONSE>(result);
+
+
+                    var currentUserID = _helperClass.GetMe();
+                    //current user can make changes and Admins
+                    if ((id == currentUserID) || _helperClass.CheckUserAdmin())
+                    {
+
+                        //get result
+                        var result = await _repo.GetUserByIdAsync(id);
+
+                        //if is true
+                        if (result != null)
+                        {
+                            return _mapper.Map<UserRESPONSE>(result);
+                        }
+                    }
+
                 }
             }
-            else
+            catch (CustomException ex)
             {
-                throw new CustomUnauthorizedException($"Unauthorized User!");
+                throw;
             }
-            //if not found
-            throw new CustomNotFoundException($"User with ID {id} not found.");
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         public async Task<UserRESPONSE> UpdateUserAsync(UserPutREQUEST request, int id)
         {
-            if (id < 0)
+            try
             {
-                throw new CustomBadRequestException($"Invalid ID");
-            }
-            var currentUserID = _helperClass.GetMe();
-            var currentUserRole = _helperClass.GetCurrentUserRole();
-            //current user can make changes and Admins
-            if ((id == currentUserID) || (currentUserRole == "Admin"))
-            {
-                //get result from repo
-                var getUser = await _repo.UpdateUserAsync(request, id);
-
-                //check if there is any
-                if (getUser != null)
+                if (id < 0)
                 {
-                    //check for duplicates
-                    var checkUser = await _helperClass.CheckDuplicatesEmailWithId(request.Email, getUser.UserId);
+                    throw new CustomException(HttpStatusCode.BadRequest,$"Invalid ID");
+                }
+                var currentUserID = _helperClass.GetMe();
+                //current user can make changes and Admins
+                if ((id == currentUserID) || _helperClass.CheckUserAdmin())
+                {
+                    //get result from repo
+                    var getUser = await _repo.UpdateUserAsync(request, id);
 
-                    //check email and phone
-                    if (_helperClass.ValidateEmailRegex(request.Email))
+                    //check if there is any
+                    if (getUser != null)
                     {
-                        //checking for duplicates
-                        if (checkUser == null)
+                        //check for duplicates
+                        var checkUser = await _helperClass.CheckDuplicatesEmailWithId(request.Email, getUser.UserId);
+
+                        //check email and phone
+                        if (_helperClass.ValidateEmailRegex(request.Email))
                         {
-                            //update the user 
-                            var result = await _repo.SaveChanges(getUser, request);
-                            return _mapper.Map<UserRESPONSE>(result);
-                        }
-                        else
-                        {
-                            throw new CustomBadRequestException($"User exists!");
+                            //checking for duplicates
+                            if (checkUser == null)
+                            {
+                                //update the user 
+                                var result = await _repo.SaveChanges(getUser, request);
+                                return _mapper.Map<UserRESPONSE>(result);
+                            }
                         }
                     }
-                    else
-                    {
-                        throw new CustomBadRequestException($"Invalid email!");
-                    }
-                }
-                else
-                {
-                    throw new CustomNotFoundException($"User with ID {id} not found.");
                 }
             }
-            else
+            catch (CustomException ex)
             {
-                throw new CustomUnauthorizedException($"Unauthorized User!");
+                throw;
             }
-            throw new CustomBadRequestException($"Invalid input");
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         public async Task<UserRESPONSE> UpdateUserPassword(UserPassREQUEST request, int id)
         {
-            var currentUserID = _helperClass.GetMe();
-            var currentUserRole = _helperClass.GetCurrentUserRole();
-            if (currentUserID == id || currentUserRole == "Admin")
+            try
             {
-                if (await _helperClass.CheckIdUser(id))
+                var currentUserID = _helperClass.GetMe();
+                if (currentUserID == id || _helperClass.CheckUserAdmin())
                 {
-                    if (await _repo.CheckOldPassword(request.OldPassword, id))
+                    if (await _helperClass.CheckIdUser(id))
                     {
-                        var currentUser = await _repo.GetUserByIdAsync(id);
-                        if (request.NewPassword == request.ConfirmPassword)
+                        if (await _repo.CheckOldPassword(request.OldPassword, id))
                         {
-                            var resultUser = await _repo.UpdatePassword(currentUser, request.NewPassword);
-                            return _mapper.Map<UserRESPONSE>(currentUser);
-                        }
-                        else
-                        {
-                            throw new CustomBadRequestException($"Passwords do not match!");
+                            var currentUser = await _repo.GetUserByIdAsync(id);
+                            if (request.NewPassword == request.ConfirmPassword)
+                            {
+                                var resultUser = await _repo.UpdatePassword(currentUser, request.NewPassword);
+                                return _mapper.Map<UserRESPONSE>(currentUser);
+                            }
+                            else
+                            {
+                                throw new CustomException(HttpStatusCode.BadRequest,$"Passwords do not match!");
+                            }
                         }
                     }
-                    else
-                    {
-                        throw new CustomBadRequestException($"Invalid old password");
-                    }
-                }
-                else
-                {
-                    throw new CustomNotFoundException($"User not found!");
                 }
             }
-            throw new CustomUnauthorizedException($"Unauthorized User");
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
     }
 }

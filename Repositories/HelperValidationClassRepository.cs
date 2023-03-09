@@ -18,13 +18,24 @@ namespace tajmautAPI.Repositories
         //check duplicates
         public async Task<User> CheckDuplicatesEmail(string email)
         {
-            return await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            var check = await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            if(check== null)
+            {
+                return check;
+            }
+
+            throw new CustomException(HttpStatusCode.BadRequest, $"User exists");
         }
 
         //check duplicates without the current user
         public async Task<User> CheckDuplicatesEmailWithId(string email, int id)
         {
-            return await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.UserId != id);
+            var check = await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.UserId != id);
+            if(check != null)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, $"User exists");
+            }
+            return check;
         }
 
         //check if category exists in DB
@@ -36,7 +47,8 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            return false;
+            throw new CustomException(HttpStatusCode.NotFound,"Category not found");
+
         }
 
         //check if event exists

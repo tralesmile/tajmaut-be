@@ -1,5 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Net;
+using System.Runtime.CompilerServices;
 using tajmautAPI.Data;
+using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -53,7 +55,13 @@ namespace tajmautAPI.Repositories
         public async Task<Event> DeleteEvent(int eventId)
         {
             //check if exists
-            return await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
+            var check = await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
+            if (check != null)
+            {
+                return check;
+            }
+            throw new CustomException(HttpStatusCode.NotFound,"Event not found!");
+
         }
 
         //delete event from DB
@@ -75,19 +83,37 @@ namespace tajmautAPI.Repositories
                 .Where(e=>e.Restaurant.City == city)
                 .ToListAsync();
 
-            return eventsInCity;
+            if(eventsInCity.Count() > 0) 
+            {
+                return eventsInCity;
+            }
+
+            throw new CustomException(HttpStatusCode.NotFound, $"No data found");
         }
 
         //get all events
         public async Task<List<Event>> GetAllEvents()
         {
-            return await _ctx.Events.ToListAsync();
+            var check = await _ctx.Events.ToListAsync();
+            if(check.Count()>0)
+            {
+                return check;
+            }
+
+            throw new CustomException(HttpStatusCode.NotFound,"No Data found!");
+
         }
 
         //get event by id
         public async Task<List<Event>> GetEventById(int eventId)
         {
-            return await _ctx.Events.Where(n => n.EventId == eventId).ToListAsync();
+            var check = await _ctx.Events.Where(n => n.EventId == eventId).ToListAsync();
+            if(check.Count() > 0)
+            {
+                return check;
+            }
+
+            throw new CustomException(HttpStatusCode.NotFound, $"Event not found");
         }
 
         //get restaurant by id
@@ -122,11 +148,11 @@ namespace tajmautAPI.Repositories
 
             if(result == null)
             {
-                return false;
+                throw new CustomException(HttpStatusCode.NotFound, $"Event with ID:{eventId} not found!");
             }
 
             //if is canceled make active
-            if(result.isCanceled)
+            if (result.isCanceled)
             {
                 result.isCanceled = false;
             }
@@ -144,7 +170,12 @@ namespace tajmautAPI.Repositories
         //update event by id
         public async Task<Event> UpdateEvent(EventPostREQUEST request, int eventId)
         {
-            return await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
+            var check = await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
+            if (check == null)
+            {
+                throw new CustomException(HttpStatusCode.NotFound, $"Event not found");
+            }
+            return check;
         }
     }
 }

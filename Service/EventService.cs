@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium.DevTools.V108.Page;
+using System.Net;
 using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
@@ -26,171 +27,238 @@ namespace tajmautAPI.Service
         //change status of event (canceled or active)
         public async Task<bool> CancelEvent(int eventId)
         {
-            if(await _repo.UpdateCancelEvent(eventId))
+            try
             {
-                return true;
+                if (await _repo.UpdateCancelEvent(eventId))
+                {
+                    return true;
+                }
             }
-            throw new CustomNotFoundException($"Event with ID:{eventId} not found!");
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         //create event
         public async Task<EventRESPONSE> CreateEvent(EventPostREQUEST request)
         {
-            //check if category and restaurant exist
-            if (await _helper.CheckIdRestaurant(request.RestaurantId))
+            try
             {
-                if(await _helper.CheckIdCategory(request.CategoryEventId))
+                //check if category and restaurant exist
+                if (await _helper.CheckIdRestaurant(request.RestaurantId))
                 {
-                    var getResult = await _repo.CreateEvent(request);
-                    if (getResult != null)
+                    if (await _helper.CheckIdCategory(request.CategoryEventId))
                     {
-                        var result = await _repo.AddToDB(getResult);
-                        return _mapper.Map<EventRESPONSE>(result);
+                        var getResult = await _repo.CreateEvent(request);
+                        if (getResult != null)
+                        {
+                            var result = await _repo.AddToDB(getResult);
+                            return _mapper.Map<EventRESPONSE>(result);
+                        }
                     }
                 }
-                else
-                {
-                    throw new CustomBadRequestException("Invalid category ID");
-                }
+
             }
-            else
+            catch (CustomException ex)
             {
-                throw new CustomBadRequestException("Invalid restaurant ID");
+                throw;
             }
 
-            throw new CustomBadRequestException("Invalid input");
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         //delete event by id
         public async Task<EventRESPONSE> DeleteEvent(int eventId)
         {
-            //if invalid input
-            if (eventId < 0)
-                throw new CustomBadRequestException("Invalid ID");
-
-            var result = await _repo.DeleteEvent(eventId);
-
-            if(result != null)
+            try
             {
-                var returnResult = await _repo.DeleteEventDB(result);
-                return _mapper.Map<EventRESPONSE>(returnResult);
+                //if invalid input
+                if (_helper.ValidateId(eventId))
+                {
+
+                    var result = await _repo.DeleteEvent(eventId);
+
+                    if (result != null)
+                    {
+                        var returnResult = await _repo.DeleteEventDB(result);
+                        return _mapper.Map<EventRESPONSE>(returnResult);
+                    }
+                }
+            }
+            catch (CustomException ex)
+            {
+                throw;
             }
 
-            throw new CustomNotFoundException("Event not found!");
-            
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+
         }
 
         //filter events by category
         public async Task<List<EventGetRESPONSE>> FilterEventsByCategory(int categoryId)
         {
-            //invalid input
-            if (categoryId < 0)
-                throw new CustomBadRequestException("Invalid ID");
-
-            //check if category exists
-            if(await _helper.CheckIdCategory(categoryId))
+            try
             {
-                var resultEvents = await _repo.GetAllEvents();
+                //invalid input
+                if (_helper.ValidateId(categoryId))
+                {
+                    //check if category exists
+                    if (await _helper.CheckIdCategory(categoryId))
+                    {
+                        var resultEvents = await _repo.GetAllEvents();
 
-                if(resultEvents.Count()>0)
-                {
-                    var listEvents = resultEvents.Where(n=>n.CategoryEventId== categoryId).ToList();
-                    return await GetEventsWithOtherData(listEvents);
-                }
-                else
-                {
-                    throw new CustomNotFoundException("No data found!");
+                        if (resultEvents.Count() > 0)
+                        {
+                            var listEvents = resultEvents.Where(n => n.CategoryEventId == categoryId).ToList();
+                            if(listEvents.Count() > 0)
+                            {
+                                return await GetEventsWithOtherData(listEvents);
+                            }
+                            else
+                            {
+                                throw new CustomException(HttpStatusCode.NotFound, $"This category has no events");
+                            }
+                        }
+                    }
                 }
             }
-            throw new CustomBadRequestException("Category not found!");
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         //filter events by city
         public async Task<List<EventGetRESPONSE>> FilterEventsByCity(string city)
         {
-            //invalid input
-            if (city == null)
-                throw new CustomBadRequestException("Invalid input!");
-
-            //filter
-            var result = await _repo.FilterEventsInCity(city);
-            if (result.Count()>0)
+            try
             {
-                return await GetEventsWithOtherData(result);
+                //invalid input
+                if (city == null)
+                    throw new CustomException(HttpStatusCode.BadRequest,"Invalid input!");
+
+                //filter
+                var result = await _repo.FilterEventsInCity(city);
+                if (result.Count() > 0)
+                {
+                    return await GetEventsWithOtherData(result);
+                }
             }
-            throw new CustomNotFoundException("No data found!");
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         //filter events by date from-to
         public async Task<List<EventGetRESPONSE>> FilterEventsByDate(DateTime startDate, DateTime endDate)
         {
-            var allEvents = await _repo.GetAllEvents();
-
-            //get all events
-            if(allEvents.Count()>0)
+            try
             {
-                //query
-                var sendEvents = allEvents.Where(e => e.DateTime >= startDate && e.DateTime <= endDate).ToList();
-                if(sendEvents.Count()>0)
+                var allEvents = await _repo.GetAllEvents();
+
+                //get all events
+                if (allEvents.Count() > 0)
                 {
-                    return await GetEventsWithOtherData(sendEvents);
+                    //query
+                    var sendEvents = allEvents.Where(e => e.DateTime >= startDate && e.DateTime <= endDate).ToList();
+                    if (sendEvents.Count() > 0)
+                    {
+                        return await GetEventsWithOtherData(sendEvents);
+                    }
+                    throw new CustomException(HttpStatusCode.NotFound,"No data found!");
                 }
-                throw new CustomNotFoundException("No data found!");
             }
-            throw new CustomNotFoundException("No data found!");
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
 
         }
 
         //get all events to list
         public async Task<List<EventGetRESPONSE>> GetAllEvents()
         {
-            var getResult = await _repo.GetAllEvents();
-
-            if(getResult.Count()>0)
+            try
             {
-                return await GetEventsWithOtherData(getResult);
+                var getResult = await _repo.GetAllEvents();
+
+                if (getResult.Count() > 0)
+                {
+                    return await GetEventsWithOtherData(getResult);
+                }
             }
-            throw new CustomNotFoundException("No data found!");
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         //get events from specific restaurant
         public async Task<List<EventGetRESPONSE>> GetAllEventsByRestaurant(int restaurantId)
         {
-            //invalid input
-            if (restaurantId < 0)
-                throw new CustomBadRequestException("Invalid ID");
-
-            var allEvents = await _repo.GetAllEvents();
-            if (allEvents.Count() > 0)
+            try
             {
-                //query
-                var listEvents = allEvents.Where(n => n.RestaurantId == restaurantId).ToList();
-                if(listEvents.Count()>0)
+                //invalid input
+                if (_helper.ValidateId(restaurantId))
                 {
-                    return await GetEventsWithOtherData(listEvents);
+
+                    var allEvents = await _repo.GetAllEvents();
+                    if (allEvents.Count() > 0)
+                    {
+                        //query
+                        var listEvents = allEvents.Where(n => n.RestaurantId == restaurantId).ToList();
+                        if (listEvents.Count() > 0)
+                        {
+                            return await GetEventsWithOtherData(listEvents);
+                        }
+                        throw new CustomException(HttpStatusCode.NotFound,"No data found!");
+                    }
                 }
-                throw new CustomNotFoundException("No data found!");
             }
-            throw new CustomNotFoundException("No data found!");
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
 
         }
 
         //get event by id
         public async Task<List<EventGetRESPONSE>> GetEventById(int eventId)
         {
-
-            //invalid input
-            if (eventId < 0)
-                throw new CustomBadRequestException("Invalid ID");
-
-            var result = await _repo.GetEventById(eventId);
-
-            if(result.Count() > 0)
+            try
             {
-                return await GetEventsWithOtherData(result);
+                //invalid input
+                if (_helper.ValidateId(eventId))
+                {
+
+                    var result = await _repo.GetEventById(eventId);
+
+                    if (result.Count() > 0)
+                    {
+                        return await GetEventsWithOtherData(result);
+                    }
+                }
+            }
+            catch (CustomException ex)
+            {
+                throw;
             }
 
-            throw new CustomNotFoundException("No data found!");
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
 
         //get other data for the events in sorted list
@@ -251,35 +319,39 @@ namespace tajmautAPI.Service
         //update event
         public async Task<EventRESPONSE> UpdateEvent(EventPostREQUEST request, int eventId)
         {
-
-            //invalid input
-            if (eventId < 0)
-                throw new CustomBadRequestException("Invalid ID");
-
-            var resultEvent = await _repo.UpdateEvent(request, eventId);
-
-            //if found
-            if (resultEvent != null)
+            try
             {
-                //check if restaurant and category exist
-                if (await _helper.CheckIdCategory(request.CategoryEventId))
+                //invalid input
+                if (_helper.ValidateId(eventId))
                 {
-                    if(await _helper.CheckIdRestaurant(request.RestaurantId))
+
+                    var resultEvent = await _repo.UpdateEvent(request, eventId);
+
+                    //if found
+                    if (resultEvent != null)
                     {
-                        var result = await _repo.SaveUpdatesEventDB(resultEvent, request);
-                        return _mapper.Map<EventRESPONSE>(result);
+                        //check if restaurant and category exist
+                        if (await _helper.CheckIdCategory(request.CategoryEventId))
+                        {
+                            if (await _helper.CheckIdRestaurant(request.RestaurantId))
+                            {
+                                var result = await _repo.SaveUpdatesEventDB(resultEvent, request);
+                                return _mapper.Map<EventRESPONSE>(result);
+                            }
+                            else
+                            {
+                                throw new CustomBadRequestException("Invalid Restaurant ID");
+                            }
+                        }
                     }
-                    else
-                    {
-                        throw new CustomBadRequestException("Invalid Restaurant ID");
-                    }
-                }
-                else
-                {
-                    throw new CustomBadRequestException("Invalid Category ID");
                 }
             }
-            throw new CustomNotFoundException("No data found");
+            catch (CustomException ex)
+            {
+                throw;
+            }
+
+            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
         }
     }
 }
