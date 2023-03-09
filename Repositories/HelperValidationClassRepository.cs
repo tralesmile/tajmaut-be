@@ -1,4 +1,6 @@
-﻿using tajmautAPI.Interfaces;
+﻿using System.Net;
+using tajmautAPI.Exceptions;
+using tajmautAPI.Interfaces;
 using tajmautAPI.Models;
 
 namespace tajmautAPI.Repositories
@@ -45,7 +47,7 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            return false;
+            throw new CustomException(HttpStatusCode.NotFound, $"Event not found");
         }
 
         //check if events is canceled
@@ -54,7 +56,7 @@ namespace tajmautAPI.Repositories
             var check = await _ctx.Events.FirstOrDefaultAsync(eve=>eve.EventId == id);
             if(check.isCanceled)
             {
-                return false;
+                throw new CustomException(HttpStatusCode.BadRequest, $"Event was canceled");
             }
             return true;
         }
@@ -67,7 +69,7 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            return false;
+            throw new CustomException(HttpStatusCode.BadRequest, $"Event ended!");
         }
 
         //check id reservation
@@ -78,7 +80,7 @@ namespace tajmautAPI.Repositories
             {
                 return result;
             }
-            return null;
+            throw new CustomException(HttpStatusCode.NotFound, $"Reservation not found");
         }
 
         //check if restaurant exists in DB
@@ -90,7 +92,8 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            return false;
+
+            throw new CustomException(HttpStatusCode.NotFound, $"Restaurant not found");
         }
 
         //check if user exists

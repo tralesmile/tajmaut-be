@@ -70,6 +70,11 @@ builder.Services.AddScoped<IHelperValidationClassService, HelperValidationClassS
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 
+//filter exception
+builder.Services.AddControllers(options=>
+{
+    options.Filters.Add<CustomExceptionFilter>();
+});
 
 //httpcontextaccessor
 builder.Services.AddHttpContextAccessor();
@@ -90,9 +95,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-//custom exception middleware
-app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.MapControllers();
 

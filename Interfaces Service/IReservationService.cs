@@ -10,7 +10,7 @@ namespace tajmautAPI.Interfaces_Service
         Task<string> DeleteReservation(int reservationId);
         Task<List<ReservationRESPONSE>> GetReservationsByUser(int userId);
         Task<List<ReservationRESPONSE>> GetAllReservations();
-        Task<ServiceResponse<List<ReservationRESPONSE>>> GetReservationsByEvent(int eventId);
+        Task<List<ReservationRESPONSE>> GetReservationsByEvent(int eventId);
         Task<List<ReservationRESPONSE>> GetReservationsByRestaurant(int restaurantId);
         Task<ReservationRESPONSE> ManagerStatusReservation(int reservationId);
     }

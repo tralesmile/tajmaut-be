@@ -1,5 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
+using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
@@ -50,7 +52,7 @@ namespace tajmautAPI.Service
                 return true;
             }
 
-            return false;
+            throw new CustomException(HttpStatusCode.BadRequest, $"Invalid Email");
         }
 
         public int GetMe()
@@ -107,17 +109,60 @@ namespace tajmautAPI.Service
             {
                 return true;
             }
-            return false;
+            throw new CustomException(HttpStatusCode.BadRequest, $"Invalid phone number!");
         }
 
         public async Task<bool> CheckIdUser(int id)
         {
-            return await _helperRepo.CheckIdUser(id);
+            bool result=  await _helperRepo.CheckIdUser(id);
+            if(result)
+            {
+                return true;
+            }
+
+            throw new CustomException(HttpStatusCode.NotFound, $"User not found");
         }
 
         public async Task<OnlineReservation> CheckIdReservation(int id)
         {
             return await _helperRepo.CheckIdReservation(id);
+        }
+
+        public bool CheckUserAdmin()
+        {
+            string check = GetCurrentUserRole();
+            if (check == "Admin")
+                return true;
+
+            throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Admin");
+        }
+
+        public bool CheckUserAdminOrManager()
+        {
+            string check = GetCurrentUserRole();
+            if (check == "Admin" || check == "Manager")
+            {
+                return true;
+            }
+
+            throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Admin or Manager");
+        }
+
+        public bool CheckUserManager()
+        {
+            string check = GetCurrentUserRole();
+            if (check == "Manager")
+                return true;
+
+            throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Manager");
+        }
+
+        public bool ValidateId(int id)
+        {
+            if (id > 0)
+                return true;
+
+            throw new CustomException(HttpStatusCode.BadRequest, $"Invalid ID");
         }
     }
 }

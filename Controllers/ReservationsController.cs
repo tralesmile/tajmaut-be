@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
+using System.Net;
 using tajmautAPI.Exceptions;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models.ModelsREQUEST;
@@ -33,12 +34,9 @@ namespace tajmautAPI.Controllers
                     return Ok(result);
                 }
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomUnauthorizedException)
-                    return Unauthorized(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -54,32 +52,27 @@ namespace tajmautAPI.Controllers
                 if (result.Count() > 0)
                     return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomUnauthorizedException)
-                    return Unauthorized(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
         }
 
-        //get reservations by event - admin,manager access - service response
+        //get reservations by event - admin,manager access 
         [HttpGet("GetReservationsByEvent"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> GetReservationsByEvent(int eventId)
         {
             var result = await _reservationService.GetReservationsByEvent(eventId);
             try
             {
-                if (result.Data.Count() > 0)
+                if (result.Count() > 0)
                     return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                return StatusCode((int)result.StatusCode, result);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -95,14 +88,9 @@ namespace tajmautAPI.Controllers
                 if (result.Count() > 0 || result != null)
                     return Ok(result);
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
-                if (ex is CustomUnauthorizedException)
-                    return Unauthorized(ex.Message);
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
+                return StatusCode((int)ex.StatusCode,ex.Message);
             }
 
             return StatusCode(500);
@@ -120,15 +108,9 @@ namespace tajmautAPI.Controllers
                     return Ok(result);
                 }
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
-                if (ex is CustomUnauthorizedException)
-                    return Unauthorized(ex.Message);
-
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
@@ -146,19 +128,15 @@ namespace tajmautAPI.Controllers
                     return Ok(result);
                 }
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if (ex is CustomBadRequestException)
-                    return BadRequest(ex.Message);
-                if (ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
-                if (ex is CustomUnauthorizedException)
-                    return Unauthorized(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);
         }
 
+        //change reservation status
         [HttpPut("ManagerStatusReservation"), Authorize(Roles = "Manager,Admin")]
         public async Task<ActionResult> ManagerStatusReservation(int reservationId)
         {
@@ -168,10 +146,9 @@ namespace tajmautAPI.Controllers
                 if(result!=null)
                 { return Ok(result); }
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                if(ex is CustomNotFoundException)
-                    return NotFound(ex.Message);
+                return StatusCode((int)ex.StatusCode, ex.Message);
             }
 
             return StatusCode(500);

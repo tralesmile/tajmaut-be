@@ -1,4 +1,6 @@
-﻿using tajmautAPI.Interfaces;
+﻿using System.Net;
+using tajmautAPI.Exceptions;
+using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
@@ -80,7 +82,13 @@ namespace tajmautAPI.Repositories
         //all reservations
         public async Task<List<OnlineReservation>> GetAllReservations()
         {
-            return await _ctx.OnlineReservations.ToListAsync();
+            var result = await _ctx.OnlineReservations.ToListAsync();
+            if(result.Count()>0)
+            {
+                return result;
+            }
+
+            throw new CustomException(HttpStatusCode.NotFound, $"No reservations found");
         }
 
         //reservation by id
@@ -91,7 +99,7 @@ namespace tajmautAPI.Repositories
             {
                 return check;
             }
-            return null;
+            throw new CustomException(HttpStatusCode.Unauthorized, $"Unauthorized user");
         }
 
         //if reservation exists
@@ -102,7 +110,7 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            return false;
+            throw new CustomException(HttpStatusCode.NotFound, $"Reservation not found");
         }
     }
 }
