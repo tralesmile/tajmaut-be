@@ -86,7 +86,7 @@ namespace tajmautAPI.Repositories
         }
 
         //update user
-        public async Task<User> UpdateUserAsync(UserPostREQUEST request, int id)
+        public async Task<User> UpdateUserAsync(UserPutREQUEST request, int id)
         {
             //search for user
             var user = await _ctx.Users.FindAsync(id);
@@ -95,15 +95,11 @@ namespace tajmautAPI.Repositories
         }
 
         //save changes
-        public async Task<User> SaveChanges(User user, UserPostREQUEST request)
+        public async Task<User> SaveChanges(User user, UserPutREQUEST request)
         {
-            //hash the password
-            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
             var currentUserID = _helperClass.GetMe();
             //create new user
             user.Email = request.Email;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
             user.FirstName= request.FirstName;
             user.LastName = request.LastName;
             user.ModifiedAt = DateTime.Now;
@@ -121,6 +117,42 @@ namespace tajmautAPI.Repositories
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
+        }
+
+        //check old with new password
+        public async Task<bool> CheckOldPassword(string oldPassword,int id)
+        {
+            var currentUser = await _ctx.Users.FindAsync(id);
+            if (currentUser == null || !VerifyPasswordHash(oldPassword, currentUser.PasswordHash, currentUser.PasswordSalt))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        //verifying hashed password
+        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
+            }
+        }
+
+        //update password
+        public async Task<User> UpdatePassword(User user, string newPassword)
+        {
+            //hash password
+            CreatePasswordHash(newPassword, out byte[] passwordHash, out byte[] passwordSalt);
+            var currentUserID = _helperClass.GetMe();
+            user.ModifiedAt= DateTime.UtcNow;
+            user.ModifiedBy= currentUserID;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt=passwordSalt;
+
+            await _ctx.SaveChangesAsync();
+            return user;
         }
     }
 }

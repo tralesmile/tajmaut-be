@@ -2,14 +2,10 @@
 
 namespace tajmautAPI.Models.ModelsREQUEST
 {
-    public class UserPostREQUEST
+    public class UserPutREQUEST
     {
         [Required]
         public string Email { get; set; } = null!;
-        [Required]
-        public string Password { get; set; } = null!;
-        [Required]
-        public string ConfirmPassword { get; set; } = null!;
         [Required]
         public string FirstName { get; set; } = null!;
         [Required]

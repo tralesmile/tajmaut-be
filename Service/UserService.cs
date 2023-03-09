@@ -20,9 +20,9 @@ namespace tajmautAPI.Service
         private readonly IHelperValidationClassService _helperClass;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository repo,IHelperValidationClassService helperClass,IMapper mapper)
+        public UserService(IUserRepository repo, IHelperValidationClassService helperClass, IMapper mapper)
         {
-            _mapper= mapper;
+            _mapper = mapper;
             _repo = repo;
             _helperClass = helperClass;
         }
@@ -41,8 +41,15 @@ namespace tajmautAPI.Service
                 //checking for duplicates
                 if (checkUser == null)
                 {
-                    var result = await _repo.AddEntity(getUser);
-                    return _mapper.Map<UserRESPONSE>(result);
+                    if (user.Password == user.ConfirmPassword)
+                    {
+                        var result = await _repo.AddEntity(getUser);
+                        return _mapper.Map<UserRESPONSE>(result);
+                    }
+                    else
+                    {
+                        throw new CustomBadRequestException($"Passwords do not match!");
+                    }
                 }
                 else
                 {
@@ -93,7 +100,7 @@ namespace tajmautAPI.Service
         public async Task<List<UserRESPONSE>> GetAllUsersAsync()
         {
             var result = await _repo.GetAllUsersAsync();
-            if(result!= null)
+            if (result != null)
                 return _mapper.Map<List<UserRESPONSE>>(result);
             throw new CustomNotFoundException("No data found!");
         }
@@ -106,7 +113,7 @@ namespace tajmautAPI.Service
         public async Task<UserRESPONSE> GetUserByIdAsync(int id)
         {
             //if id is smaller than 0
-            if(id < 0)
+            if (id < 0)
             {
                 throw new CustomBadRequestException($"Invalid ID");
             }
@@ -134,9 +141,9 @@ namespace tajmautAPI.Service
             throw new CustomNotFoundException($"User with ID {id} not found.");
         }
 
-        public async Task<UserRESPONSE> UpdateUserAsync(UserPostREQUEST request, int id)
+        public async Task<UserRESPONSE> UpdateUserAsync(UserPutREQUEST request, int id)
         {
-            if(id < 0)
+            if (id < 0)
             {
                 throw new CustomBadRequestException($"Invalid ID");
             }
@@ -183,8 +190,41 @@ namespace tajmautAPI.Service
             {
                 throw new CustomUnauthorizedException($"Unauthorized User!");
             }
-                throw new CustomBadRequestException($"Invalid input");
+            throw new CustomBadRequestException($"Invalid input");
         }
 
+        public async Task<UserRESPONSE> UpdateUserPassword(UserPassREQUEST request, int id)
+        {
+            var currentUserID = _helperClass.GetMe();
+            var currentUserRole = _helperClass.GetCurrentUserRole();
+            if (currentUserID == id || currentUserRole == "Admin")
+            {
+                if (await _helperClass.CheckIdUser(id))
+                {
+                    if (await _repo.CheckOldPassword(request.OldPassword, id))
+                    {
+                        var currentUser = await _repo.GetUserByIdAsync(id);
+                        if (request.NewPassword == request.ConfirmPassword)
+                        {
+                            var resultUser = await _repo.UpdatePassword(currentUser, request.NewPassword);
+                            return _mapper.Map<UserRESPONSE>(currentUser);
+                        }
+                        else
+                        {
+                            throw new CustomBadRequestException($"Passwords do not match!");
+                        }
+                    }
+                    else
+                    {
+                        throw new CustomBadRequestException($"Invalid old password");
+                    }
+                }
+                else
+                {
+                    throw new CustomNotFoundException($"User not found!");
+                }
+            }
+            throw new CustomUnauthorizedException($"Unauthorized User");
+        }
     }
 }

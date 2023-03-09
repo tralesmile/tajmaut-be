@@ -97,7 +97,7 @@ namespace tajmautAPI.Controllers
         }
 
         [HttpPut("{id}"), Authorize]
-        public async Task<ActionResult> Put(UserPostREQUEST request, int id)
+        public async Task<ActionResult> Put(UserPutREQUEST request, int id)
         {
             //get result from service
             var user = await _userService.UpdateUserAsync(request, id);
@@ -158,6 +158,30 @@ namespace tajmautAPI.Controllers
         {
             var userEmail = _userService.GetMe();
             return Ok(userEmail);
+        }
+
+        [HttpPut("UpdateUserPassword"),Authorize]
+        public async Task<ActionResult> UpdateUserPassword(UserPassREQUEST request,int id)
+        {
+            var result = await _userService.UpdateUserPassword(request,id);
+            try
+            {
+                if(result != null)
+                {
+                    return Ok(result);
+                }
+            }
+            catch(Exception ex)
+            {
+                if(ex is CustomBadRequestException)
+                    return BadRequest(ex.Message);
+                if(ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if(ex is CustomUnauthorizedException)
+                    return Unauthorized(ex.Message);
+            }
+
+            return StatusCode(500);
         }
 
     }

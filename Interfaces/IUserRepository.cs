@@ -16,7 +16,7 @@ namespace tajmautAPI.Interfaces
         Task<User> CreateUserAsync(UserPostREQUEST request);
 
         //update user
-        Task<User> UpdateUserAsync(UserPostREQUEST request, int id);
+        Task<User> UpdateUserAsync(UserPutREQUEST request, int id);
 
         //delete user
         Task<User> DeleteUserAsync(int id);
@@ -29,9 +29,17 @@ namespace tajmautAPI.Interfaces
 
         //save the changes
         //request are the new changes
-        Task<User> SaveChanges(User user, UserPostREQUEST request);
+        Task<User> SaveChanges(User user, UserPutREQUEST request);
 
         void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
+
+        //check old password
+        Task<bool> CheckOldPassword(string oldPassword,int id);
+        bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
+
+        //update password
+        Task<User> UpdatePassword(User user,string newPassword);
+
 
 
     }

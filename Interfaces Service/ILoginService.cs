@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Interfaces_Service
 {
@@ -7,6 +8,6 @@ namespace tajmautAPI.Interfaces_Service
     {
         string CreateToken(User user);
         bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
-        Task<string> Login(string email, string password);
+        Task<string> Login(LoginREQUEST request);
     }
 }

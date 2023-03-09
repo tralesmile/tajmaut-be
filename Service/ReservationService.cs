@@ -47,7 +47,7 @@ namespace tajmautAPI.Service
                             if(_helper.ValidatePhoneRegex(request.Phone))
                             {
                                 //check fullname property
-                                if(request.FullName!="" || request.FullName!=null)
+                                if(_helper.ValidateEmailRegex(request.Email))
                                 {
                                     //check number of guests
                                     if(request.NumberGuests>0)
@@ -76,7 +76,7 @@ namespace tajmautAPI.Service
                                 }
                                 else
                                 {
-                                    throw new CustomBadRequestException($"Invalid name!");
+                                    throw new CustomBadRequestException($"Invalid email!");
                                 }
                             }
                             else

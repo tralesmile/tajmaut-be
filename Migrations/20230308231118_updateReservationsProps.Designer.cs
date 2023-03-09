@@ -12,8 +12,8 @@ using tajmautAPI.Data;
 namespace tajmautAPI.Migrations
 {
     [DbContext(typeof(tajmautDataContext))]
-    [Migration("20230307103119_updateOnlineReservations")]
-    partial class updateOnlineReservations
+    [Migration("20230308231118_updateReservationsProps")]
+    partial class updateReservationsProps
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -144,15 +144,23 @@ namespace tajmautAPI.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");

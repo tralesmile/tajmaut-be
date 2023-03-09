@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Controllers
 {
@@ -25,10 +26,10 @@ namespace tajmautAPI.Controllers
         
         //user login endpoint
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(string email,string password)
+        public async Task<ActionResult<string>> Login(LoginREQUEST request)
         {
             //get token from services
-            var token = await _login.Login(email, password);
+            var token = await _login.Login(request);
 
             if(token == null)
             {

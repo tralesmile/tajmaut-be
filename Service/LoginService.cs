@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
+using tajmautAPI.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Service
 {
@@ -24,13 +25,13 @@ namespace tajmautAPI.Service
         }
 
         //User login method
-        public async Task<string> Login(string email, string password)
+        public async Task<string> Login(LoginREQUEST request)
         {
             //get user from repo
-            var user = await _repo.Login(email, password);
+            var user = await _repo.Login(request.Email, request.Password);
 
             //if email is wrong or password is wrong
-            if(user == null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if(user == null || !VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
             }
