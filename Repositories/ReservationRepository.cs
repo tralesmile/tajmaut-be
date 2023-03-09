@@ -17,6 +17,21 @@ namespace tajmautAPI.Repositories
             _helper= helper;
         }
 
+        //change reservation status - accepted , declined
+        public async Task<bool> ChangeReservationStatus(OnlineReservation onlineReservation)
+        {
+            if(onlineReservation.IsActive)
+            {
+                onlineReservation.IsActive = false;
+            }
+            else
+            {
+                onlineReservation.IsActive = true;
+            }
+            await _ctx.SaveChangesAsync();
+            return true;
+        }
+
         //create reservations and save to DB
         public async Task<OnlineReservation> CreateReservation(ReservationREQUEST request)
         {

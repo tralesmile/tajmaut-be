@@ -114,5 +114,10 @@ namespace tajmautAPI.Service
         {
             return await _helperRepo.CheckIdUser(id);
         }
+
+        public async Task<OnlineReservation> CheckIdReservation(int id)
+        {
+            return await _helperRepo.CheckIdReservation(id);
+        }
     }
 }

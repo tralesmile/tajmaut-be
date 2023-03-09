@@ -22,7 +22,7 @@ namespace tajmautAPI.Controllers
         }
 
         //get all reservations - admin access
-        [HttpGet("GetAllReservations") ,Authorize(Roles ="Admin")]
+        [HttpGet("GetAllReservations"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> GetAllReservations()
         {
             var result = await _reservationService.GetAllReservations();
@@ -35,9 +35,9 @@ namespace tajmautAPI.Controllers
             }
             catch (Exception ex)
             {
-                if(ex is CustomNotFoundException)
+                if (ex is CustomNotFoundException)
                     return NotFound(ex.Message);
-                if(ex is CustomUnauthorizedException)
+                if (ex is CustomUnauthorizedException)
                     return Unauthorized(ex.Message);
             }
 
@@ -45,7 +45,7 @@ namespace tajmautAPI.Controllers
         }
 
         //get reservations by restaurant - admin,manager access
-        [HttpGet("GetReservationsByRestaurant"),Authorize(Roles ="Admin,Manager")]
+        [HttpGet("GetReservationsByRestaurant"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> GetReservationsByRestaurant(int restaurantId)
         {
             var result = await _reservationService.GetReservationsByRestaurant(restaurantId);
@@ -68,7 +68,7 @@ namespace tajmautAPI.Controllers
         }
 
         //get reservations by event - admin,manager access - service response
-        [HttpGet("GetReservationsByEvent"),Authorize(Roles ="Admin,Manager")]
+        [HttpGet("GetReservationsByEvent"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> GetReservationsByEvent(int eventId)
         {
             var result = await _reservationService.GetReservationsByEvent(eventId);
@@ -86,20 +86,20 @@ namespace tajmautAPI.Controllers
         }
 
         //get reservations by user - user,admin,manager access
-        [HttpGet("GetReservationsByUser"),Authorize(Roles ="Admin,Manager,User")]
+        [HttpGet("GetReservationsByUser"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> GetReservationsByUser(int userId)
         {
             var result = await _reservationService.GetReservationsByUser(userId);
             try
             {
-                if (result.Count() > 0 || result!=null)
+                if (result.Count() > 0 || result != null)
                     return Ok(result);
             }
             catch (Exception ex)
             {
-                if(ex is CustomBadRequestException)
+                if (ex is CustomBadRequestException)
                     return BadRequest(ex.Message);
-                if(ex is CustomUnauthorizedException)
+                if (ex is CustomUnauthorizedException)
                     return Unauthorized(ex.Message);
                 if (ex is CustomNotFoundException)
                     return NotFound(ex.Message);
@@ -109,24 +109,24 @@ namespace tajmautAPI.Controllers
         }
 
         //create reservation user,admin,manager access
-        [HttpPost("CreateReservation"),Authorize(Roles ="Admin,Manager,User")]
+        [HttpPost("CreateReservation"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> CreateReservation(ReservationREQUEST request)
         {
             var result = await _reservationService.CreateReservation(request);
             try
             {
-                if(result!=null)
+                if (result != null)
                 {
                     return Ok(result);
                 }
             }
             catch (Exception ex)
             {
-                if(ex is CustomNotFoundException)
+                if (ex is CustomNotFoundException)
                     return NotFound(ex.Message);
-                if(ex is CustomBadRequestException)
+                if (ex is CustomBadRequestException)
                     return BadRequest(ex.Message);
-                if(ex is CustomUnauthorizedException)
+                if (ex is CustomUnauthorizedException)
                     return Unauthorized(ex.Message);
 
             }
@@ -135,25 +135,43 @@ namespace tajmautAPI.Controllers
         }
 
         //delete reservation user,admin,manager access
-        [HttpDelete("DeleteReservation"),Authorize(Roles ="Admin,User,Manager")]
+        [HttpDelete("DeleteReservation"), Authorize(Roles = "Admin,User,Manager")]
         public async Task<ActionResult> DeleteReservation(int reservationId)
         {
             var result = await _reservationService.DeleteReservation(reservationId);
             try
             {
-                if(result!=null || result!="")
+                if (result != null || result != "")
                 {
                     return Ok(result);
                 }
             }
             catch (Exception ex)
             {
-                if(ex is CustomBadRequestException)
+                if (ex is CustomBadRequestException)
                     return BadRequest(ex.Message);
+                if (ex is CustomNotFoundException)
+                    return NotFound(ex.Message);
+                if (ex is CustomUnauthorizedException)
+                    return Unauthorized(ex.Message);
+            }
+
+            return StatusCode(500);
+        }
+
+        [HttpPut("ManagerStatusReservation"), Authorize(Roles = "Manager,Admin")]
+        public async Task<ActionResult> ManagerStatusReservation(int reservationId)
+        {
+            var result = await _reservationService.ManagerStatusReservation(reservationId);
+            try
+            {
+                if(result!=null)
+                { return Ok(result); }
+            }
+            catch (Exception ex)
+            {
                 if(ex is CustomNotFoundException)
                     return NotFound(ex.Message);
-                if(ex is CustomUnauthorizedException)
-                    return Unauthorized(ex.Message);
             }
 
             return StatusCode(500);

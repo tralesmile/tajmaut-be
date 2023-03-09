@@ -11,5 +11,6 @@ namespace tajmautAPI.Interfaces
         Task<bool> DeleteReservation(OnlineReservation onlineReservation);
         Task<List<OnlineReservation>> GetAllGetReservationsByUser(int userId);
         Task<List<OnlineReservation>> GetAllReservations();
+        Task<bool> ChangeReservationStatus(OnlineReservation onlineReservation);
     }
 }

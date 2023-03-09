@@ -22,6 +22,7 @@ namespace tajmautAPI.Interfaces_Service
         Task<bool> CheckIdEventDate(int id);
         bool ValidatePhoneRegex(string phone);
         Task<bool> CheckIdUser(int id);
+        Task<OnlineReservation> CheckIdReservation(int id);
 
 
     }

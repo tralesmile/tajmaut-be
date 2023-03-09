@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using OpenQA.Selenium.Internal;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Numerics;
@@ -10,6 +11,7 @@ using System.Security.Cryptography;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
+using tajmautAPI.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Controllers
 {
@@ -23,20 +25,25 @@ namespace tajmautAPI.Controllers
         {
             _login = iservices;
         }
-        
+
         //user login endpoint
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(LoginREQUEST request)
+        public async Task<ActionResult> Login(LoginREQUEST request)
         {
             //get token from services
             var token = await _login.Login(request);
 
-            if(token == null)
+            if (token == null)
             {
                 return Unauthorized("Wrong email or password!");
             }
 
-            return token;
+            var responseToken = new TokenRESPONSE();
+            responseToken.AccessToken = token;
+            responseToken.Expires = DateTime.Now.AddHours(1);
+
+            return Ok(responseToken);
+
 
         }
         

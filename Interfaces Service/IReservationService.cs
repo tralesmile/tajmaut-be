@@ -12,5 +12,6 @@ namespace tajmautAPI.Interfaces_Service
         Task<List<ReservationRESPONSE>> GetAllReservations();
         Task<ServiceResponse<List<ReservationRESPONSE>>> GetReservationsByEvent(int eventId);
         Task<List<ReservationRESPONSE>> GetReservationsByRestaurant(int restaurantId);
+        Task<ReservationRESPONSE> ManagerStatusReservation(int reservationId);
     }
 }

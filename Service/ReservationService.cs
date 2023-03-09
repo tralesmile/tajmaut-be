@@ -316,5 +316,16 @@ namespace tajmautAPI.Service
             }
             throw new CustomNotFoundException("User Not Found!");
         }
+
+        public async Task<ReservationRESPONSE> ManagerStatusReservation(int reservationId)
+        {
+            var checkReservation = await _helper.CheckIdReservation(reservationId);
+            if(checkReservation != null)
+            {
+                if (await _repo.ChangeReservationStatus(checkReservation))
+                    return _mapper.Map<ReservationRESPONSE>(checkReservation);
+            }
+            throw new CustomNotFoundException($"Reservation not found");
+        }
     }
 }

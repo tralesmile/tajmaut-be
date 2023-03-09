@@ -70,6 +70,17 @@ namespace tajmautAPI.Repositories
             return false;
         }
 
+        //check id reservation
+        public async Task<OnlineReservation> CheckIdReservation(int id)
+        {
+            var result = await _ctx.OnlineReservations.FindAsync(id);
+            if(result!=null)
+            {
+                return result;
+            }
+            return null;
+        }
+
         //check if restaurant exists in DB
         public async Task<bool> CheckIdRestaurant(int id)
         {
@@ -92,5 +103,6 @@ namespace tajmautAPI.Repositories
             }
             return false;
         }
+
     }
 }
