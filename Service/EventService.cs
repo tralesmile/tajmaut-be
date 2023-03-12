@@ -409,10 +409,6 @@ namespace tajmautAPI.Service
                                 var result = await _repo.SaveUpdatesEventDB(resultEvent, request);
                                 return _mapper.Map<EventRESPONSE>(result);
                             }
-                            else
-                            {
-                                throw new CustomBadRequestException("Invalid Restaurant ID");
-                            }
                         }
                     }
                 }
