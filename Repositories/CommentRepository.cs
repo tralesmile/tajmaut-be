@@ -1,4 +1,6 @@
-﻿using tajmautAPI.Interfaces;
+﻿using System.Net;
+using tajmautAPI.Exceptions;
+using tajmautAPI.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
@@ -26,6 +28,11 @@ namespace tajmautAPI.Repositories
                 UserId= currentUserID,
                 Body= request.Body,
                 Review = request.Review,
+                DateTime = DateTime.Now,
+                CreatedAt= DateTime.Now,
+                CreatedBy= currentUserID,
+                ModifiedAt = DateTime.Now,
+                ModifiedBy= currentUserID,
             };
 
             _ctx.Comments.Add(newComment);
@@ -33,6 +40,16 @@ namespace tajmautAPI.Repositories
 
             return newComment;
 
+        }
+
+        public async Task<List<Comment>> GetAllComments()
+        {
+            var allComments = await _ctx.Comments.ToListAsync();
+
+            if (allComments.Count() > 0)
+                return allComments;
+
+            throw new CustomException(HttpStatusCode.NotFound, $"No comments found");
         }
     }
 }

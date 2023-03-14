@@ -51,7 +51,15 @@ namespace tajmautAPI.Controllers
         [HttpGet("GetCommentsByRestaurantID"), AllowAnonymous]
         public async Task<ActionResult> GetCommentsByRestaurantID(int restaurantId)
         {
-            return Ok();
+            try
+            {
+                var result = await _service.GetCommentsByRestaurantID(restaurantId);
+                return Ok(result);
+            }
+            catch (CustomException ex)
+            {
+                return StatusCode((int)ex.StatusCode, ex.Message);
+            }
         }
     }
 }

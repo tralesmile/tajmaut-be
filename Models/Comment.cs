@@ -20,6 +20,21 @@ namespace tajmautAPI.Models
         [Required]
         public int Review { get; set; }
 
+        [Required]
+        public DateTime DateTime { get; set; }
+
+        [Required]
+        public DateTime ModifiedAt { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public int CreatedBy { get; set; }
+
+        [Required]
+        public int ModifiedBy { get; set; }
+
         //N-1 Relationships
         [JsonIgnore]
         public virtual Restaurant Restaurant { get; set; } = null!;
