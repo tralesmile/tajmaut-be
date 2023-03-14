@@ -12,5 +12,7 @@
 
         public int Review { get; set; }
 
+        public DateTime DateTime { get; set; }
+
     }
 }

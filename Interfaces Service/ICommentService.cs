@@ -7,5 +7,7 @@ namespace tajmautAPI.Interfaces_Service
     {
         Task<CommentRESPONSE> CreateComment(CommentREQUEST request);
         Task<List<CommentRESPONSE>> GetCommentsByRestaurantID(int restaurantId);
+        Task<bool> DeleteComment(int commentId);
+        Task<CommentRESPONSE> UpdateComment(CommentREQUEST request,int commentId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using tajmautAPI.Exceptions;
@@ -181,6 +182,18 @@ namespace tajmautAPI.Service
                 return true;
 
             throw new CustomException(HttpStatusCode.BadRequest, $"Invalid ID");
+        }
+
+        //check if comment exists
+        public async Task<bool> CheckIdComment(int commentId)
+        {
+            return await _helperRepo.CheckIdComment(commentId);
+        }
+
+        //get comment with id
+        public async Task<Comment> GetCommentId(int id)
+        {
+            return await _helperRepo.GetCommentId(id);
         }
     }
 }

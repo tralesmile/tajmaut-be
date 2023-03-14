@@ -15,6 +15,8 @@ namespace tajmautAPI.Interfaces
         Task<bool> CheckIdEventActivity(int id);
         Task<bool> CheckIdEventDate(int id);
         Task<bool> CheckIdUser(int id);
+        Task<bool> CheckIdComment(int id);
+        Task<Comment> GetCommentId(int id);
         Task<OnlineReservation> CheckIdReservation(int id);
 
     }

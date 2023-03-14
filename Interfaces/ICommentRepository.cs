@@ -7,5 +7,7 @@ namespace tajmautAPI.Interfaces
     {
         Task<Comment> AddToDB(CommentREQUEST request);
         Task<List<Comment>> GetAllComments();
+        Task<bool> DeleteComment(Comment comment);
+        Task<Comment> UpdateComment(Comment comment,CommentREQUEST request);
     }
 }

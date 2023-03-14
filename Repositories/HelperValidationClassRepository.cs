@@ -51,6 +51,17 @@ namespace tajmautAPI.Repositories
 
         }
 
+        //check if comment exists
+        public async Task<bool> CheckIdComment(int id)
+        {
+            var check = await _ctx.Comments.FirstOrDefaultAsync(x=>x.CommentId== id);
+            if(check!= null)
+            {
+                return true;
+            }
+            throw new CustomException(HttpStatusCode.NotFound, $"Comment not found");
+        }
+
         //check if event exists
         public async Task<bool> CheckIdEvent(int id)
         {
@@ -119,5 +130,15 @@ namespace tajmautAPI.Repositories
             return false;
         }
 
+        //get comment with id
+        public async Task<Comment> GetCommentId(int id)
+        {
+            var check = await _ctx.Comments.FindAsync(id);
+            if(check != null)
+            {
+                return check;
+            }
+            throw new CustomException(HttpStatusCode.NotFound, $"Comment not found");
+        }
     }
 }

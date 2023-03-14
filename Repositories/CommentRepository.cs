@@ -19,6 +19,7 @@ namespace tajmautAPI.Repositories
             _helper= helper;
         }
 
+        //add comment to db
         public async Task<Comment> AddToDB(CommentREQUEST request)
         {
             var currentUserID = _helper.GetMe();
@@ -42,6 +43,15 @@ namespace tajmautAPI.Repositories
 
         }
 
+        //delete comment
+        public async Task<bool> DeleteComment(Comment comment)
+        {
+            _ctx.Comments.Remove(comment);
+            await _ctx.SaveChangesAsync();
+            return true;
+        }
+
+        //get all comments
         public async Task<List<Comment>> GetAllComments()
         {
             var allComments = await _ctx.Comments.ToListAsync();
@@ -50,6 +60,23 @@ namespace tajmautAPI.Repositories
                 return allComments;
 
             throw new CustomException(HttpStatusCode.NotFound, $"No comments found");
+        }
+
+        //update comment
+        public async Task<Comment> UpdateComment(Comment comment, CommentREQUEST request)
+        {
+            var currentUserID = _helper.GetMe();
+
+            comment.UserId = currentUserID;
+            comment.RestaurantId = request.RestaurantId;
+            comment.Review = request.Review;
+            comment.Body= request.Body;
+            comment.ModifiedAt= DateTime.Now;
+            comment.ModifiedBy= currentUserID;
+
+            await _ctx.SaveChangesAsync();
+
+            return comment;
         }
     }
 }
