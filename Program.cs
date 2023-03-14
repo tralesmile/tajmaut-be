@@ -69,6 +69,8 @@ builder.Services.AddScoped<IHelperValidationClassRepository, HelperValidationCla
 builder.Services.AddScoped<IHelperValidationClassService, HelperValidationClassService>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 //filter exception
 builder.Services.AddControllers(options=>

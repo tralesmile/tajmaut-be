@@ -22,7 +22,7 @@ namespace tajmautAPI.Controllers
         }
 
         //get all db events
-        [HttpGet("GetAllEvents"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("GetAllEvents"), AllowAnonymous]
         public async Task<ActionResult> GetAllEvents()
         {
             try
@@ -40,7 +40,7 @@ namespace tajmautAPI.Controllers
         }
 
         //get event by id
-        [HttpGet("GetEventByID"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("GetEventByID"), AllowAnonymous]
         public async Task<ActionResult> GetEventById(int eventId)
         {
 
@@ -59,7 +59,7 @@ namespace tajmautAPI.Controllers
         }
 
         //all events in a specific restaurant
-        [HttpGet("GetRestaurantEventsByRestaurantID"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("GetRestaurantEventsByRestaurantID"), AllowAnonymous]
         public async Task<ActionResult> GetAllEventsByRestaurant(int restaurantId)
         {
 
@@ -138,7 +138,7 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by category
-        [HttpGet("FilterEventsByCategory"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("FilterEventsByCategory"), AllowAnonymous]
         public async Task<ActionResult> FilterEventsByCategory(int categoryId)
         {
 
@@ -157,7 +157,7 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by date
-        [HttpGet("FilterEventsByDate"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("FilterEventsByDate"), AllowAnonymous]
         public async Task<ActionResult> FilterEventsByDate(DateTime startDate,DateTime endDate)
         {
 
@@ -176,7 +176,7 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by city
-        [HttpGet("FilterEventsByCity"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("FilterEventsByCity"), AllowAnonymous]
         public async Task<ActionResult> FilterEventsByCity(string city)
         {
 
@@ -195,7 +195,7 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by restaurant rating
-        [HttpGet("FilterEventsByRestaurantRating"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("FilterEventsByRestaurantRating"), AllowAnonymous]
         public async Task<ActionResult> FilterEventsByRating()
         {
             return Ok();
@@ -220,7 +220,7 @@ namespace tajmautAPI.Controllers
 
         }
 
-        [HttpGet("GetNumberOfEvents"),Authorize(Roles ="Manager,Admin,User")]
+        [HttpGet("GetNumberOfEvents"), AllowAnonymous]
         public async Task<ActionResult> GetNumberOfEvents(int numEvents)
         {
             try
