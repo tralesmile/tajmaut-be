@@ -116,7 +116,7 @@ namespace tajmautAPI.Service
             }
             catch (CustomException ex)
             {
-                throw;
+                throw ex;
             }
 
             throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
