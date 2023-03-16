@@ -25,26 +25,36 @@ namespace tajmautAPI.Service
         }
 
         //change status of event (canceled or active)
-        public async Task<bool> CancelEvent(int eventId)
+        public async Task<ServiceResponse<EventGetRESPONSE>> CancelEvent(int eventId)
         {
+
+            ServiceResponse<EventGetRESPONSE> result = new();
+
             try
             {
-                if (await _repo.UpdateCancelEvent(eventId))
+                var getEvent = await _repo.UpdateCancelEvent(eventId);
+
+                if (getEvent!=null)
                 {
-                    return true;
+                    result.Data = _mapper.Map<EventGetRESPONSE>(getEvent);
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //create event
-        public async Task<EventRESPONSE> CreateEvent(EventPostREQUEST request)
+        public async Task<ServiceResponse<EventRESPONSE>> CreateEvent(EventPostREQUEST request)
         {
+
+            ServiceResponse<EventRESPONSE> result = new();
+
             try
             {
                 //check if category and restaurant exist
@@ -54,54 +64,64 @@ namespace tajmautAPI.Service
                     if (await _helper.CheckIdCategory(request.CategoryEventId))
                     {
                         var getResult = await _repo.CreateEvent(request);
-                        //
+
                         if (getResult != null)
                         {
-                            var result = await _repo.AddToDB(getResult);
-                            return _mapper.Map<EventRESPONSE>(result);
+                            var resultSend = await _repo.AddToDB(getResult);
+                            result.Data = _mapper.Map<EventRESPONSE>(resultSend);
                         }
                     }
                 }
 
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //delete event by id
-        public async Task<EventRESPONSE> DeleteEvent(int eventId)
+        public async Task<ServiceResponse<EventRESPONSE>> DeleteEvent(int eventId)
         {
+
+            ServiceResponse<EventRESPONSE> result = new();
+
             try
             {
                 //if invalid input
                 if (_helper.ValidateId(eventId))
                 {
 
-                    var result = await _repo.DeleteEvent(eventId);
+                    var resultSend = await _repo.DeleteEvent(eventId);
 
-                    if (result != null)
+                    if (resultSend != null)
                     {
-                        var returnResult = await _repo.DeleteEventDB(result);
-                        return _mapper.Map<EventRESPONSE>(returnResult);
+                        var returnResult = await _repo.DeleteEventDB(resultSend);
+                        result.Data = _mapper.Map<EventRESPONSE>(returnResult);
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
         //filter events by category
-        public async Task<List<EventGetRESPONSE>> FilterEventsByCategory(int categoryId)
+        public async Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByCategory(int categoryId)
         {
+
+            ServiceResponse<List<EventGetRESPONSE>> result = new();
+
             try
             {
                 //invalid input
@@ -117,51 +137,62 @@ namespace tajmautAPI.Service
                             var listEvents = resultEvents.Where(n => n.CategoryEventId == categoryId).ToList();
                             if(listEvents.Count() > 0)
                             {
-                                return await GetEventsWithOtherData(listEvents);
+                                var resultSend = await GetEventsWithOtherData(listEvents);
+                                result.Data = resultSend;
                             }
                             else
                             {
-                                throw new CustomException(HttpStatusCode.NotFound, $"This category has no events");
+                                throw new CustomError(404, $"This category has no events");
                             }
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //filter events by city
-        public async Task<List<EventGetRESPONSE>> FilterEventsByCity(string city)
+        public async Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByCity(string city)
         {
+
+            ServiceResponse<List<EventGetRESPONSE>> result = new();
+
             try
             {
                 //invalid input
                 if (city == null)
-                    throw new CustomException(HttpStatusCode.BadRequest,"Invalid input!");
+                    throw new CustomError(400,"Invalid input!");
 
                 //filter
-                var result = await _repo.FilterEventsInCity(city);
-                if (result.Count() > 0)
+                var resultSend = await _repo.FilterEventsInCity(city);
+                if (resultSend.Count() > 0)
                 {
-                    return await GetEventsWithOtherData(result);
+                    result.Data = await GetEventsWithOtherData(resultSend);
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //filter events by date from-to
-        public async Task<List<EventGetRESPONSE>> FilterEventsByDate(DateTime startDate, DateTime endDate)
+        public async Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByDate(DateTime startDate, DateTime endDate)
         {
+
+            ServiceResponse<List<EventGetRESPONSE>> result = new();
+
             try
             {
                 var allEvents = await _repo.GetAllEvents();
@@ -173,94 +204,115 @@ namespace tajmautAPI.Service
                     var sendEvents = allEvents.Where(e => e.DateTime >= startDate && e.DateTime <= endDate).ToList();
                     if (sendEvents.Count() > 0)
                     {
-                        return await GetEventsWithOtherData(sendEvents);
+                        result.Data = await GetEventsWithOtherData(sendEvents);
                     }
-                    throw new CustomException(HttpStatusCode.NotFound,"No data found!");
+                    throw new CustomError(404, "No data found!");
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
         //get all events to list
-        public async Task<List<EventGetRESPONSE>> GetAllEvents()
+        public async Task<ServiceResponse<List<EventGetRESPONSE>>> GetAllEvents()
         {
+
+            ServiceResponse<List<EventGetRESPONSE>> result = new();
+
             try
             {
                 var getResult = await _repo.GetAllEvents();
 
                 if (getResult.Count() > 0)
                 {
-                    return await GetEventsWithOtherData(getResult);
+                    result.Data = await GetEventsWithOtherData(getResult);
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //get events from specific restaurant
-        public async Task<List<EventGetRESPONSE>> GetAllEventsByRestaurant(int restaurantId)
+        public async Task<ServiceResponse<List<EventGetRESPONSE>>> GetAllEventsByRestaurant(int restaurantId)
         {
+
+            ServiceResponse<List<EventGetRESPONSE>> result = new();
+
             try
             {
                 //invalid input
                 if (_helper.ValidateId(restaurantId))
                 {
-
-                    var allEvents = await _repo.GetAllEvents();
-                    if (allEvents.Count() > 0)
+                    if (await _helper.CheckIdRestaurant(restaurantId))
                     {
-                        //query
-                        var listEvents = allEvents.Where(n => n.RestaurantId == restaurantId).ToList();
-                        if (listEvents.Count() > 0)
+                        var allEvents = await _repo.GetAllEvents();
+
+                        if (allEvents.Count() > 0)
                         {
-                            return await GetEventsWithOtherData(listEvents);
+                            //query
+                            var listEvents = allEvents.Where(n => n.RestaurantId == restaurantId).ToList();
+                            if (listEvents.Count() > 0)
+                            {
+                                result.Data = await GetEventsWithOtherData(listEvents);
+                            }
+                            throw new CustomError(404, "This restaurant has no events!");
                         }
-                        throw new CustomException(HttpStatusCode.NotFound,"No data found!");
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
         //get event by id
-        public async Task<List<EventGetRESPONSE>> GetEventById(int eventId)
+        public async Task<ServiceResponse<List<EventGetRESPONSE>>> GetEventById(int eventId)
         {
+
+            ServiceResponse<List<EventGetRESPONSE>> result = new();
+
+
             try
             {
                 //invalid input
                 if (_helper.ValidateId(eventId))
                 {
 
-                    var result = await _repo.GetEventById(eventId);
+                    var resultSend = await _repo.GetEventById(eventId);
 
-                    if (result.Count() > 0)
+                    if (resultSend.Count() > 0)
                     {
-                        return await GetEventsWithOtherData(result);
+                        result.Data = await GetEventsWithOtherData(resultSend);
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //get other data for the events in sorted list
@@ -319,8 +371,11 @@ namespace tajmautAPI.Service
         }
 
         //get number of events
-        public async Task<List<EventGetRESPONSE>> GetNumberOfEvents(int numEvents)
+        public async Task<ServiceResponse<List<EventGetRESPONSE>>> GetNumberOfEvents(int numEvents)
         {
+
+            ServiceResponse<List<EventGetRESPONSE>> result = new();
+
             try
             {
                 //get all events
@@ -369,26 +424,31 @@ namespace tajmautAPI.Service
                         //take num events
                         var getNumEvents = getEvents.Take(numEvents).ToList();
 
-                        return getNumEvents;
+                        result.Data = getNumEvents;
 
                     }
                     else
                     {
-                        throw new CustomException(HttpStatusCode.NotFound,$"No upcoming events");
+                        throw new CustomError(404,$"No upcoming events");
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //update event
-        public async Task<EventRESPONSE> UpdateEvent(EventPostREQUEST request, int eventId)
+        public async Task<ServiceResponse<EventRESPONSE>> UpdateEvent(EventPostREQUEST request, int eventId)
         {
+
+            ServiceResponse<EventRESPONSE> result = new();
+
             try
             {
                 //invalid input
@@ -406,19 +466,21 @@ namespace tajmautAPI.Service
                             //if restaurant exists
                             if (await _helper.CheckIdRestaurant(request.RestaurantId))
                             {
-                                var result = await _repo.SaveUpdatesEventDB(resultEvent, request);
-                                return _mapper.Map<EventRESPONSE>(result);
+                                var resultSend = await _repo.SaveUpdatesEventDB(resultEvent, request);
+                                result.Data = _mapper.Map<EventRESPONSE>(resultSend);
                             }
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
     }

@@ -64,7 +64,7 @@ namespace tajmautAPI.Repositories
                 return user;
             }
             
-            throw new CustomException(HttpStatusCode.NotFound,$"User not found");
+            throw new CustomError(404,$"User not found");
         }
 
         //get all users
@@ -77,7 +77,7 @@ namespace tajmautAPI.Repositories
                 return check;
             }
 
-            throw new CustomException(HttpStatusCode.NotFound, $"No users found");
+            throw new CustomError(404, $"No users found");
         }
         
         //get user by id
@@ -90,7 +90,7 @@ namespace tajmautAPI.Repositories
                 return check;
             }
 
-            throw new CustomException(HttpStatusCode.NotFound,$"User not found");
+            throw new CustomError(404,$"User not found");
         }
 
         //save to database
@@ -112,7 +112,7 @@ namespace tajmautAPI.Repositories
             {
                 return user;
             }
-            throw new CustomException(HttpStatusCode.NotFound, $"User not found");
+            throw new CustomError(404, $"User not found");
         }
 
         //save changes
@@ -146,7 +146,7 @@ namespace tajmautAPI.Repositories
             var currentUser = await _ctx.Users.FindAsync(id);
             if (currentUser == null || !VerifyPasswordHash(oldPassword, currentUser.PasswordHash, currentUser.PasswordSalt))
             {
-                throw new CustomException(HttpStatusCode.BadRequest, $"Invalid old password");
+                throw new CustomError(400, $"Invalid old password");
             }
             return true;
         }

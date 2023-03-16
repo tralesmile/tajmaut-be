@@ -28,8 +28,11 @@ namespace tajmautAPI.Service
             _helperClass = helperClass;
         }
 
-        public async Task<UserRESPONSE> CreateUserAsync(UserPostREQUEST user)
+        public async Task<ServiceResponse<UserRESPONSE>> CreateUserAsync(UserPostREQUEST user)
         {
+
+            ServiceResponse<UserRESPONSE> result = new();
+
             try
             {
                 //get user from repo
@@ -46,27 +49,32 @@ namespace tajmautAPI.Service
                     {
                         if (user.Password == user.ConfirmPassword)
                         {
-                            var result = await _repo.AddEntity(getUser);
-                            return _mapper.Map<UserRESPONSE>(result);
+                            var resultSend = await _repo.AddEntity(getUser);
+                            result.Data = _mapper.Map<UserRESPONSE>(resultSend);
                         }
                         else
                         {
-                            throw new CustomException(HttpStatusCode.BadRequest,$"Passwords do not match!");
+                            throw new CustomError(400,$"Passwords do not match!");
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
-        public async Task<UserRESPONSE> DeleteUserAsync(int id)
+        public async Task<ServiceResponse<UserRESPONSE>> DeleteUserAsync(int id)
         {
+
+            ServiceResponse<UserRESPONSE> result = new();
+
             try
             {
                 if (_helperClass.ValidateId(id))
@@ -83,36 +91,43 @@ namespace tajmautAPI.Service
                         //check if there is any
                         if (user != null)
                         {
-                            var result = await _repo.DeleteEntity(user);
-                            return _mapper.Map<UserRESPONSE>(result);
+                            var resultSend = await _repo.DeleteEntity(user);
+                            result.Data = _mapper.Map<UserRESPONSE>(resultSend);
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
-        public async Task<List<UserRESPONSE>> GetAllUsersAsync()
+        public async Task<ServiceResponse<List<UserRESPONSE>>> GetAllUsersAsync()
         {
+
+            ServiceResponse<List<UserRESPONSE>> result = new();
+
             try
             {
-                var result = await _repo.GetAllUsersAsync();
-                if (result != null)
+                var resultSend = await _repo.GetAllUsersAsync();
+                if (resultSend != null)
                 {
-                    return _mapper.Map<List<UserRESPONSE>>(result);
+                    result.Data = _mapper.Map<List<UserRESPONSE>>(resultSend);
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         public int GetMe()
@@ -120,8 +135,11 @@ namespace tajmautAPI.Service
             return _helperClass.GetMe();
         }
 
-        public async Task<UserRESPONSE> GetUserByIdAsync(int id)
+        public async Task<ServiceResponse<UserRESPONSE>> GetUserByIdAsync(int id)
         {
+
+            ServiceResponse<UserRESPONSE> result = new();
+
             try
             {
                 //if id is smaller than 0
@@ -135,27 +153,32 @@ namespace tajmautAPI.Service
                     {
 
                         //get result
-                        var result = await _repo.GetUserByIdAsync(id);
+                        var resultSend = await _repo.GetUserByIdAsync(id);
 
                         //if is true
-                        if (result != null)
+                        if (resultSend != null)
                         {
-                            return _mapper.Map<UserRESPONSE>(result);
+                            result.Data = _mapper.Map<UserRESPONSE>(resultSend);
                         }
                     }
 
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
-        public async Task<UserRESPONSE> UpdateUserAsync(UserPutREQUEST request, int id)
+        public async Task<ServiceResponse<UserRESPONSE>> UpdateUserAsync(UserPutREQUEST request, int id)
         {
+
+            ServiceResponse<UserRESPONSE> result = new();
+
             try
             {
                 if (id < 0)
@@ -182,23 +205,28 @@ namespace tajmautAPI.Service
                             if (checkUser == null)
                             {
                                 //update the user 
-                                var result = await _repo.SaveChanges(getUser, request);
-                                return _mapper.Map<UserRESPONSE>(result);
+                                var resultSend = await _repo.SaveChanges(getUser, request);
+                                result.Data = _mapper.Map<UserRESPONSE>(resultSend);
                             }
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
-        public async Task<UserRESPONSE> UpdateUserPassword(UserPassREQUEST request, int id)
+        public async Task<ServiceResponse<UserRESPONSE>> UpdateUserPassword(UserPassREQUEST request, int id)
         {
+
+            ServiceResponse<UserRESPONSE> result = new();
+
             try
             {
                 var currentUserID = _helperClass.GetMe();
@@ -216,22 +244,24 @@ namespace tajmautAPI.Service
                             if (request.NewPassword == request.ConfirmPassword)
                             {
                                 var resultUser = await _repo.UpdatePassword(currentUser, request.NewPassword);
-                                return _mapper.Map<UserRESPONSE>(currentUser);
+                                result.Data = _mapper.Map<UserRESPONSE>(currentUser);
                             }
                             else
                             {
-                                throw new CustomException(HttpStatusCode.BadRequest,$"Passwords do not match!");
+                                throw new CustomError(400,$"Passwords do not match!");
                             }
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
     }
 }

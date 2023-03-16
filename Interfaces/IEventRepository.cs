@@ -15,7 +15,7 @@ namespace tajmautAPI.Interfaces
         Task<Event> SaveUpdatesEventDB(Event getEvent, EventPostREQUEST request);
         Task<List<Event>> FilterEventsInCity(string city);
         Task<Restaurant> GetRestaurantById(int id);
-        Task<bool> UpdateCancelEvent(int eventId);
+        Task<Event> UpdateCancelEvent(int eventId);
 
 
     }

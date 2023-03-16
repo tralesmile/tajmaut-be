@@ -60,7 +60,7 @@ namespace tajmautAPI.Repositories
             {
                 return check;
             }
-            throw new CustomException(HttpStatusCode.NotFound,"Event not found!");
+            throw new CustomError(404,"Event not found!");
 
         }
 
@@ -88,7 +88,7 @@ namespace tajmautAPI.Repositories
                 return eventsInCity;
             }
 
-            throw new CustomException(HttpStatusCode.NotFound, $"No data found");
+            throw new CustomError(404, $"No data found");
         }
 
         //get all events
@@ -100,7 +100,7 @@ namespace tajmautAPI.Repositories
                 return check;
             }
 
-            throw new CustomException(HttpStatusCode.NotFound,"No Data found!");
+            throw new CustomError(404,"No Data found!");
 
         }
 
@@ -113,7 +113,7 @@ namespace tajmautAPI.Repositories
                 return check;
             }
 
-            throw new CustomException(HttpStatusCode.NotFound, $"Event not found");
+            throw new CustomError(404, $"Event not found");
         }
 
         //get restaurant by id
@@ -141,14 +141,14 @@ namespace tajmautAPI.Repositories
         }
 
         //update status of event cancel-active
-        public async Task<bool> UpdateCancelEvent(int eventId)
+        public async Task<Event> UpdateCancelEvent(int eventId)
         {
             //check if exists
             var result = await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
 
             if(result == null)
             {
-                throw new CustomException(HttpStatusCode.NotFound, $"Event with ID:{eventId} not found!");
+                throw new CustomError(404, $"Event with ID:{eventId} not found!");
             }
 
             //if is canceled make active
@@ -164,7 +164,7 @@ namespace tajmautAPI.Repositories
 
             await _ctx.SaveChangesAsync();
 
-            return true;
+            return result;
         }
 
         //update event by id
@@ -173,7 +173,7 @@ namespace tajmautAPI.Repositories
             var check = await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
             if (check == null)
             {
-                throw new CustomException(HttpStatusCode.NotFound, $"Event not found");
+                throw new CustomError(404, $"Event not found");
             }
             return check;
         }

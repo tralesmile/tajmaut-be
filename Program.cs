@@ -73,10 +73,10 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
 //filter exception
-builder.Services.AddControllers(options=>
-{
-    options.Filters.Add<CustomExceptionFilter>();
-});
+//builder.Services.AddControllers(options=>
+//{
+//    options.Filters.Add<CustomExceptionFilter>();
+//});
 
 //httpcontextaccessor
 builder.Services.AddHttpContextAccessor();
@@ -95,6 +95,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+//custom exception middleware
+app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.MapControllers();
 

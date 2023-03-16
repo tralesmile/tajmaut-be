@@ -29,20 +29,16 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> GetAllUsers()
         {
             //get result from service
-            var users = await _userService.GetAllUsersAsync();
+            var result = await _userService.GetAllUsersAsync();
 
-            //check if there is any
-            try
+            //check if error exists
+            if (result.isError)
             {
-                if (users != null)
-                    return Ok(users);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
 
         }
 
@@ -50,20 +46,16 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> GetUserById(int id)
         {
             //get result from service
-            var user = await _userService.GetUserByIdAsync(id);
-            try
+            var result = await _userService.GetUserByIdAsync(id);
+
+            //check if error exists
+            if (result.isError)
             {
-                if (user != null)
-                {
-                    return Ok(user);
-                }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
 
         }
 
@@ -72,41 +64,33 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> Create(UserPostREQUEST user)
         {
             //get result from service
-            var userCheck = await _userService.CreateUserAsync(user);
+            var result = await _userService.CreateUserAsync(user);
 
-            try
+            //check if error exists
+            if(result.isError)
             {
-                //check if there is any
-                if (userCheck != null)
-                {
-                    return Ok(userCheck);
-                }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
+            
         }
 
         [HttpPut("{id}"), Authorize]
         public async Task<ActionResult> Put(UserPutREQUEST request, int id)
         {
             //get result from service
-            var user = await _userService.UpdateUserAsync(request, id);
+            var result = await _userService.UpdateUserAsync(request, id);
 
-            try
+            //check if error exists
+            if (result.isError)
             {
-                //check if updated
-                if (user != null)
-                {
-                    return Ok("UPDATED");
-                }
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
-            catch (CustomException ex) { return StatusCode((int)ex.StatusCode, ex.Message); }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
 
         }
 
@@ -115,25 +99,19 @@ namespace tajmautAPI.Controllers
 
         {
             //get result from service
-            var user = await _userService.DeleteUserAsync(id);
+            var result = await _userService.DeleteUserAsync(id);
 
-            try
+            //check if error exists
+            if (result.isError)
             {
-                //check if there is any
-                if (user != null)
-                {
-                    return Ok("DELETED");
-                }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok("Success");
         }
 
-        [HttpGet("GetCurrentUserID"), Authorize]
+        [HttpGet("GetCurrentUserID"), Authorize(Roles ="Admin")]
         public ActionResult<int> GetCurrentUserEmail()
         {
             var userEmail = _userService.GetMe();
@@ -144,19 +122,15 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> UpdateUserPassword(UserPassREQUEST request,int id)
         {
             var result = await _userService.UpdateUserPassword(request,id);
-            try
+
+            //check if error exists
+            if (result.isError)
             {
-                if(result != null)
-                {
-                    return Ok(result);
-                }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok("Success");
         }
 
     }

@@ -24,7 +24,7 @@ namespace tajmautAPI.Repositories
                 return check;
             }
 
-            throw new CustomException(HttpStatusCode.BadRequest, $"User exists");
+            throw new CustomError(409, $"User exists");
         }
 
         //check duplicates without the current user
@@ -33,7 +33,7 @@ namespace tajmautAPI.Repositories
             var check = await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.UserId != id);
             if(check != null)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, $"User exists");
+                throw new CustomError(409, $"User exists");
             }
             return check;
         }
@@ -47,7 +47,7 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            throw new CustomException(HttpStatusCode.NotFound,"Category not found");
+            throw new CustomError(404,"Category not found");
 
         }
 
@@ -59,7 +59,7 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            throw new CustomException(HttpStatusCode.NotFound, $"Comment not found");
+            throw new CustomError(404, $"Comment not found");
         }
 
         //check if event exists
@@ -70,7 +70,7 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            throw new CustomException(HttpStatusCode.NotFound, $"Event not found");
+            throw new CustomError(404, $"Event not found");
         }
 
         //check if events is canceled
@@ -79,7 +79,7 @@ namespace tajmautAPI.Repositories
             var check = await _ctx.Events.FirstOrDefaultAsync(eve=>eve.EventId == id);
             if(check.isCanceled)
             {
-                throw new CustomException(HttpStatusCode.BadRequest, $"Event was canceled");
+                throw new CustomError(400, $"Event was canceled");
             }
             return true;
         }
@@ -92,7 +92,7 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            throw new CustomException(HttpStatusCode.BadRequest, $"Event ended!");
+            throw new CustomError(400, $"Event ended!");
         }
 
         //check id reservation
@@ -103,7 +103,7 @@ namespace tajmautAPI.Repositories
             {
                 return result;
             }
-            throw new CustomException(HttpStatusCode.NotFound, $"Reservation not found");
+            throw new CustomError(404, $"Reservation not found");
         }
 
         //check if restaurant exists in DB
@@ -116,7 +116,7 @@ namespace tajmautAPI.Repositories
                 return true;
             }
 
-            throw new CustomException(HttpStatusCode.NotFound, $"Restaurant not found");
+            throw new CustomError(404, $"Restaurant not found");
         }
 
         //check if user exists
@@ -138,7 +138,7 @@ namespace tajmautAPI.Repositories
             {
                 return check;
             }
-            throw new CustomException(HttpStatusCode.NotFound, $"Comment not found");
+            throw new CustomError(404, $"Comment not found");
         }
     }
 }

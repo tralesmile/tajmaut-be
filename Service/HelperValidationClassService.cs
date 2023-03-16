@@ -58,7 +58,7 @@ namespace tajmautAPI.Service
                 return true;
             }
 
-            throw new CustomException(HttpStatusCode.BadRequest, $"Invalid Email");
+            throw new CustomError(400, $"Invalid Email");
         }
 
         //get current user id
@@ -122,7 +122,7 @@ namespace tajmautAPI.Service
             {
                 return true;
             }
-            throw new CustomException(HttpStatusCode.BadRequest, $"Invalid phone number!");
+            throw new CustomError(400, $"Invalid phone number!");
         }
 
         //check if user exists
@@ -134,7 +134,7 @@ namespace tajmautAPI.Service
                 return true;
             }
 
-            throw new CustomException(HttpStatusCode.NotFound, $"User not found");
+            throw new CustomError(404, $"User not found");
         }
 
         //check if reservations exists
@@ -150,7 +150,7 @@ namespace tajmautAPI.Service
             if (check == "Admin")
                 return true;
 
-            throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Admin");
+            throw new CustomError(401, $"Current user is not Admin");
         }
 
         //user or manager current user
@@ -162,7 +162,7 @@ namespace tajmautAPI.Service
                 return true;
             }
 
-            throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Admin or Manager");
+            throw new CustomError(401, $"Current user is not Admin or Manager");
         }
 
         //check if current user is manager
@@ -172,7 +172,7 @@ namespace tajmautAPI.Service
             if (check == "Manager")
                 return true;
 
-            throw new CustomException(HttpStatusCode.Unauthorized, $"Current user is not Manager");
+            throw new CustomError(401, $"Current user is not Manager");
         }
 
         //validate id input
@@ -181,7 +181,7 @@ namespace tajmautAPI.Service
             if (id > 0)
                 return true;
 
-            throw new CustomException(HttpStatusCode.BadRequest, $"Invalid ID");
+            throw new CustomError(400, $"Invalid ID");
         }
 
         //check if comment exists
