@@ -59,7 +59,7 @@ namespace tajmautAPI.Repositories
             if (allComments.Count() > 0)
                 return allComments;
 
-            throw new CustomException(HttpStatusCode.NotFound, $"No comments found");
+            throw new CustomError(404, $"No comments found");
         }
 
         //update comment

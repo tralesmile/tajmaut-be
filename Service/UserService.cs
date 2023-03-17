@@ -183,7 +183,7 @@ namespace tajmautAPI.Service
             {
                 if (id < 0)
                 {
-                    throw new CustomException(HttpStatusCode.BadRequest,$"Invalid ID");
+                    throw new CustomError(400,$"Invalid ID");
                 }
                 var currentUserID = _helperClass.GetMe();
                 //current user can make changes and Admins

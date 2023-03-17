@@ -207,7 +207,7 @@ namespace tajmautAPI.Controllers
             }
 
             //if no error
-            return Ok(result.Data);
+            return Ok("Event status changed");
 
         }
 

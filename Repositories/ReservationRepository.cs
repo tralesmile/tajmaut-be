@@ -88,7 +88,7 @@ namespace tajmautAPI.Repositories
                 return result;
             }
 
-            throw new CustomException(HttpStatusCode.NotFound, $"No reservations found");
+            throw new CustomError(404, $"No reservations found");
         }
 
         //reservation by id
@@ -99,7 +99,7 @@ namespace tajmautAPI.Repositories
             {
                 return check;
             }
-            throw new CustomException(HttpStatusCode.Unauthorized, $"Unauthorized user");
+            throw new CustomError(401, $"Unauthorized user");
         }
 
         //if reservation exists
@@ -110,7 +110,7 @@ namespace tajmautAPI.Repositories
             {
                 return true;
             }
-            throw new CustomException(HttpStatusCode.NotFound, $"Reservation not found");
+            throw new CustomError(404, $"Reservation not found");
         }
     }
 }

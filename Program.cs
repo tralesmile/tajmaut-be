@@ -72,11 +72,18 @@ builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
-//filter exception
-//builder.Services.AddControllers(options=>
-//{
-//    options.Filters.Add<CustomExceptionFilter>();
-//});
+
+//CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 //httpcontextaccessor
 builder.Services.AddHttpContextAccessor();
@@ -88,6 +95,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Lotus.API.Integration v1"));
 
+//CORS
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

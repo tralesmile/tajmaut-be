@@ -25,10 +25,10 @@ namespace tajmautAPI.Service
         }
 
         //change status of event (canceled or active)
-        public async Task<ServiceResponse<EventGetRESPONSE>> CancelEvent(int eventId)
+        public async Task<ServiceResponse<EventRESPONSE>> CancelEvent(int eventId)
         {
 
-            ServiceResponse<EventGetRESPONSE> result = new();
+            ServiceResponse<EventRESPONSE> result = new();
 
             try
             {
@@ -36,7 +36,7 @@ namespace tajmautAPI.Service
 
                 if (getEvent!=null)
                 {
-                    result.Data = _mapper.Map<EventGetRESPONSE>(getEvent);
+                    result.Data = _mapper.Map<EventRESPONSE>(getEvent);
                 }
             }
             catch (CustomError ex)
@@ -206,7 +206,10 @@ namespace tajmautAPI.Service
                     {
                         result.Data = await GetEventsWithOtherData(sendEvents);
                     }
-                    throw new CustomError(404, "No data found!");
+                    else
+                    {
+                        throw new CustomError(404, "No data found!");
+                    }
                 }
             }
             catch (CustomError ex)
@@ -268,7 +271,10 @@ namespace tajmautAPI.Service
                             {
                                 result.Data = await GetEventsWithOtherData(listEvents);
                             }
-                            throw new CustomError(404, "This restaurant has no events!");
+                            else
+                            {
+                                throw new CustomError(404, "This restaurant has no events!");
+                            }
                         }
                     }
                 }

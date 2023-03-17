@@ -23,8 +23,11 @@ namespace tajmautAPI.Service
         }
 
         //create comment
-        public async Task<CommentRESPONSE> CreateComment(CommentREQUEST request)
+        public async Task<ServiceResponse<CommentRESPONSE>> CreateComment(CommentREQUEST request)
         {
+
+            ServiceResponse<CommentRESPONSE> result = new();
+
             try
             {
                 //if valid id
@@ -33,22 +36,27 @@ namespace tajmautAPI.Service
                     //if restaurant exists
                     if (await _helper.CheckIdRestaurant(request.RestaurantId))
                     {
-                        var result = await _repo.AddToDB(request);
-                        return _mapper.Map<CommentRESPONSE>(result);
+                        var resultSend = await _repo.AddToDB(request);
+                        result.Data = _mapper.Map<CommentRESPONSE>(resultSend);
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //delete comment
-        public async Task<bool> DeleteComment(int commentId)
+        public async Task<ServiceResponse<CommentRESPONSE>> DeleteComment(int commentId)
         {
+
+            ServiceResponse<CommentRESPONSE> result = new();
+
             try
             {
                 //if comment exists
@@ -56,6 +64,7 @@ namespace tajmautAPI.Service
                 {
 
                     var currentUserID = _helper.GetMe();
+
                     //get comment obj
                     var getComment = await _helper.GetCommentId(commentId);
 
@@ -66,23 +75,28 @@ namespace tajmautAPI.Service
                         {
                             if(await _repo.DeleteComment(getComment))
                             {
-                                return true;
+                                result.Data = _mapper.Map<CommentRESPONSE>(getComment);
                             }
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //get comments by restaurant
-        public async Task<List<CommentRESPONSE>> GetCommentsByRestaurantID(int restaurantId)
+        public async Task<ServiceResponse<List<CommentRESPONSE>>> GetCommentsByRestaurantID(int restaurantId)
         {
+
+            ServiceResponse<List<CommentRESPONSE>> result = new();
+
             try
             {
                 //if valid restaurant id
@@ -104,27 +118,32 @@ namespace tajmautAPI.Service
                                 //sord comments by date - newest first
                                 var sortedResComments = restaurantComments.OrderByDescending(x => x.DateTime).ToList();
 
-                                return _mapper.Map<List<CommentRESPONSE>>(sortedResComments);
+                                result.Data = _mapper.Map<List<CommentRESPONSE>>(sortedResComments);
                             }
                             else
                             {
-                                throw new CustomException(HttpStatusCode.NotFound, $"This restaurant has no comments");
+                                throw new CustomError(404, $"This restaurant has no comments");
                             }
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw ex;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
         }
 
         //update comment
-        public async Task<CommentRESPONSE> UpdateComment(CommentREQUEST request,int commentId)
+        public async Task<ServiceResponse<CommentRESPONSE>> UpdateComment(CommentREQUEST request,int commentId)
         {
+
+            ServiceResponse<CommentRESPONSE> result = new();
+
             try
             {
                 //check if comment exists
@@ -141,22 +160,24 @@ namespace tajmautAPI.Service
                         //only comment user id can update
                         if(currentUserID==getComment.UserId)
                         {
-                            var result = await _repo.UpdateComment(getComment, request);
-                            return _mapper.Map<CommentRESPONSE>(result);
+                            var resultSend = await _repo.UpdateComment(getComment, request);
+                            result.Data = _mapper.Map<CommentRESPONSE>(resultSend);
                         }
                         else
                         {
-                            throw new CustomException(HttpStatusCode.Unauthorized, $"Unauthorized user access");
+                            throw new CustomError(401, $"Unauthorized user access");
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
     }

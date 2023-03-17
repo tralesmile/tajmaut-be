@@ -25,15 +25,18 @@ namespace tajmautAPI.Controllers
         [HttpPost("CreateComment"),Authorize(Roles ="Admin,Manager,User")]
         public async Task<ActionResult> CreateComment(CommentREQUEST request)
         {
-            try
+
+            var result = await _service.CreateComment(request);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _service.CreateComment(request);
-                return Ok(result);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
-            }
+
+            //if no error
+            return Ok(result.Data);
+
 
         }
 
@@ -41,45 +44,51 @@ namespace tajmautAPI.Controllers
         [HttpDelete("DeleteComment"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> DeleteComment(int commentId)
         {
-            try
+            var result = await _service.DeleteComment(commentId);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _service.DeleteComment(commentId);
-                return Ok($"DELETED");
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
-            }
+
+            //if no error
+            return Ok("Deleted");
+
         }
 
         //update
         [HttpPut("UpdateComment"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> UpdateComment(CommentREQUEST request,int commentId)
         {
-            try
+            var result = await _service.UpdateComment(request, commentId);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _service.UpdateComment(request, commentId);
-                return Ok(result);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
-            }
+
+            //if no error
+            return Ok(result.Data);
+
         }
 
         //get comment by restaurant
         [HttpGet("GetCommentsByRestaurantID"), AllowAnonymous]
         public async Task<ActionResult> GetCommentsByRestaurantID(int restaurantId)
         {
-            try
+            var result = await _service.GetCommentsByRestaurantID(restaurantId);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _service.GetCommentsByRestaurantID(restaurantId);
-                return Ok(result);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
-            }
+
+            //if no error
+            return Ok(result.Data);
+
         }
     }
 }

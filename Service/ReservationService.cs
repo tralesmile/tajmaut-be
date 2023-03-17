@@ -24,8 +24,11 @@ namespace tajmautAPI.Service
         }
 
         //create reservation
-        public async Task<ReservationRESPONSE> CreateReservation(ReservationREQUEST request)
+        public async Task<ServiceResponse<ReservationRESPONSE>> CreateReservation(ReservationREQUEST request)
         {
+
+            ServiceResponse<ReservationRESPONSE> result = new();
+
             try
             {
 
@@ -57,19 +60,19 @@ namespace tajmautAPI.Service
                                             //check if current user is the entered user || role is admin,manager
                                             if (request.UserId == currentUserID || _helper.CheckUserAdminOrManager())
                                             {
-                                                var result = await _repo.CreateReservation(request);
+                                                var resultSend = await _repo.CreateReservation(request);
 
-                                                return _mapper.Map<ReservationRESPONSE>(result);
+                                                result.Data = _mapper.Map<ReservationRESPONSE>(resultSend);
                                             }
                                             else
                                             {
-                                                throw new CustomException(HttpStatusCode.Unauthorized,$"Unauthorized User");
+                                                throw new CustomError(401, $"Unauthorized User");
                                             }
 
                                         }
                                         else
                                         {
-                                            throw new CustomException(HttpStatusCode.BadRequest,$"Invalid number of guests field!");
+                                            throw new CustomError(401, $"Invalid number of guests field!");
                                         }
                                     }
                                 }
@@ -79,18 +82,23 @@ namespace tajmautAPI.Service
                 }
 
             }
-            catch(CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
         //delete reservation
-        public async Task<string> DeleteReservation(int reservationId)
+        public async Task<ServiceResponse<ReservationRESPONSE>> DeleteReservation(int reservationId)
         {
+
+            ServiceResponse<ReservationRESPONSE> result = new();
+
             try
             {
 
@@ -109,23 +117,28 @@ namespace tajmautAPI.Service
                         var check = await _repo.DeleteReservation(currentReservation);
                         if (check)
                         {
-                            return "Reservation Deleted";
+                            result.Data = _mapper.Map<ReservationRESPONSE>(currentReservation);
                         }
                     }
                 }
             }
-            catch(CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
         //all reservations
-        public async Task<List<ReservationRESPONSE>> GetAllReservations()
+        public async Task<ServiceResponse<List<ReservationRESPONSE>>> GetAllReservations()
         {
+
+            ServiceResponse<List<ReservationRESPONSE>> result = new();
+
             try
             {
 
@@ -137,22 +150,27 @@ namespace tajmautAPI.Service
                     //if there are reservations
                     if (listReservations.Count() > 0)
                     {
-                        return _mapper.Map<List<ReservationRESPONSE>>(listReservations);
+                        result.Data = _mapper.Map<List<ReservationRESPONSE>>(listReservations);
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
         //all reservations by event 
-        public async Task<List<ReservationRESPONSE>> GetReservationsByEvent(int eventId)
+        public async Task<ServiceResponse<List<ReservationRESPONSE>>> GetReservationsByEvent(int eventId)
         {
+
+            ServiceResponse<List<ReservationRESPONSE>> result = new();
+
             try
             {
                 //if the id is valid
@@ -173,29 +191,34 @@ namespace tajmautAPI.Service
 
                                 if (eventReservations.Count() > 0)
                                 {
-                                    return _mapper.Map<List<ReservationRESPONSE>>(eventReservations);
+                                    result.Data = _mapper.Map<List<ReservationRESPONSE>>(eventReservations);
                                 }
                                 else
                                 {
-                                    throw new CustomException(HttpStatusCode.NotFound, $"This event has no reservations");
+                                    throw new CustomError(404, $"This event has no reservations");
                                 }
                             }
                         }
                     }
                 }
             }
-            catch(CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
         //all reservations by restaurant
-        public async Task<List<ReservationRESPONSE>> GetReservationsByRestaurant(int restaurantId)
+        public async Task<ServiceResponse<List<ReservationRESPONSE>>> GetReservationsByRestaurant(int restaurantId)
         {
+
+            ServiceResponse<List<ReservationRESPONSE>> result = new();
+
             try
             {
                 //if restaurantId is valid
@@ -215,35 +238,40 @@ namespace tajmautAPI.Service
                                 var restaurantReservations = listReservations.Where(n => n.RestaurantId == restaurantId).ToList();
                                 if (restaurantReservations.Count() > 0)
                                 {
-                                    return _mapper.Map<List<ReservationRESPONSE>>(restaurantReservations);
+                                    result.Data = _mapper.Map<List<ReservationRESPONSE>>(restaurantReservations);
                                 }
                                 else
                                 {
-                                    throw new CustomException(HttpStatusCode.NotFound,$"Restaurant has no reservations");
+                                    throw new CustomError(404,$"Restaurant has no reservations");
                                 }
                             }
                         }
                     }
                 }
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
 
         //all reservations by user - filter exception
-        public async Task<List<ReservationRESPONSE>> GetReservationsByUser(int userId)
+        public async Task<ServiceResponse<List<ReservationRESPONSE>>> GetReservationsByUser(int userId)
         {
+
+            ServiceResponse<List<ReservationRESPONSE>> result = new();
+
             try
             {
 
                 //if invalid userId
                 if (userId < 0)
-                    throw new CustomException(HttpStatusCode.BadRequest, "Invalid UserId");
+                    throw new CustomError(400, "Invalid UserId");
 
                 //if user exists
                 if (await _helper.CheckIdUser(userId))
@@ -262,31 +290,36 @@ namespace tajmautAPI.Service
 
                             if (userReservations.Count() > 0)
                             {
-                                return _mapper.Map<List<ReservationRESPONSE>>(userReservations);
+                                result.Data = _mapper.Map<List<ReservationRESPONSE>>(userReservations);
                             }
                             else
                             {
-                                throw new CustomException(HttpStatusCode.NotFound, "This user has no reservations!");
+                                throw new CustomError(404, "This user has no reservations!");
                             }
                         }
                     }
                     else
                     {
-                        throw new CustomException(HttpStatusCode.Unauthorized, "Unauthorized User");
+                        throw new CustomError(401, "Unauthorized User");
                     }
                 }
                 
             }
-            catch (CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError,$"Server error");
+            return result;
         }
 
-        public async Task<ReservationRESPONSE> ManagerStatusReservation(int reservationId)
+        public async Task<ServiceResponse<ReservationRESPONSE>> ManagerStatusReservation(int reservationId)
         {
+
+            ServiceResponse<ReservationRESPONSE> result = new();
+
             try
             {
 
@@ -295,15 +328,17 @@ namespace tajmautAPI.Service
                 if (checkReservation != null)
                 {
                     if (await _repo.ChangeReservationStatus(checkReservation))
-                        return _mapper.Map<ReservationRESPONSE>(checkReservation);
+                        result.Data = _mapper.Map<ReservationRESPONSE>(checkReservation);
                 }
             }
-            catch(CustomException ex)
+            catch (CustomError ex)
             {
-                throw;
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
             }
 
-            throw new CustomException(HttpStatusCode.InternalServerError, $"Server error");
+            return result;
 
         }
     }
