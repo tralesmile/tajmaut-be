@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using tajmautAPI.Models;
+using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 

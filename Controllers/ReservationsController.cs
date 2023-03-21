@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using System.Net;
-using tajmautAPI.Exceptions;
-using tajmautAPI.Interfaces_Service;
+using tajmautAPI.Middlewares.Exceptions;
+using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
+using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Controllers
 {

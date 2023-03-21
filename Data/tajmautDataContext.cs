@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using tajmautAPI.Models;
+using tajmautAPI.Models.EntityClasses;
 
 namespace tajmautAPI.Data
 {

@@ -1,17 +1,17 @@
 global using Microsoft.EntityFrameworkCore;
 global using tajmautAPI.Data;
 global using System.Collections.Generic;
-using tajmautAPI.Interfaces;
 using tajmautAPI.Models;
-using tajmautAPI.Repositories;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using tajmautAPI.Exceptions;
+using tajmautAPI.Services.Implementations;
+using tajmautAPI.Services.Interfaces;
+using tajmautAPI.Repositories.Implementations;
+using tajmautAPI.Repositories.Interfaces;
+using tajmautAPI.Middlewares.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 

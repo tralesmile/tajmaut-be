@@ -8,10 +8,10 @@ using System.Net;
 using System.Numerics;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Models;
+using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
+using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Controllers
 {
