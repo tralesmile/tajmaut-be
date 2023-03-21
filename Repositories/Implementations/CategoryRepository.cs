@@ -48,6 +48,7 @@ namespace tajmautAPI.Repositories.Implementations
         public async Task<List<CategoryEvent>> GetAllCategories()
         {
             var categories = await _ctx.CategoryEvents.ToListAsync();
+
             if (categories.Count() > 0)
             {
                 return categories;
@@ -59,11 +60,14 @@ namespace tajmautAPI.Repositories.Implementations
         public async Task<CategoryEvent> GetCategoryById(int id)
         {
             var category = await _ctx.CategoryEvents.FirstOrDefaultAsync(x => x.CategoryEventId == id);
+
             if (category != null)
                 return category;
+
             throw new CustomError(404, $"Category not found");
         }
 
+        //update category and save to db
         public async Task<CategoryEvent> UpdateCategory(CategoryEvent category, CategoryREQUEST request)
         {
             category.Name = request.Name;

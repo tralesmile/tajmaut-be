@@ -19,12 +19,15 @@ namespace tajmautAPI.Services.Implementations
             _mapper = mapper;
         }
 
+        //create category
         public async Task<ServiceResponse<CategoryRESPONSE>> CreateCategory(CategoryREQUEST request)
         {
             ServiceResponse<CategoryRESPONSE> result = new();
             try
             {
+                //create category
                 var getCategory = await _repo.CreateCategory(request);
+
                 result.Data = _mapper.Map<CategoryRESPONSE>(getCategory);
             }
             catch (CustomError ex)
@@ -37,13 +40,16 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
+        //delete category
         public async Task<ServiceResponse<CategoryRESPONSE>> DeleteCategory(int categoryId)
         {
             ServiceResponse<CategoryRESPONSE> result = new();
             try
             {
+                //get category by id
                 var category = await _repo.GetCategoryById(categoryId);
 
+                //delete category
                 await _repo.DeleteCategory(category);
 
                 result.Data = _mapper.Map<CategoryRESPONSE>(category);
@@ -59,12 +65,15 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
+        //get all categories
         public async Task<ServiceResponse<List<CategoryRESPONSE>>> GetAllCategories()
         {
             ServiceResponse<List<CategoryRESPONSE>> result = new();
             try
             {
+                //get all
                 var categories = await _repo.GetAllCategories();
+
                 result.Data = _mapper.Map<List<CategoryRESPONSE>>(categories);
             }
             catch (CustomError ex)
@@ -77,13 +86,18 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
+        //update category
         public async Task<ServiceResponse<CategoryRESPONSE>> UpdateCategory(CategoryREQUEST request, int catId)
         {
             ServiceResponse<CategoryRESPONSE> result = new();
             try
             {
+                //get category by id
                 var category = await _repo.GetCategoryById(catId);
+
+                //update
                 var categoryUpdate = await _repo.UpdateCategory(category, request);
+
                 result.Data = _mapper.Map<CategoryRESPONSE>(categoryUpdate);
             }
             catch (CustomError ex)
