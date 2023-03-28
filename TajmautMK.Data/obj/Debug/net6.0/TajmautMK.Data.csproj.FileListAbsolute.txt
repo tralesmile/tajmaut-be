@@ -1,0 +1,15 @@
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.csproj.AssemblyReference.cache
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.AssemblyInfoInputs.cache
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.AssemblyInfo.cs
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.csproj.CoreCompileInputs.cache
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\bin\Debug\net6.0\TajmautMK.Data.deps.json
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\bin\Debug\net6.0\TajmautMK.Data.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\bin\Debug\net6.0\TajmautMK.Data.pdb
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\bin\Debug\net6.0\TajmautMK.Common.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\bin\Debug\net6.0\TajmautMK.Common.pdb
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.csproj.CopyComplete
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\refint\TajmautMK.Data.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.pdb
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\ref\TajmautMK.Data.dll
