@@ -195,5 +195,10 @@ namespace tajmautAPI.Helper
         {
             return await _helperRepo.GetCommentId(id);
         }
+
+        public async Task<User> GetUserWithEmail(string email)
+        {
+            return await _helperRepo.GetUserWithEmail(email);
+        }
     }
 }

@@ -142,5 +142,15 @@ namespace tajmautAPI.Repositories.Implementations
             }
             throw new CustomError(404, $"Comment not found");
         }
+
+        public async Task<User> GetUserWithEmail(string email)
+        {
+            var user = await _ctx.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            if (user != null)
+            {
+                return user;
+            }
+            throw new CustomError(404, $"User not found!");
+        }
     }
 }

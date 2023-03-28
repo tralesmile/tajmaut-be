@@ -29,6 +29,7 @@ namespace tajmautAPI.Services.Interfaces
         bool ValidateId(int id);
         Task<OnlineReservation> CheckIdReservation(int id);
         Task<Comment> GetCommentId(int id);
+        Task<User> GetUserWithEmail(string email);
 
 
     }

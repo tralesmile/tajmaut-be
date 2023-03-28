@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Services.Interfaces;
 
 namespace TajmautMK.API.Controllers
 {
@@ -12,10 +13,22 @@ namespace TajmautMK.API.Controllers
     public class AdminController : ControllerBase
     {
 
+        private readonly IAdminService _adminService;
+
+        public AdminController(IAdminService adminService)
+        {
+            _adminService= adminService;
+        }
+
         [HttpPut("ChangeUserRole")]
         public async Task<ActionResult> ChangeUserRole(UserRoleREQUEST request)
         {
-            return Ok(request);
+            var result = await _adminService.ChangeUserRole(request);
+            if(result.isError)
+            {
+                return StatusCode((int)result.statusCode, result.errorMessage);
+            }
+            return Ok(result.Data);
         }
 
     }

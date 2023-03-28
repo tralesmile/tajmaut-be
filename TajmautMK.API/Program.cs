@@ -14,8 +14,10 @@ using tajmautAPI.Data;
 using tajmautAPI.Repositories.Implementations;
 using tajmautAPI.Repositories;
 using tajmautAPI.Helper;
-
-
+using TajmautMK.Common.Repositories.Interfaces;
+using TajmautMK.Repository.Repositories.Implementations;
+using TajmautMK.Common.Services.Interfaces;
+using TajmautMK.Core.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +81,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 
 //CORS
