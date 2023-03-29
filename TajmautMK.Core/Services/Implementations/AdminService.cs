@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Implementations;
 using tajmautAPI.Services.Interfaces;
 using TajmautMK.Common.Models.ModelsREQUEST;
-using TajmautMK.Common.Repositories.Interfaces;
 using TajmautMK.Common.Services.Interfaces;
+using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Core.Services.Implementations
 {

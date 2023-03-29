@@ -1,11 +1,10 @@
-﻿using System.Net;
-using System.Runtime.InteropServices;
+﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Repositories.Interfaces;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Repository.Interfaces;
 
 namespace tajmautAPI.Helper
 {

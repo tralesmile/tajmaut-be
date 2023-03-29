@@ -1,6 +1,6 @@
 ﻿using tajmautAPI.Models.EntityClasses;
 
-namespace tajmautAPI.Repositories.Interfaces
+namespace TajmautMK.Repository.Interfaces
 {
     public interface ILoginRepository
     {

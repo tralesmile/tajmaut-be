@@ -1,17 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Xml.Linq;
 using tajmautAPI.Data;
-using tajmautAPI.Interfaces;
 using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models;
 using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Repositories.Interfaces;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Repository.Interfaces;
 
-namespace tajmautAPI.Repositories
+namespace TajmautMK.Repository.Implementations
 {
     public class RestaurantRepository : IRestaurantRepository
     {
@@ -25,7 +20,7 @@ namespace tajmautAPI.Repositories
         }
 
         // gets all restaurants
-        
+
         public async Task<List<Restaurant>> GetAllRestaurantsAsync()
         {
             var check = await _context.Restaurants.ToListAsync();

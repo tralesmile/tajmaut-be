@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Repositories;
 using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Controllers

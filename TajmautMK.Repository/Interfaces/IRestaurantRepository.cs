@@ -1,7 +1,8 @@
 ﻿using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
-namespace tajmautAPI.Interfaces
+
+namespace TajmautMK.Repository.Interfaces
 {
     public interface IRestaurantRepository
     {

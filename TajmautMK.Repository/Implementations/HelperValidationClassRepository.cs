@@ -3,9 +3,9 @@ using System.Net;
 using tajmautAPI.Data;
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Repositories.Interfaces;
+using TajmautMK.Repository.Interfaces;
 
-namespace tajmautAPI.Repositories.Implementations
+namespace TajmautMK.Repository.Implementations
 {
     public class HelperValidationClassRepository : IHelperValidationClassRepository
     {

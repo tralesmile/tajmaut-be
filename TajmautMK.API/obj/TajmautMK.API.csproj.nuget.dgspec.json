@@ -145,6 +145,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.2.0, )"
@@ -204,6 +212,9 @@
             "projectReferences": {
               "D:\\TRAJCE\\C#\\TajmautMK\\TajmautMK.Common\\TajmautMK.Common.csproj": {
                 "projectPath": "D:\\TRAJCE\\C#\\TajmautMK\\TajmautMK.Common\\TajmautMK.Common.csproj"
+              },
+              "D:\\TRAJCE\\C#\\TajmautMK\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
+                "projectPath": "D:\\TRAJCE\\C#\\TajmautMK\\TajmautMK.Repository\\TajmautMK.Repository.csproj"
               }
             }
           }
@@ -219,6 +230,10 @@
           "targetAlias": "net6.0",
           "dependencies": {
             "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[12.0.0, )"
             },
@@ -300,6 +315,14 @@
           "targetAlias": "net6.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[7.0.4, )"
             }

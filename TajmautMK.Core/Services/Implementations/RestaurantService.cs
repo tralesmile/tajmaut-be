@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using tajmautAPI.Interfaces;
+using TajmautMK.Repository.Interfaces;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Models;
 using tajmautAPI.Services.Interfaces;
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;

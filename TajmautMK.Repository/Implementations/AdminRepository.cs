@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using tajmautAPI.Data;
+﻿using tajmautAPI.Data;
 using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Services.Interfaces;
 using TajmautMK.Common.Models.ModelsREQUEST;
-using TajmautMK.Common.Repositories.Interfaces;
+using TajmautMK.Repository.Interfaces;
 
-namespace TajmautMK.Repository.Repositories.Implementations
+namespace TajmautMK.Repository.Implementations
 {
     public class AdminRepository : IAdminRepository
     {
@@ -26,9 +21,9 @@ namespace TajmautMK.Repository.Repositories.Implementations
         public async Task<User> UpdateUserAsync(User user, UserRoleREQUEST request)
         {
             var currentUserID = _helper.GetMe();
-            user.Role=request.Role;
-            user.ModifiedAt=DateTime.Now;
-            user.ModifiedBy=currentUserID;
+            user.Role = request.Role;
+            user.ModifiedAt = DateTime.Now;
+            user.ModifiedBy = currentUserID;
 
             await _ctx.SaveChangesAsync();
 

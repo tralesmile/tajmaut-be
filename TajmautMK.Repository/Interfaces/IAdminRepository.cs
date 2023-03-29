@@ -7,11 +7,11 @@ using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsREQUEST;
 
-namespace TajmautMK.Common.Repositories.Interfaces
+namespace TajmautMK.Repository.Interfaces
 {
     public interface IAdminRepository
     {
         //update user
-        Task<User> UpdateUserAsync(User user,UserRoleREQUEST request);
+        Task<User> UpdateUserAsync(User user, UserRoleREQUEST request);
     }
 }

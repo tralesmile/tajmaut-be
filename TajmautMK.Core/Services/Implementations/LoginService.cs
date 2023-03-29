@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Repositories.Interfaces;
+using TajmautMK.Repository.Interfaces;
 using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Services.Implementations

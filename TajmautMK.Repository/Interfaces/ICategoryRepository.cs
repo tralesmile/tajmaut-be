@@ -1,7 +1,7 @@
 ﻿using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 
-namespace tajmautAPI.Repositories.Interfaces
+namespace TajmautMK.Repository.Interfaces
 {
     public interface ICategoryRepository
     {

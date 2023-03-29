@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using tajmautAPI.Data;
 using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Repositories.Interfaces;
+using TajmautMK.Repository.Interfaces;
 
-namespace tajmautAPI.Repositories.Implementations
+namespace TajmautMK.Repository.Implementations
 {
     public class LoginRepository : ILoginRepository
     {

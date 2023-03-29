@@ -3,8 +3,8 @@ using System.Net;
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Repositories.Interfaces;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Repository.Interfaces;
 
 namespace tajmautAPI.Services.Implementations
 {

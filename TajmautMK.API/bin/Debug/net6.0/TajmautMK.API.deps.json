@@ -770,6 +770,8 @@
       },
       "TajmautMK.Common/1.0.0": {
         "dependencies": {
+          "AutoMapper": "12.0.0",
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
           "Newtonsoft.Json": "13.0.3"
         },
@@ -780,10 +782,12 @@
       "TajmautMK.Core/1.0.0": {
         "dependencies": {
           "AutoMapper": "12.0.0",
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.IdentityModel.Tokens": "6.27.0",
           "System.IdentityModel.Tokens.Jwt": "6.27.0",
-          "TajmautMK.Common": "1.0.0"
+          "TajmautMK.Common": "1.0.0",
+          "TajmautMK.Repository": "1.0.0"
         },
         "runtime": {
           "TajmautMK.Core.dll": {}
@@ -792,6 +796,8 @@
       "TajmautMK.Data/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "7.0.4",
+          "Microsoft.EntityFrameworkCore.Relational": "7.0.4",
+          "Microsoft.EntityFrameworkCore.SqlServer": "7.0.4",
           "TajmautMK.Common": "1.0.0"
         },
         "runtime": {

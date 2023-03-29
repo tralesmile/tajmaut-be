@@ -2,7 +2,7 @@
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Repositories.Interfaces;
+using TajmautMK.Repository.Interfaces;
 using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Services.Implementations

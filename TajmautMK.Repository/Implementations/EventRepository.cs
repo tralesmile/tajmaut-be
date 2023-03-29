@@ -5,10 +5,10 @@ using tajmautAPI.Data;
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Repositories.Interfaces;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Repository.Interfaces;
 
-namespace tajmautAPI.Repositories.Implementations
+namespace TajmautMK.Repository.Implementations
 {
     public class EventRepository : IEventRepository
     {

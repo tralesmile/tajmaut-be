@@ -13,3 +13,7 @@ D:\TRAJCE\C#\TajmautMK\TajmautMK.Core\obj\Debug\net6.0\ref\TajmautMK.Core.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Core\bin\Debug\net6.0\TajmautMK.Common.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Core\bin\Debug\net6.0\TajmautMK.Common.pdb
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Core\obj\Debug\net6.0\TajmautMK.Core.csproj.CopyComplete
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Core\bin\Debug\net6.0\TajmautMK.Data.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Core\bin\Debug\net6.0\TajmautMK.Repository.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Core\bin\Debug\net6.0\TajmautMK.Repository.pdb
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Core\bin\Debug\net6.0\TajmautMK.Data.pdb
