@@ -6,6 +6,8 @@ using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Interfaces;
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
+using Azure.Core;
+using TajmautMK.Common.Models.EntityClasses;
 
 namespace tajmautAPI.Services.Implementations
 {
@@ -27,6 +29,8 @@ namespace tajmautAPI.Services.Implementations
             ServiceResponse<VenueRESPONSE> result = new();
             try
             {
+                if (await _repo.CheckVenueTypeId(request.VenueTypeId))
+                {
                     var getResult = await _repo.CreateVenueAsync(request);
 
                     if (getResult != null)
@@ -34,6 +38,7 @@ namespace tajmautAPI.Services.Implementations
                         var resultSend = await _repo.AddVenueToDB(getResult);
                         result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
                     }
+                }
             }
             catch (CustomError ex)
             {
@@ -229,6 +234,24 @@ namespace tajmautAPI.Services.Implementations
             }
 
             return response;
+        }
+
+        public async Task<ServiceResponse<List<Venue_Types>>> GetAllVenueTypes()
+        {
+            ServiceResponse<List<Venue_Types>> result = new();
+
+            try
+            {
+                result.Data = await _repo.GetAllVenueTypes();
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
+            }
+
+            return result;
         }
     }
 }

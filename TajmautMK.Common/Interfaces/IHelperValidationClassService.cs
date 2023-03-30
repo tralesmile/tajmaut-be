@@ -19,6 +19,7 @@ namespace tajmautAPI.Services.Interfaces
         string GetCurrentUserEmail();
         string GetCurrentUserRole();
         Task<bool> CheckIdEvent(int id);
+        Task<bool> CheckEventVenueRelation(int venueId,int eventId);
         Task<bool> CheckIdEventActivity(int id);
         Task<bool> CheckIdEventDate(int id);
         bool ValidatePhoneRegex(string phone);

@@ -152,5 +152,15 @@ namespace TajmautMK.Repository.Implementations
             }
             throw new CustomError(404, $"User not found!");
         }
+
+        public async Task<bool> CheckEventVenueRelation(int venueId, int eventId)
+        {
+            var check = await _ctx.Events.FirstOrDefaultAsync(v => v.VenueId == venueId && v.EventId==v.EventId);
+            if(check != null)
+            {
+                return true;
+            }
+            throw new CustomError(400, $"Invalid Venue or Event");
+        }
     }
 }

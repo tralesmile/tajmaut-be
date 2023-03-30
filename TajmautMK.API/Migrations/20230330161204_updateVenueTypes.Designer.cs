@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tajmautAPI.Data;
 
@@ -11,9 +12,11 @@ using tajmautAPI.Data;
 namespace tajmautAPI.Migrations
 {
     [DbContext(typeof(tajmautDataContext))]
-    partial class tajmautDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230330161204_updateVenueTypes")]
+    partial class updateVenueTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,31 +24,6 @@ namespace tajmautAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.ForgotPassEntity", b =>
-                {
-                    b.Property<int>("ForgotPassEntityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ForgotPassEntityId"));
-
-                    b.Property<DateTime>("Expire")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ForgotPassEntityId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ForgotPassEntity");
-                });
 
             modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.Venue_Types", b =>
                 {
@@ -352,17 +330,6 @@ namespace tajmautAPI.Migrations
                     b.ToTable("Venues");
                 });
 
-            modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.ForgotPassEntity", b =>
-                {
-                    b.HasOne("tajmautAPI.Models.EntityClasses.User", "user")
-                        .WithMany("ForgotPassChanges")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("user");
-                });
-
             modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Comment", b =>
                 {
                     b.HasOne("tajmautAPI.Models.EntityClasses.User", "User")
@@ -457,8 +424,6 @@ namespace tajmautAPI.Migrations
             modelBuilder.Entity("tajmautAPI.Models.EntityClasses.User", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("ForgotPassChanges");
 
                     b.Navigation("OnlineReservations");
                 });

@@ -117,5 +117,22 @@ namespace tajmautAPI.Controllers
             return Ok("Venue Deleted");
 
         }
+
+        [HttpGet("GetAllVenueTypes"), AllowAnonymous]
+        public async Task<ActionResult> GetAllVenueTypes()
+        {
+
+            var result = await _venueService.GetAllVenueTypes();
+
+            //check if error exists
+            if (result.isError)
+            {
+                return StatusCode((int)result.statusCode, result.errorMessage);
+            }
+
+            //if no error
+            return Ok(result.Data);
+
+        }
     }
 }

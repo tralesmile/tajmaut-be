@@ -16,6 +16,7 @@ namespace TajmautMK.Repository.Interfaces
         Task<bool> CheckIdEventDate(int id);
         Task<bool> CheckIdUser(int id);
         Task<bool> CheckIdComment(int id);
+        Task<bool> CheckEventVenueRelation(int venueId, int eventId);
         Task<Comment> GetCommentId(int id);
         Task<OnlineReservation> CheckIdReservation(int id);
         Task<User> GetUserWithEmail(string email);

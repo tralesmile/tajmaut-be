@@ -58,8 +58,8 @@ namespace tajmautAPI.Controllers
         }
 
         //all events in a specific restaurant
-        [HttpGet("GetRestaurantEventsByRestaurantID"), AllowAnonymous]
-        public async Task<ActionResult> GetAllEventsByRestaurant(int venueId)
+        [HttpGet("GetVenueEventsByVenueID"), AllowAnonymous]
+        public async Task<ActionResult> GetVenueEventsByVenueID(int venueId)
         {
 
             var result = await _eventService.GetAllEventsByVenue(venueId);
@@ -188,8 +188,8 @@ namespace tajmautAPI.Controllers
         }
 
         //filter events by restaurant rating
-        [HttpGet("FilterEventsByRestaurantRating"), AllowAnonymous]
-        public async Task<ActionResult> FilterEventsByRating()
+        [HttpGet("FilterEventsByVenueRating"), AllowAnonymous]
+        public async Task<ActionResult> FilterEventsByVenueRating()
         {
             return Ok();
         }

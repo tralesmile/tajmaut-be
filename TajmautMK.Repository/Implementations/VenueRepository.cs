@@ -4,6 +4,7 @@ using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Repository.Implementations
@@ -63,6 +64,7 @@ namespace TajmautMK.Repository.Implementations
             var currentUserID = _helper.GetMe();
             return new Venue
             {
+                VenueTypeId = request.VenueTypeId,
                 Name = request.Name,
                 Email = request.Email,
                 Phone = request.Phone,
@@ -128,6 +130,7 @@ namespace TajmautMK.Repository.Implementations
         public async Task<Venue> SaveUpdatesVenueDB(Venue getVenue, VenuePutREQUEST request)
         {
             var currentUserID = _helper.GetMe();
+            getVenue.VenueTypeId=request.VenueTypeId;
             getVenue.Name = request.Name;
             getVenue.Email = request.Email;
             getVenue.Address = request.Address;
@@ -152,6 +155,29 @@ namespace TajmautMK.Repository.Implementations
         public async Task<Venue> CheckVenueId(int venueId)
         {
             return await _context.Venues.FirstOrDefaultAsync(venue => venue.VenueId == venueId);
+        }
+
+        public async Task<bool> CheckVenueTypeId(int venueTypeId)
+        {
+            var check = await _context.VenueTypes.FirstOrDefaultAsync(v=>v.Venue_TypesId == venueTypeId);
+            if(check != null)
+            {
+                return true;
+            }
+
+            throw new CustomError(404, $"Venue type not found");
+        }
+
+        public async Task<List<Venue_Types>> GetAllVenueTypes()
+        {
+            var venueTypes = await _context.VenueTypes.ToListAsync();
+
+            if(venueTypes.Count()>0)
+            {
+                return venueTypes;
+            }
+
+            throw new CustomError(404, $"No venue Types found");
         }
     }
 }

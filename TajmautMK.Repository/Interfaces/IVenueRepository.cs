@@ -1,6 +1,7 @@
 ﻿using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.EntityClasses;
 
 namespace TajmautMK.Repository.Interfaces
 {
@@ -17,5 +18,7 @@ namespace TajmautMK.Repository.Interfaces
         Task<Venue> AddVenueToDB(Venue result);
         Task<Venue> SaveUpdatesVenueDB(Venue result, VenuePutREQUEST request);
         Task<Venue> CheckVenueId(int venueId);
+        Task<bool> CheckVenueTypeId(int venueTypeId);
+        Task<List<Venue_Types>> GetAllVenueTypes();
     }
 }

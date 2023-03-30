@@ -36,41 +36,45 @@ namespace tajmautAPI.Services.Implementations
                     //if event exists
                     if (await _helper.CheckIdEvent(request.EventId))
                     {
-                        //is event is canceled
-                        if (await _helper.CheckIdEventActivity(request.EventId))
+                        //if event is in that venue
+                        if (await _helper.CheckEventVenueRelation(request.VenueId, request.EventId))
                         {
-                            //if event ended
-                            if (await _helper.CheckIdEventDate(request.EventId))
+                            //is event is canceled
+                            if (await _helper.CheckIdEventActivity(request.EventId))
                             {
-                                //validate phone
-                                if (_helper.ValidatePhoneRegex(request.Phone))
+                                //if event ended
+                                if (await _helper.CheckIdEventDate(request.EventId))
                                 {
-                                    //check fullname property
-                                    if (_helper.ValidateEmailRegex(request.Email))
+                                    //validate phone
+                                    if (_helper.ValidatePhoneRegex(request.Phone))
                                     {
-                                        //check number of guests
-                                        if (request.NumberGuests > 0)
+                                        //check fullname property
+                                        if (_helper.ValidateEmailRegex(request.Email))
                                         {
-
-                                            var currentUserID = _helper.GetMe();
-
-                                            var currentUserRole = _helper.GetCurrentUserRole();
-                                            //check if current user is the entered user || role is admin,manager
-                                            if (request.UserId == currentUserID || _helper.CheckUserAdminOrManager())
+                                            //check number of guests
+                                            if (request.NumberGuests > 0)
                                             {
-                                                var resultSend = await _repo.CreateReservation(request);
 
-                                                result.Data = _mapper.Map<ReservationRESPONSE>(resultSend);
+                                                var currentUserID = _helper.GetMe();
+
+                                                var currentUserRole = _helper.GetCurrentUserRole();
+                                                //check if current user is the entered user || role is admin,manager
+                                                if (request.UserId == currentUserID || _helper.CheckUserAdminOrManager())
+                                                {
+                                                    var resultSend = await _repo.CreateReservation(request);
+
+                                                    result.Data = _mapper.Map<ReservationRESPONSE>(resultSend);
+                                                }
+                                                else
+                                                {
+                                                    throw new CustomError(401, $"Unauthorized User");
+                                                }
+
                                             }
                                             else
                                             {
-                                                throw new CustomError(401, $"Unauthorized User");
+                                                throw new CustomError(401, $"Invalid number of guests field!");
                                             }
-
-                                        }
-                                        else
-                                        {
-                                            throw new CustomError(401, $"Invalid number of guests field!");
                                         }
                                     }
                                 }

@@ -49,7 +49,7 @@ namespace tajmautAPI.Helper
         {
 
             //validate email with regex
-            string pattern = @"^[a-zA-Z0-9._%+-]+@(hotmail|yahoo|gmail|outlook)\.(com|net|org|mk)$";
+            string pattern = @"^[a-zA-Z0-9._]{1,100}\@[a-zA-Z0-9.-]{2,10}\.[a-zA-Z]{2,6}$";
             bool isValidEmail = Regex.IsMatch(emailRegex, pattern);
 
             if (isValidEmail)
@@ -198,6 +198,11 @@ namespace tajmautAPI.Helper
         public async Task<User> GetUserWithEmail(string email)
         {
             return await _helperRepo.GetUserWithEmail(email);
+        }
+
+        public async Task<bool> CheckEventVenueRelation(int venueId, int eventId)
+        {
+            return await _helperRepo.CheckEventVenueRelation(venueId, eventId);
         }
     }
 }

@@ -1,4 +1,7 @@
 ﻿
+using Newtonsoft.Json;
+using TajmautMK.Common.Models.EntityClasses;
+
 namespace tajmautAPI.Models.EntityClasses
 {
     public class User
@@ -20,6 +23,9 @@ namespace tajmautAPI.Models.EntityClasses
         //1-N Relationships
         public List<Comment> Comments { get; set; }
         public List<OnlineReservation> OnlineReservations { get; set; }
+
+        [JsonIgnore]
+        public List<ForgotPassEntity> ForgotPassChanges { get; set; }
 
     }
 }

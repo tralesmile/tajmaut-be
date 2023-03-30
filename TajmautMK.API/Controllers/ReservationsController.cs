@@ -35,8 +35,8 @@ namespace tajmautAPI.Controllers
         }
 
         //get reservations by restaurant - admin,manager access
-        [HttpGet("GetReservationsByRestaurant"), Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult> GetReservationsByRestaurant(int venueId)
+        [HttpGet("GetReservationsByVenue"), Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult> GetReservationsByVenue(int venueId)
         {
             var result = await _reservationService.GetReservationsByVenue(venueId);
 

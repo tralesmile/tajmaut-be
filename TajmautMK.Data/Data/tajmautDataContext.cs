@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using tajmautAPI.Models.EntityClasses;
+using TajmautMK.Common.Models.EntityClasses;
 
 namespace tajmautAPI.Data
 {
@@ -19,10 +20,8 @@ namespace tajmautAPI.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<CategoryEvent> CategoryEvents { get; set; }
         public DbSet<OnlineReservation> OnlineReservations { get; set; }
-
-
-
-
+        public DbSet<Venue_Types> VenueTypes { get; set; }
+        public DbSet<ForgotPassEntity> ForgotPassEntity { get; set; }
 
     }
 
