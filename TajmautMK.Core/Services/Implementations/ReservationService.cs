@@ -31,7 +31,7 @@ namespace tajmautAPI.Services.Implementations
             {
 
                 //if restaurant exists
-                if (await _helper.CheckIdRestaurant(request.RestaurantId))
+                if (await _helper.CheckIdVenue(request.VenueId))
                 {
                     //if event exists
                     if (await _helper.CheckIdEvent(request.EventId))
@@ -212,7 +212,7 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //all reservations by restaurant
-        public async Task<ServiceResponse<List<ReservationRESPONSE>>> GetReservationsByRestaurant(int restaurantId)
+        public async Task<ServiceResponse<List<ReservationRESPONSE>>> GetReservationsByVenue(int venueId)
         {
 
             ServiceResponse<List<ReservationRESPONSE>> result = new();
@@ -220,27 +220,27 @@ namespace tajmautAPI.Services.Implementations
             try
             {
                 //if restaurantId is valid
-                if (_helper.ValidateId(restaurantId))
+                if (_helper.ValidateId(venueId))
                 {
                     //admin and manager access
                     if (_helper.CheckUserAdminOrManager())
                     {
                         //if restaurant exists
-                        if (await _helper.CheckIdRestaurant(restaurantId))
+                        if (await _helper.CheckIdVenue(venueId))
                         {
                             var listReservations = await _repo.GetAllReservations();
 
                             if (listReservations.Count() > 0)
                             {
                                 //search restaurants with that id
-                                var restaurantReservations = listReservations.Where(n => n.RestaurantId == restaurantId).ToList();
-                                if (restaurantReservations.Count() > 0)
+                                var venueReservations = listReservations.Where(n => n.VenueId == venueId).ToList();
+                                if (venueReservations.Count() > 0)
                                 {
-                                    result.Data = _mapper.Map<List<ReservationRESPONSE>>(restaurantReservations);
+                                    result.Data = _mapper.Map<List<ReservationRESPONSE>>(venueReservations);
                                 }
                                 else
                                 {
-                                    throw new CustomError(404, $"Restaurant has no reservations");
+                                    throw new CustomError(404, $"Venue has no reservations");
                                 }
                             }
                         }

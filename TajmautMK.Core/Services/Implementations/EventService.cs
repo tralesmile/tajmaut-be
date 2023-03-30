@@ -54,8 +54,8 @@ namespace tajmautAPI.Services.Implementations
 
             try
             {
-                //check if category and restaurant exist
-                if (await _helper.CheckIdRestaurant(request.RestaurantId))
+                //check if category and venue exist
+                if (await _helper.CheckIdVenue(request.VenueId))
                 {
                     //if category exists
                     if (await _helper.CheckIdCategory(request.CategoryEventId))
@@ -246,7 +246,7 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //get events from specific restaurant
-        public async Task<ServiceResponse<List<EventGetRESPONSE>>> GetAllEventsByRestaurant(int restaurantId)
+        public async Task<ServiceResponse<List<EventGetRESPONSE>>> GetAllEventsByVenue(int venueId)
         {
 
             ServiceResponse<List<EventGetRESPONSE>> result = new();
@@ -254,23 +254,23 @@ namespace tajmautAPI.Services.Implementations
             try
             {
                 //invalid input
-                if (_helper.ValidateId(restaurantId))
+                if (_helper.ValidateId(venueId))
                 {
-                    if (await _helper.CheckIdRestaurant(restaurantId))
+                    if (await _helper.CheckIdVenue(venueId))
                     {
                         var allEvents = await _repo.GetAllEvents();
 
                         if (allEvents.Count() > 0)
                         {
                             //query
-                            var listEvents = allEvents.Where(n => n.RestaurantId == restaurantId).ToList();
+                            var listEvents = allEvents.Where(n => n.VenueId == venueId).ToList();
                             if (listEvents.Count() > 0)
                             {
                                 result.Data = await GetEventsWithOtherData(listEvents);
                             }
                             else
                             {
-                                throw new CustomError(404, "This restaurant has no events!");
+                                throw new CustomError(404, "This venue has no events!");
                             }
                         }
                     }
@@ -332,7 +332,7 @@ namespace tajmautAPI.Services.Implementations
                 foreach (var ev in events)
                 {
                     //to get the name and phone of the restaurant
-                    var restaurant = await _repo.GetRestaurantById(ev.RestaurantId);
+                    var venue = await _repo.GetVenueById(ev.VenueId);
 
                     //update status of event
                     var statusEvent = "";
@@ -352,14 +352,14 @@ namespace tajmautAPI.Services.Implementations
                     {
                         EventId = ev.EventId,
                         CategoryEventId = ev.CategoryEventId,
-                        RestaurantId = ev.RestaurantId,
+                        VenueId = ev.VenueId,
                         Name = ev.Name,
                         Description = ev.Description,
                         EventImage = ev.EventImage,
                         DateTime = ev.DateTime,
                         isCanceled = ev.isCanceled,
-                        RestaurantName = restaurant.Name,
-                        RestaurantPhone = restaurant.Phone,
+                        VenueName = venue.Name,
+                        VenuePhone = venue.Phone,
                         StatusEvent = statusEvent,
                     });
 
@@ -402,20 +402,20 @@ namespace tajmautAPI.Services.Implementations
                             if (!ev.isCanceled)
                             {
                                 //get the event restaurant
-                                var restaurant = await _repo.GetRestaurantById(ev.RestaurantId);
+                                var venue = await _repo.GetVenueById(ev.VenueId);
 
                                 getEvents.Add(new EventGetRESPONSE
                                 {
                                     EventId = ev.EventId,
                                     CategoryEventId = ev.CategoryEventId,
-                                    RestaurantId = ev.RestaurantId,
+                                    VenueId = ev.VenueId,
                                     Name = ev.Name,
                                     Description = ev.Description,
                                     EventImage = ev.EventImage,
                                     DateTime = ev.DateTime,
                                     isCanceled = ev.isCanceled,
-                                    RestaurantName = restaurant.Name,
-                                    RestaurantPhone = restaurant.Phone,
+                                    VenueName = venue.Name,
+                                    VenuePhone = venue.Phone,
                                     StatusEvent = "Upcoming",
                                 });
                             }
@@ -467,7 +467,7 @@ namespace tajmautAPI.Services.Implementations
                         if (await _helper.CheckIdCategory(request.CategoryEventId))
                         {
                             //if restaurant exists
-                            if (await _helper.CheckIdRestaurant(request.RestaurantId))
+                            if (await _helper.CheckIdVenue(request.VenueId))
                             {
                                 var resultSend = await _repo.SaveUpdatesEventDB(resultEvent, request);
                                 result.Data = _mapper.Map<EventRESPONSE>(resultSend);

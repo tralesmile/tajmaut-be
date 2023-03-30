@@ -4,7 +4,7 @@
     {
         public int CommentId { get; set; }
 
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
 
         public int UserId { get; set; }
 

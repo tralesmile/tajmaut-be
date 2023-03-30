@@ -9,30 +9,30 @@ using tajmautAPI.Models.EntityClasses;
 
 namespace tajmautAPI.Services.Implementations
 {
-    public class RestaurantService : IRestaurantService
+    public class VenueService : IVenueService
     {
-        private readonly IRestaurantRepository _repo;
+        private readonly IVenueRepository _repo;
         private readonly IMapper _mapper;
         private readonly IHelperValidationClassService _helper;
 
-        public RestaurantService(IRestaurantRepository repo, IMapper mapper, IHelperValidationClassService helper)
+        public VenueService(IVenueRepository repo, IMapper mapper, IHelperValidationClassService helper)
         {
             _repo = repo;
             _mapper = mapper;
             _helper = helper;
         }
         // create restaurant and checks if restaurant exist
-        public async Task<ServiceResponse<RestaurantRESPONSE>> CreateRestaurantAsync(RestaurantPostREQUEST request)
+        public async Task<ServiceResponse<VenueRESPONSE>> CreateVenue(VenuePostREQUEST request)
         {
-            ServiceResponse<RestaurantRESPONSE> result = new();
+            ServiceResponse<VenueRESPONSE> result = new();
             try
             {
-                    var getResult = await _repo.CreateRestaurantAsync(request);
+                    var getResult = await _repo.CreateVenueAsync(request);
 
                     if (getResult != null)
                     {
-                        var resultSend = await _repo.AddRestaurantToDB(getResult);
-                        result.Data = _mapper.Map<RestaurantRESPONSE>(resultSend);
+                        var resultSend = await _repo.AddVenueToDB(getResult);
+                        result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
                     }
             }
             catch (CustomError ex)
@@ -45,25 +45,25 @@ namespace tajmautAPI.Services.Implementations
         }
 
         // Deletes a specific restaurant form the DB by it's id
-        public async Task<ServiceResponse<RestaurantRESPONSE>> DeleteRestaurantAsync(int restaurantId)
+        public async Task<ServiceResponse<VenueRESPONSE>> DeleteVenue(int venueId)
         { 
-         ServiceResponse<RestaurantRESPONSE> result = new();
+         ServiceResponse<VenueRESPONSE> result = new();
 
             try
             {
-                if (_helper.ValidateId(restaurantId))
+                if (_helper.ValidateId(venueId))
                 {
                     var currentUserID = _helper.GetMe();
                     var currentUserRole = _helper.CheckUserAdminOrManager(); 
 
-                    if ((restaurantId == currentUserID) || _helper.CheckUserAdminOrManager())
+                    if ((venueId == currentUserID) || _helper.CheckUserAdminOrManager())
                     {
-                        var restaurant = await _repo.DeleteRestaurantAsync(restaurantId);
+                        var venue = await _repo.DeleteVenueAsync(venueId);
 
-                        if (restaurant != null)
+                        if (venue != null)
                         {
-                            var resultSend = await _repo.DeleteRestaurantDB(restaurant); 
-                            result.Data = _mapper.Map<RestaurantRESPONSE>(resultSend);
+                            var resultSend = await _repo.DeleteVenueDB(venue); 
+                            result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
                         }
                     }
                 }
@@ -79,17 +79,17 @@ namespace tajmautAPI.Services.Implementations
         }
 
         // gets all resraurants
-        public async Task<ServiceResponse<List<RestaurantRESPONSE>>> GetAllRestaurantsAsync()
+        public async Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenues()
         {
 
-            ServiceResponse<List<RestaurantRESPONSE>> result = new();
+            ServiceResponse<List<VenueRESPONSE>> result = new();
 
             try
             {
-                var resultSend = await _repo.GetAllRestaurantsAsync();
+                var resultSend = await _repo.GetAllVenuesAsync();
                 if (resultSend != null)
                 {
-                    result.Data = _mapper.Map<List<RestaurantRESPONSE>>(resultSend);
+                    result.Data = _mapper.Map<List<VenueRESPONSE>>(resultSend);
                 }
             }
             catch (CustomError ex)
@@ -102,9 +102,9 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
         //filter restaurants by city
-        public async Task<ServiceResponse<List<RestaurantRESPONSE>>> FilterRestaurantsByCity(string city)
+        public async Task<ServiceResponse<List<VenueRESPONSE>>> FilterVenuesByCity(string city)
         {
-            ServiceResponse<List<RestaurantRESPONSE>> result = new();
+            ServiceResponse<List<VenueRESPONSE>> result = new();
 
             try
             {
@@ -113,10 +113,10 @@ namespace tajmautAPI.Services.Implementations
                     throw new CustomError(400, "Invalid input!");
 
                 // filter
-                var restaurants = await _repo.FilterRestaurantsByCity(city);
-                if (restaurants.Count() > 0)
+                var venues = await _repo.FilterVenuesByCity(city);
+                if (venues.Count() > 0)
                 {
-                    result = await GetRestaurantsWithOtherData(restaurants);
+                    result = await GetVenuesWithOtherData(venues);
                 }
             }
             catch (CustomError ex)
@@ -130,25 +130,25 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //get other data for the restaurant in sorted list
-        public async Task<ServiceResponse<List<RestaurantRESPONSE>>> GetRestaurantsWithOtherData(List<Restaurant> rest)
+        public async Task<ServiceResponse<List<VenueRESPONSE>>> GetVenuesWithOtherData(List<Venue> venue)
         {
-            ServiceResponse<List<RestaurantRESPONSE>> result = new ServiceResponse<List<RestaurantRESPONSE>>();
+            ServiceResponse<List<VenueRESPONSE>> result = new ServiceResponse<List<VenueRESPONSE>>();
 
             try
             {
-                if (rest != null && rest.Any())
+                if (venue != null && venue.Any())
                 {
-                    var restaurantDetails = await _repo.GetAllRestaurantsAsync();
+                    var venueDetails = await _repo.GetAllVenuesAsync();
 
-                    var getRestaurant = rest.Select(rest =>
+                    var getVenue = venue.Select(venue =>
                     {
-                        var details = restaurantDetails.FirstOrDefault(details => details.RestaurantId == rest.RestaurantId);
+                        var details = venueDetails.FirstOrDefault(details => details.VenueId == venue.VenueId);
 
                         if (details != null)
                         {
-                            return new RestaurantRESPONSE
+                            return new VenueRESPONSE
                             {
-                                RestaurantId = details.RestaurantId,
+                                VenueId = details.VenueId,
                                 Name = details.Name,
                                 Email = details.Email,
                                 Phone = details.Phone,
@@ -162,7 +162,7 @@ namespace tajmautAPI.Services.Implementations
                         }
                     }).Where(r => r != null).ToList();
 
-                    result.Data = getRestaurant;
+                    result.Data = getVenue;
                 }
                 else
                 {
@@ -179,16 +179,16 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
         //gets a specific restaurant by it's's id
-        public async Task<ServiceResponse<RestaurantRESPONSE>> GetRestaurantByIdAsync(int restaurantId)
+        public async Task<ServiceResponse<VenueRESPONSE>> GetVenueById(int venueId)
         {
-            ServiceResponse<RestaurantRESPONSE> result = new();
+            ServiceResponse<VenueRESPONSE> result = new();
 
             try
             {
-                if (_helper.ValidateId(restaurantId))
+                if (_helper.ValidateId(venueId))
                 {
-                    var resultSend = await _repo.GetRestaurantsIdAsync(restaurantId);
-                    result.Data = _mapper.Map<RestaurantRESPONSE>(resultSend);
+                    var resultSend = await _repo.GetVenuesIdAsync(venueId);
+                    result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
                 }
             }
             catch (CustomError ex)
@@ -201,22 +201,22 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
         // checks if restaurant exists and updates it to the DB
-        public async Task<ServiceResponse<RestaurantRESPONSE>> UpdateRestaurantAsync(int restaurantId, RestaurantPutREQUEST request)
+        public async Task<ServiceResponse<VenueRESPONSE>> UpdateVenue(int venueId, VenuePutREQUEST request)
         {
-            var response = new ServiceResponse<RestaurantRESPONSE>();
+            var response = new ServiceResponse<VenueRESPONSE>();
 
             try
             {
-                if (_helper.ValidateId(restaurantId))
+                if (_helper.ValidateId(venueId))
                 {
-                    var updatedRestaurant = await _repo.UpdateRestaurantAsync(request, restaurantId);
+                    var updateVenue = await _repo.UpdateVenueAsync(request, venueId);
 
-                    if (updatedRestaurant != null)
+                    if (updateVenue != null)
                     {
-                        if (await _helper.CheckIdRestaurant((int)updatedRestaurant.RestaurantId))
+                        if (await _helper.CheckIdVenue((int)updateVenue.VenueId))
                         {
-                            var savedRestaurant = await _repo.SaveUpdatesRestaurantDB(updatedRestaurant, request);
-                            response.Data = _mapper.Map<RestaurantRESPONSE>(savedRestaurant);
+                            var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
+                            response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
                         }
                     }
                 }

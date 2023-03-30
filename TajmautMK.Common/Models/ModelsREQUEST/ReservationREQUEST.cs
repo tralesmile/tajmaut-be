@@ -5,7 +5,7 @@ namespace tajmautAPI.Models.ModelsREQUEST
     public class ReservationREQUEST
     {
 
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
 
         public int UserId { get; set; }
 

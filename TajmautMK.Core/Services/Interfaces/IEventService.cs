@@ -10,7 +10,7 @@ namespace tajmautAPI.Services.Interfaces
         Task<ServiceResponse<EventRESPONSE>> CreateEvent(EventPostREQUEST request);
         Task<ServiceResponse<List<EventGetRESPONSE>>> GetAllEvents();
         Task<ServiceResponse<List<EventGetRESPONSE>>> GetEventById(int eventId);
-        Task<ServiceResponse<List<EventGetRESPONSE>>> GetAllEventsByRestaurant(int restaurantId);
+        Task<ServiceResponse<List<EventGetRESPONSE>>> GetAllEventsByVenue(int venueId);
         Task<ServiceResponse<EventRESPONSE>> DeleteEvent(int eventId);
         Task<ServiceResponse<EventRESPONSE>> UpdateEvent(EventPostREQUEST request, int eventId);
         Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByCategory(int categoryId);

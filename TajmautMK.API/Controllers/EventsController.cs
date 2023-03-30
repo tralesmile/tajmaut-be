@@ -59,10 +59,10 @@ namespace tajmautAPI.Controllers
 
         //all events in a specific restaurant
         [HttpGet("GetRestaurantEventsByRestaurantID"), AllowAnonymous]
-        public async Task<ActionResult> GetAllEventsByRestaurant(int restaurantId)
+        public async Task<ActionResult> GetAllEventsByRestaurant(int venueId)
         {
 
-            var result = await _eventService.GetAllEventsByRestaurant(restaurantId);
+            var result = await _eventService.GetAllEventsByVenue(venueId);
 
             //check if error exists
             if (result.isError)

@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace tajmautAPI.Models.EntityClasses
 {
-    public class Restaurant
+    public class Venue
     {
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
         [Required]
         public string Email { get; set; } = null!;
         [Required]
@@ -16,6 +16,10 @@ namespace tajmautAPI.Models.EntityClasses
         public string City { get; set; } = null!;
         [Required]
         public string Phone { get; set; } = null!;
+
+        [Required]
+        public int ManagerId { get; set; }
+
         [Required]
         public DateTime ModifiedAt { get; set; }
         [Required]

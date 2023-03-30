@@ -8,18 +8,18 @@ namespace tajmautAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class RestaurantsController : ControllerBase
+    public class VenuesController : ControllerBase
     {
-        private readonly IRestaurantService _restaurantService;
-        public RestaurantsController(IRestaurantService restaurantService)
+        private readonly IVenueService _venueService;
+        public VenuesController(IVenueService venueService)
         {
-            _restaurantService = restaurantService;
+            _venueService = venueService;
         }
 
-        [HttpGet("Get All Restaurants"), AllowAnonymous]
-        public async Task<ActionResult> GetAllRestaurantsAsync()
+        [HttpGet("GetAllVenues"), AllowAnonymous]
+        public async Task<ActionResult> GetAllVenues()
         {
-            var result = await _restaurantService.GetAllRestaurantsAsync();
+            var result = await _venueService.GetAllVenues();
 
             //check if error exists
             if (result.isError)
@@ -32,29 +32,11 @@ namespace tajmautAPI.Controllers
 
         }
 
-        [HttpGet("Filter Restaurants By City"), AllowAnonymous]
-        public async Task<ActionResult> FilterRestaurantsByCity(string city)
+        [HttpGet("FilterVenuesByCity"), AllowAnonymous]
+        public async Task<ActionResult> FilterVenuesByCity(string city)
         {
 
-            var result = await _restaurantService.FilterRestaurantsByCity(city);
-
-            //check if error exists
-            if (result.isError)
-            {
-                return StatusCode((int)result.statusCode, result.errorMessage);
-            }
-
-            //if no error
-            return Ok(result.Data);
-
-
-        }
-
-        [HttpGet("Get Restaurant By ID"), AllowAnonymous]
-        public async Task<ActionResult> GetRestaurantByIdAsync(int RestaurantId)
-        {
-
-            var result = await _restaurantService.GetRestaurantByIdAsync(RestaurantId);
+            var result = await _venueService.FilterVenuesByCity(city);
 
             //check if error exists
             if (result.isError)
@@ -68,11 +50,29 @@ namespace tajmautAPI.Controllers
 
         }
 
-
-        [HttpPost("Create Restaurant"), Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult> CreateRestaurantAsync(RestaurantPostREQUEST request)
+        [HttpGet("GetVenueByID"), AllowAnonymous]
+        public async Task<ActionResult> GetVenueByID(int VenueId)
         {
-            var result = await _restaurantService.CreateRestaurantAsync(request);
+
+            var result = await _venueService.GetVenueById(VenueId);
+
+            //check if error exists
+            if (result.isError)
+            {
+                return StatusCode((int)result.statusCode, result.errorMessage);
+            }
+
+            //if no error
+            return Ok(result.Data);
+
+
+        }
+
+
+        [HttpPost("CreateVenue"), Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult> CreateVenue(VenuePostREQUEST request)
+        {
+            var result = await _venueService.CreateVenue(request);
 
             //check if error exists
             if (result.isError)
@@ -85,11 +85,11 @@ namespace tajmautAPI.Controllers
         }
 
 
-        [HttpPut("Update Restaurant"), Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult> UpdateRestaurantAsync(RestaurantPutREQUEST request, int restaurantId)
+        [HttpPut("UpdateVenue"), Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult> UpdateVenue(VenuePutREQUEST request, int VenueId)
         {
             // Get result from service
-            var result = await _restaurantService.UpdateRestaurantAsync(restaurantId, request);
+            var result = await _venueService.UpdateVenue(VenueId, request);
 
             // Check if an error exists
             if (result.isError)
@@ -101,11 +101,11 @@ namespace tajmautAPI.Controllers
                 return Ok(result.Data);
         }
 
-        [HttpDelete("Delete Restaurant"), Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult> DeleteRestaurantAsync(int RestaurantId)
+        [HttpDelete("DeleteVenue"), Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult> DeleteVenue(int VenueId)
         {
 
-            var result = await _restaurantService.DeleteRestaurantAsync(RestaurantId);
+            var result = await _venueService.DeleteVenue(VenueId);
 
             //check if error exists
             if (result.isError)
@@ -114,7 +114,7 @@ namespace tajmautAPI.Controllers
             }
 
             //if no error
-            return Ok("Restaurant Deleted");
+            return Ok("Venue Deleted");
 
         }
     }

@@ -109,16 +109,16 @@ namespace TajmautMK.Repository.Implementations
         }
 
         //check if restaurant exists in DB
-        public async Task<bool> CheckIdRestaurant(int id)
+        public async Task<bool> CheckIdVenue(int id)
         {
-            var check = await _ctx.Restaurants.FirstOrDefaultAsync(res => res.RestaurantId == id);
+            var check = await _ctx.Venues.FirstOrDefaultAsync(res => res.VenueId == id);
 
             if (check != null)
             {
                 return true;
             }
 
-            throw new CustomError(404, $"Restaurant not found");
+            throw new CustomError(404, $"Venue not found");
         }
 
         //check if user exists

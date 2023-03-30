@@ -39,9 +39,9 @@ namespace tajmautAPI.Helper
         }
 
         //check if restaurant exists
-        public async Task<bool> CheckIdRestaurant(int id)
+        public async Task<bool> CheckIdVenue(int id)
         {
-            return await _helperRepo.CheckIdRestaurant(id);
+            return await _helperRepo.CheckIdVenue(id);
         }
 
         //validate email

@@ -13,7 +13,7 @@ namespace tajmautAPI.AutoMapper
             CreateMap<OnlineReservation, ReservationRESPONSE>();
             CreateMap<Comment, CommentRESPONSE>();
             CreateMap<CategoryEvent, CategoryRESPONSE>();
-            CreateMap<Restaurant, RestaurantRESPONSE>();
+            CreateMap<Venue, VenueRESPONSE>();
 
 
         }

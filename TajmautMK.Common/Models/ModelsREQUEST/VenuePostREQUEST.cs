@@ -2,7 +2,7 @@
 
 namespace tajmautAPI.Models.ModelsREQUEST
 {
-    public class RestaurantPostREQUEST
+    public class VenuePostREQUEST
     {
         [Required]
         public string Email { get; set; }
