@@ -23,7 +23,7 @@ namespace tajmautAPI.Services.Implementations
             _mapper = mapper;
             _helper = helper;
         }
-        // create restaurant and checks if restaurant exist
+        // create venue and checks if venue exist
         public async Task<ServiceResponse<VenueRESPONSE>> CreateVenue(VenuePostREQUEST request)
         {
             ServiceResponse<VenueRESPONSE> result = new();
@@ -49,7 +49,7 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
-        // Deletes a specific restaurant form the DB by it's id
+        // Deletes a specific venue form the DB by it's id
         public async Task<ServiceResponse<VenueRESPONSE>> DeleteVenue(int venueId)
         { 
          ServiceResponse<VenueRESPONSE> result = new();
@@ -83,7 +83,7 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
-        // gets all resraurants
+        // gets all venue
         public async Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenues()
         {
 
@@ -106,7 +106,7 @@ namespace tajmautAPI.Services.Implementations
 
             return result;
         }
-        //filter restaurants by city
+        //filter venue by city
         public async Task<ServiceResponse<List<VenueRESPONSE>>> FilterVenuesByCity(string city)
         {
             ServiceResponse<List<VenueRESPONSE>> result = new();
@@ -134,7 +134,7 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
-        //get other data for the restaurant in sorted list
+        //get other data for the venue in sorted list
         public async Task<ServiceResponse<List<VenueRESPONSE>>> GetVenuesWithOtherData(List<Venue> venue)
         {
             ServiceResponse<List<VenueRESPONSE>> result = new ServiceResponse<List<VenueRESPONSE>>();
@@ -183,7 +183,7 @@ namespace tajmautAPI.Services.Implementations
 
             return result;
         }
-        //gets a specific restaurant by it's's id
+        //gets a specific venue by it's's id
         public async Task<ServiceResponse<VenueRESPONSE>> GetVenueById(int venueId)
         {
             ServiceResponse<VenueRESPONSE> result = new();
@@ -205,7 +205,7 @@ namespace tajmautAPI.Services.Implementations
 
             return result;
         }
-        // checks if restaurant exists and updates it to the DB
+        // checks if venue exists and updates it to the DB
         public async Task<ServiceResponse<VenueRESPONSE>> UpdateVenue(int venueId, VenuePutREQUEST request)
         {
             var response = new ServiceResponse<VenueRESPONSE>();

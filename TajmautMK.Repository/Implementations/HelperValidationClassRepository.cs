@@ -153,6 +153,7 @@ namespace TajmautMK.Repository.Implementations
             throw new CustomError(404, $"User not found!");
         }
 
+        //if a specific restaurant has that event
         public async Task<bool> CheckEventVenueRelation(int venueId, int eventId)
         {
             var check = await _ctx.Events.FirstOrDefaultAsync(v => v.VenueId == venueId && v.EventId==v.EventId);

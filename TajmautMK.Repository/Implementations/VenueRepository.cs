@@ -20,7 +20,7 @@ namespace TajmautMK.Repository.Implementations
             _helper = helper;
         }
 
-        // gets all restaurants
+        // gets all venues
 
         public async Task<List<Venue>> GetAllVenuesAsync()
         {
@@ -33,7 +33,7 @@ namespace TajmautMK.Repository.Implementations
             throw new CustomError(404, "No Data found!");
 
         }
-        // filter restaurants by city
+        // filter venues by city
         public async Task<List<Venue>> FilterVenuesByCity(string city)
         {
             var cityVenues = await _context.Venues
@@ -47,7 +47,7 @@ namespace TajmautMK.Repository.Implementations
 
             throw new CustomError(404, $"No data found");
         }
-        // get restaurant by it's ID
+        // get venue by it's ID
         public async Task<Venue> GetVenuesIdAsync(int venueId)
         {
             var venue = await _context.Venues.FirstOrDefaultAsync(r => r.VenueId == venueId);
@@ -58,7 +58,7 @@ namespace TajmautMK.Repository.Implementations
 
             return venue;
         }
-        // creates restaurant
+        // creates venue
         public async Task<Venue> CreateVenueAsync(VenuePostREQUEST request)
         {
             var currentUserID = _helper.GetMe();
@@ -77,7 +77,7 @@ namespace TajmautMK.Repository.Implementations
                 ManagerId = currentUserID,
             };
         }
-        // updates restaurant
+        // updates venue
         public async Task<Venue> UpdateVenueAsync(VenuePutREQUEST request, int VenueId)
         {
             var venue = await _context.Venues.FindAsync(VenueId);
@@ -87,7 +87,7 @@ namespace TajmautMK.Repository.Implementations
             }
             throw new CustomError(404, $"Venue not found");
         }
-        // saves changes to restraunt
+        // saves changes to venue
         public async Task<Venue> SaveChanges(Venue venue, VenuePutREQUEST request)
         {
             var currentUserID = _helper.GetMe();
@@ -104,10 +104,10 @@ namespace TajmautMK.Repository.Implementations
 
             return venue;
         }
-        // deletes restaurant
+        // deletes venue
         public async Task<Venue> DeleteVenueAsync(int VenueId)
         {
-            // check's if restaurant exists 
+            // check's if venue exists 
             var check = await _context.Venues.FirstOrDefaultAsync(venue => venue.VenueId == VenueId);
             if (check != null)
             {
@@ -117,7 +117,7 @@ namespace TajmautMK.Repository.Implementations
 
         }
 
-        // delete's restaurant from DB
+        // delete's venue from DB
         public async Task<Venue> DeleteVenueDB(Venue getVenue)
         {
             _context.Venues.Remove(getVenue);
@@ -126,7 +126,7 @@ namespace TajmautMK.Repository.Implementations
 
             return getVenue;
         }
-        // saves & updates restaurant in the DB
+        // saves & updates venue in the DB
         public async Task<Venue> SaveUpdatesVenueDB(Venue getVenue, VenuePutREQUEST request)
         {
             var currentUserID = _helper.GetMe();
@@ -151,7 +151,7 @@ namespace TajmautMK.Repository.Implementations
 
             return getResult;
         }
-        // get restaurant by it's id
+        // get venue by it's id
         public async Task<Venue> CheckVenueId(int venueId)
         {
             return await _context.Venues.FirstOrDefaultAsync(venue => venue.VenueId == venueId);

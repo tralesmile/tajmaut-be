@@ -38,7 +38,7 @@ namespace tajmautAPI.Helper
             return await _helperRepo.CheckIdCategory(id);
         }
 
-        //check if restaurant exists
+        //check if venue exists
         public async Task<bool> CheckIdVenue(int id)
         {
             return await _helperRepo.CheckIdVenue(id);
