@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Filters;
-using System.Net;
-using tajmautAPI.Exceptions;
-using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models.ModelsREQUEST;
+using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Controllers
 {
@@ -27,37 +23,31 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> GetAllReservations()
         {
             var result = await _reservationService.GetAllReservations();
-            try
+
+            //check if error exists
+            if (result.isError)
             {
-                if (result.Count() > 0)
-                {
-                    return Ok(result);
-                }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
         }
 
         //get reservations by restaurant - admin,manager access
-        [HttpGet("GetReservationsByRestaurant"), Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult> GetReservationsByRestaurant(int restaurantId)
+        [HttpGet("GetReservationsByVenue"), Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult> GetReservationsByVenue(int venueId)
         {
-            var result = await _reservationService.GetReservationsByRestaurant(restaurantId);
-            try
+            var result = await _reservationService.GetReservationsByVenue(venueId);
+
+            //check if error exists
+            if (result.isError)
             {
-                if (result.Count() > 0)
-                    return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
         }
 
         //get reservations by event - admin,manager access 
@@ -65,17 +55,15 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> GetReservationsByEvent(int eventId)
         {
             var result = await _reservationService.GetReservationsByEvent(eventId);
-            try
+
+            //check if error exists
+            if (result.isError)
             {
-                if (result.Count() > 0)
-                    return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
         }
 
         //get reservations by user - user,admin,manager access
@@ -83,17 +71,15 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> GetReservationsByUser(int userId)
         {
             var result = await _reservationService.GetReservationsByUser(userId);
-            try
+
+            //check if error exists
+            if (result.isError)
             {
-                if (result.Count() > 0 || result != null)
-                    return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode,ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
         }
 
         //create reservation user,admin,manager access
@@ -101,19 +87,15 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> CreateReservation(ReservationREQUEST request)
         {
             var result = await _reservationService.CreateReservation(request);
-            try
+
+            //check if error exists
+            if (result.isError)
             {
-                if (result != null)
-                {
-                    return Ok(result);
-                }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
         }
 
         //delete reservation user,admin,manager access
@@ -121,19 +103,15 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> DeleteReservation(int reservationId)
         {
             var result = await _reservationService.DeleteReservation(reservationId);
-            try
+
+            //check if error exists
+            if (result.isError)
             {
-                if (result != null || result != "")
-                {
-                    return Ok(result);
-                }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok("Deleted");
         }
 
         //change reservation status
@@ -141,17 +119,15 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> ManagerStatusReservation(int reservationId)
         {
             var result = await _reservationService.ManagerStatusReservation(reservationId);
-            try
+
+            //check if error exists
+            if (result.isError)
             {
-                if(result!=null)
-                { return Ok(result); }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
         }
     }
 }

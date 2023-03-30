@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using tajmautAPI.Exceptions;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Models;
+using tajmautAPI.Middlewares.Exceptions;
+using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
+using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Controllers
 {
@@ -22,58 +22,56 @@ namespace tajmautAPI.Controllers
         }
 
         //get all db events
-        [HttpGet("GetAllEvents"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("GetAllEvents"), AllowAnonymous]
         public async Task<ActionResult> GetAllEvents()
         {
-            try
+            var result = await _eventService.GetAllEvents();
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.GetAllEvents();
-                return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
 
         }
 
         //get event by id
-        [HttpGet("GetEventByID"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("GetEventByID"), AllowAnonymous]
         public async Task<ActionResult> GetEventById(int eventId)
         {
 
-            try
+            var result = await _eventService.GetEventById(eventId);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.GetEventById(eventId);
-                return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
+
 
         }
 
         //all events in a specific restaurant
-        [HttpGet("GetRestaurantEventsByRestaurantID"), Authorize(Roles = "Admin,Manager,User")]
-        public async Task<ActionResult> GetAllEventsByRestaurant(int restaurantId)
+        [HttpGet("GetVenueEventsByVenueID"), AllowAnonymous]
+        public async Task<ActionResult> GetVenueEventsByVenueID(int venueId)
         {
 
-            try
+            var result = await _eventService.GetAllEventsByVenue(venueId);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.GetAllEventsByRestaurant(restaurantId);
-                return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
 
         }
 
@@ -82,20 +80,16 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> CreateEvent(EventPostREQUEST request)
         {
 
-            try
+            var result = await _eventService.CreateEvent(request);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.CreateEvent(request);
-                if (result != null)
-                {
-                    return Ok(result);
-                }
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
 
         }
 
@@ -104,17 +98,17 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> UpdateEvent(EventPostREQUEST request,int eventId)
         {
 
-            try
+            var result = await _eventService.UpdateEvent(request,eventId);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.UpdateEvent(request,eventId);
-                return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
+
 
         }
 
@@ -123,80 +117,79 @@ namespace tajmautAPI.Controllers
         public async Task<ActionResult> DeleteEvent(int eventId)
         {
 
-            try
+            var result = await _eventService.DeleteEvent(eventId);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.DeleteEvent(eventId);
-                return Ok("Event Deleted");
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok("Event Deleted");
 
         }
 
         //filter events by category
-        [HttpGet("FilterEventsByCategory"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("FilterEventsByCategory"), AllowAnonymous]
         public async Task<ActionResult> FilterEventsByCategory(int categoryId)
         {
 
-            try
+            var result = await _eventService.FilterEventsByCategory(categoryId);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.FilterEventsByCategory(categoryId);
-                return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
+
 
         }
 
         //filter events by date
-        [HttpGet("FilterEventsByDate"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("FilterEventsByDate"), AllowAnonymous]
         public async Task<ActionResult> FilterEventsByDate(DateTime startDate,DateTime endDate)
         {
 
-            try
+            var result = await _eventService.FilterEventsByDate(startDate,endDate);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.FilterEventsByDate(startDate,endDate);
-                return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
+
 
         }
 
         //filter events by city
-        [HttpGet("FilterEventsByCity"), Authorize(Roles = "Admin,Manager,User")]
+        [HttpGet("FilterEventsByCity"), AllowAnonymous]
         public async Task<ActionResult> FilterEventsByCity(string city)
         {
 
-            try
+            var result = await _eventService.FilterEventsByCity(city);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.FilterEventsByCity(city);
-                return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
+
 
         }
 
         //filter events by restaurant rating
-        [HttpGet("FilterEventsByRestaurantRating"), Authorize(Roles = "Admin,Manager,User")]
-        public async Task<ActionResult> FilterEventsByRating()
+        [HttpGet("FilterEventsByVenueRating"), AllowAnonymous]
+        public async Task<ActionResult> FilterEventsByVenueRating()
         {
             return Ok();
         }
@@ -205,36 +198,34 @@ namespace tajmautAPI.Controllers
         [HttpPut("EventStatusChange"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> CancelEvent(int eventId)
         {
+            var result = await _eventService.CancelEvent(eventId);
 
-            try
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.CancelEvent(eventId);
-                return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok("Event status changed");
 
         }
 
-        [HttpGet("GetNumberOfEvents"),Authorize(Roles ="Manager,Admin,User")]
+        [HttpGet("GetNumberOfEvents"), AllowAnonymous]
         public async Task<ActionResult> GetNumberOfEvents(int numEvents)
         {
-            try
+
+            var result = await _eventService.GetNumberOfEvents(numEvents);
+
+            //check if error exists
+            if (result.isError)
             {
-                var result = await _eventService.GetNumberOfEvents(numEvents);
-                if(result.Count()>0)
-                    return Ok(result);
-            }
-            catch (CustomException ex)
-            {
-                return StatusCode((int)ex.StatusCode, ex.Message);
+                return StatusCode((int)result.statusCode, result.errorMessage);
             }
 
-            return StatusCode(500);
+            //if no error
+            return Ok(result.Data);
+
         }
     }
 }

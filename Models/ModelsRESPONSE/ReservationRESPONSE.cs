@@ -6,7 +6,7 @@ namespace tajmautAPI.Models.ModelsRESPONSE
     {
         public int OnlineReservationId { get; set; }
 
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
 
         public int UserId { get; set; }
 

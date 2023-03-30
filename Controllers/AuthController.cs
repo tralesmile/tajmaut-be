@@ -1,17 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using OpenQA.Selenium.Internal;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Numerics;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
+using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Controllers
 {

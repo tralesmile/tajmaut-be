@@ -17,12 +17,54 @@ namespace tajmautAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("tajmautAPI.Models.CategoryEvent", b =>
+            modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.ForgotPassEntity", b =>
+                {
+                    b.Property<int>("ForgotPassEntityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ForgotPassEntityId"));
+
+                    b.Property<DateTime>("Expire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ForgotPassEntityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ForgotPassEntity");
+                });
+
+            modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.Venue_Types", b =>
+                {
+                    b.Property<int>("Venue_TypesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Venue_TypesId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Venue_TypesId");
+
+                    b.ToTable("VenueTypes");
+                });
+
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.CategoryEvent", b =>
                 {
                     b.Property<int>("CategoryEventId")
                         .ValueGeneratedOnAdd()
@@ -30,21 +72,28 @@ namespace tajmautAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryEventId"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ModifiedBy")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RestaurantId")
-                        .HasColumnType("int");
-
                     b.HasKey("CategoryEventId");
-
-                    b.HasIndex("RestaurantId");
 
                     b.ToTable("CategoryEvents");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.Comment", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Comment", b =>
                 {
                     b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
@@ -56,7 +105,19 @@ namespace tajmautAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RestaurantId")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ModifiedBy")
                         .HasColumnType("int");
 
                     b.Property<int>("Review")
@@ -65,16 +126,19 @@ namespace tajmautAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("VenueId")
+                        .HasColumnType("int");
+
                     b.HasKey("CommentId");
 
-                    b.HasIndex("RestaurantId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("VenueId");
 
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.Event", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Event", b =>
                 {
                     b.Property<int>("EventId")
                         .ValueGeneratedOnAdd()
@@ -112,7 +176,7 @@ namespace tajmautAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RestaurantId")
+                    b.Property<int>("VenueId")
                         .HasColumnType("int");
 
                     b.Property<bool>("isCanceled")
@@ -122,12 +186,12 @@ namespace tajmautAPI.Migrations
 
                     b.HasIndex("CategoryEventId");
 
-                    b.HasIndex("RestaurantId");
+                    b.HasIndex("VenueId");
 
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.OnlineReservation", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.OnlineReservation", b =>
                 {
                     b.Property<int>("OnlineReservationId")
                         .ValueGeneratedOnAdd()
@@ -172,61 +236,24 @@ namespace tajmautAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RestaurantId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("VenueId")
                         .HasColumnType("int");
 
                     b.HasKey("OnlineReservationId");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("RestaurantId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("VenueId");
 
                     b.ToTable("OnlineReservations");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.Restaurant", b =>
-                {
-                    b.Property<int>("RestaurantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RestaurantId"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RestaurantId");
-
-                    b.ToTable("Restaurants");
-                });
-
-            modelBuilder.Entity("tajmautAPI.Models.User", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -272,106 +299,175 @@ namespace tajmautAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.CategoryEvent", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Venue", b =>
                 {
-                    b.HasOne("tajmautAPI.Models.Restaurant", "Restaurant")
-                        .WithMany("CategoryEvents")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("VenueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Restaurant");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VenueId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ManagerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VenueTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VenueId");
+
+                    b.HasIndex("VenueTypeId");
+
+                    b.ToTable("Venues");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.Comment", b =>
+            modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.ForgotPassEntity", b =>
                 {
-                    b.HasOne("tajmautAPI.Models.Restaurant", "Restaurant")
-                        .WithMany("Comments")
-                        .HasForeignKey("RestaurantId")
+                    b.HasOne("tajmautAPI.Models.EntityClasses.User", "user")
+                        .WithMany("ForgotPassChanges")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tajmautAPI.Models.User", "User")
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Comment", b =>
+                {
+                    b.HasOne("tajmautAPI.Models.EntityClasses.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Restaurant");
+                    b.HasOne("tajmautAPI.Models.EntityClasses.Venue", "Venue")
+                        .WithMany("Comments")
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
+
+                    b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.Event", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Event", b =>
                 {
-                    b.HasOne("tajmautAPI.Models.CategoryEvent", "CategoryEvent")
+                    b.HasOne("tajmautAPI.Models.EntityClasses.CategoryEvent", "CategoryEvent")
                         .WithMany("Events")
                         .HasForeignKey("CategoryEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tajmautAPI.Models.Restaurant", "Restaurant")
+                    b.HasOne("tajmautAPI.Models.EntityClasses.Venue", "Venue")
                         .WithMany("Events")
-                        .HasForeignKey("RestaurantId")
+                        .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CategoryEvent");
 
-                    b.Navigation("Restaurant");
+                    b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.OnlineReservation", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.OnlineReservation", b =>
                 {
-                    b.HasOne("tajmautAPI.Models.Event", "Event")
+                    b.HasOne("tajmautAPI.Models.EntityClasses.Event", "Event")
                         .WithMany("OnlineReservations")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tajmautAPI.Models.Restaurant", "Restaurant")
-                        .WithMany("OnlineReservations")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("tajmautAPI.Models.User", "User")
+                    b.HasOne("tajmautAPI.Models.EntityClasses.User", "User")
                         .WithMany("OnlineReservations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("tajmautAPI.Models.EntityClasses.Venue", "Venue")
+                        .WithMany("OnlineReservations")
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Event");
 
-                    b.Navigation("Restaurant");
-
                     b.Navigation("User");
+
+                    b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.CategoryEvent", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Venue", b =>
+                {
+                    b.HasOne("TajmautMK.Common.Models.EntityClasses.Venue_Types", "VenueType")
+                        .WithMany("Venues")
+                        .HasForeignKey("VenueTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VenueType");
+                });
+
+            modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.Venue_Types", b =>
+                {
+                    b.Navigation("Venues");
+                });
+
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.CategoryEvent", b =>
                 {
                     b.Navigation("Events");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.Event", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Event", b =>
                 {
                     b.Navigation("OnlineReservations");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.Restaurant", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.User", b =>
                 {
-                    b.Navigation("CategoryEvents");
+                    b.Navigation("Comments");
 
+                    b.Navigation("ForgotPassChanges");
+
+                    b.Navigation("OnlineReservations");
+                });
+
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Venue", b =>
+                {
                     b.Navigation("Comments");
 
                     b.Navigation("Events");
-
-                    b.Navigation("OnlineReservations");
-                });
-
-            modelBuilder.Entity("tajmautAPI.Models.User", b =>
-                {
-                    b.Navigation("Comments");
 
                     b.Navigation("OnlineReservations");
                 });

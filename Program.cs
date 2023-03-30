@@ -1,17 +1,19 @@
 global using Microsoft.EntityFrameworkCore;
-global using tajmautAPI.Data;
-global using System.Collections.Generic;
-using tajmautAPI.Interfaces;
-using tajmautAPI.Models;
-using tajmautAPI.Repositories;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using tajmautAPI.Exceptions;
+using tajmautAPI.Services.Implementations;
+using tajmautAPI.Services.Interfaces;
+using tajmautAPI.Middlewares.Exceptions;
+using tajmautAPI.Interfaces_Service;
+using tajmautAPI.Data;
+using tajmautAPI.Helper;
+using TajmautMK.Common.Services.Interfaces;
+using TajmautMK.Core.Services.Implementations;
+using TajmautMK.Repository.Implementations;
+using TajmautMK.Repository.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +29,7 @@ builder.Services.AddEndpointsApiExplorer();
 //Authorization header
 builder.Services.AddSwaggerGen(options =>
 {
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme 
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Description = "Standard Authorization header using Bearer scheme (\"bearer{token}\")",
         In = ParameterLocation.Header,
@@ -48,11 +50,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuerSigningKey= true,
+            ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
             .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
             ValidateIssuer = false,
-            ValidateAudience= false,
+            ValidateAudience = false,
         };
 
     });
@@ -69,11 +71,26 @@ builder.Services.AddScoped<IHelperValidationClassRepository, HelperValidationCla
 builder.Services.AddScoped<IHelperValidationClassService, HelperValidationClassService>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IVenueRepository, VenueRepository>();
+builder.Services.AddScoped<IVenueService, VenueService>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
-//filter exception
-builder.Services.AddControllers(options=>
+
+//CORS
+builder.Services.AddCors(options =>
 {
-    options.Filters.Add<CustomExceptionFilter>();
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
 });
 
 //httpcontextaccessor
@@ -82,12 +99,12 @@ builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//without if statement for azure
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Lotus.API.Integration v1"));
 
+//CORS
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
@@ -95,6 +112,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+//custom exception middleware
+app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.MapControllers();
 
