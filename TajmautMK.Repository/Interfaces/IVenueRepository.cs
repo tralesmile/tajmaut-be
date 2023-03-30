@@ -20,5 +20,6 @@ namespace TajmautMK.Repository.Interfaces
         Task<Venue> CheckVenueId(int venueId);
         Task<bool> CheckVenueTypeId(int venueTypeId);
         Task<List<Venue_Types>> GetAllVenueTypes();
+        Task<List<Venue>> GetAllVenuesByVenueTypeID(int id);
     }
 }

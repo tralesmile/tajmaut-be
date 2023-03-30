@@ -16,5 +16,6 @@ namespace tajmautAPI.Interfaces_Service
         Task<ServiceResponse<VenueRESPONSE>> UpdateVenue(int venueId, VenuePutREQUEST request);
         Task<ServiceResponse<VenueRESPONSE>> GetVenueById(int venueId);
         Task<ServiceResponse<List<Venue_Types>>> GetAllVenueTypes();
+        Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenuesByVenueTypeID(int id);
     }
 }

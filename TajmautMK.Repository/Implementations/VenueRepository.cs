@@ -179,5 +179,17 @@ namespace TajmautMK.Repository.Implementations
 
             throw new CustomError(404, $"No venue Types found");
         }
+
+        public async Task<List<Venue>> GetAllVenuesByVenueTypeID(int id)
+        {
+            var check = await _context.Venues.Where(v => v.VenueTypeId == id).ToListAsync();
+            if(check.Count()>0)
+            {
+                return check;
+            }
+
+            throw new CustomError(404, $"No venues found!");
+
+        }
     }
 }

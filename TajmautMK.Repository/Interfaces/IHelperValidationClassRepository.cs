@@ -20,6 +20,7 @@ namespace TajmautMK.Repository.Interfaces
         Task<Comment> GetCommentId(int id);
         Task<OnlineReservation> CheckIdReservation(int id);
         Task<User> GetUserWithEmail(string email);
+        Task<bool> CheckVenueTypeId(int id);
 
     }
 }

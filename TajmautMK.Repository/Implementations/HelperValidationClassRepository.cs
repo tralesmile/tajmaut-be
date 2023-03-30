@@ -162,5 +162,16 @@ namespace TajmautMK.Repository.Implementations
             }
             throw new CustomError(400, $"Invalid Venue or Event");
         }
+
+        public async Task<bool> CheckVenueTypeId(int id)
+        {
+            var check = await _ctx.VenueTypes.FirstOrDefaultAsync(v => v.Venue_TypesId == id);
+            if(check!=null)
+            {
+                return true;
+            }
+
+            throw new CustomError(404, $"Venue type not found!");
+        }
     }
 }

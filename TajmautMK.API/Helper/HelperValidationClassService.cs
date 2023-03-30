@@ -204,5 +204,10 @@ namespace tajmautAPI.Helper
         {
             return await _helperRepo.CheckEventVenueRelation(venueId, eventId);
         }
+
+        public async Task<bool> CheckVenueTypeId(int id)
+        {
+            return await _helperRepo.CheckIdVenue(id);
+        }
     }
 }

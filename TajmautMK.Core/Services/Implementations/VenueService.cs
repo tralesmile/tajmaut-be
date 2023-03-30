@@ -256,5 +256,26 @@ namespace tajmautAPI.Services.Implementations
 
             return result;
         }
+
+        public async Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenuesByVenueTypeID(int id)
+        {
+            ServiceResponse<List<VenueRESPONSE>> result = new();
+
+            try
+            {
+                if(await _helper.CheckIdVenue(id))
+                {
+                    result.Data = _mapper.Map<List<VenueRESPONSE>>(await _repo.GetAllVenuesByVenueTypeID(id));
+                }
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.errorMessage = ex.ErrorMessage;
+            }
+
+            return result;
+        }
     }
 }

@@ -134,5 +134,20 @@ namespace tajmautAPI.Controllers
             return Ok(result.Data);
 
         }
+
+        [HttpGet("GetAllVenuesByVenueTypeID"), AllowAnonymous]
+        public async Task<ActionResult> GetAllVenuesByVenueTypeID(int id)
+        {
+            var result = await _venueService.GetAllVenuesByVenueTypeID(id);
+
+            //check if error exists
+            if (result.isError)
+            {
+                return StatusCode((int)result.statusCode, result.errorMessage);
+            }
+
+            //if no error
+            return Ok(result.Data);
+        }
     }
 }
