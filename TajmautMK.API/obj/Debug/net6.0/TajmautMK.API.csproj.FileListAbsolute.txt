@@ -93,3 +93,10 @@ D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\TajmautMK.Repository.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\TajmautMK.Core.pdb
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\TajmautMK.Repository.pdb
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\Humanizer.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\Mono.TextTemplating.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\System.CodeDom.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\System.Text.Encodings.Web.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\System.Text.Json.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll

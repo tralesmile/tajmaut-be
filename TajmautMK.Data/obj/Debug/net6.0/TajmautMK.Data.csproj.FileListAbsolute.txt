@@ -13,3 +13,5 @@ D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\refint\TajmautMK.Data.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.pdb
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\ref\TajmautMK.Data.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\bin\Debug\net6.0\TajmautMK.Data.runtimeconfig.json
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Data\obj\Debug\net6.0\TajmautMK.Data.genruntimeconfig.cache

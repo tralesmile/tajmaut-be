@@ -17,7 +17,7 @@ namespace tajmautAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -78,20 +78,20 @@ namespace tajmautAPI.Migrations
                     b.Property<int>("ModifiedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("RestaurantId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Review")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("VenueId")
+                        .HasColumnType("int");
+
                     b.HasKey("CommentId");
 
-                    b.HasIndex("RestaurantId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("VenueId");
 
                     b.ToTable("Comments");
                 });
@@ -134,7 +134,7 @@ namespace tajmautAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RestaurantId")
+                    b.Property<int>("VenueId")
                         .HasColumnType("int");
 
                     b.Property<bool>("isCanceled")
@@ -144,7 +144,7 @@ namespace tajmautAPI.Migrations
 
                     b.HasIndex("CategoryEventId");
 
-                    b.HasIndex("RestaurantId");
+                    b.HasIndex("VenueId");
 
                     b.ToTable("Events");
                 });
@@ -194,66 +194,21 @@ namespace tajmautAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RestaurantId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("VenueId")
                         .HasColumnType("int");
 
                     b.HasKey("OnlineReservationId");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("RestaurantId");
-
                     b.HasIndex("UserId");
 
+                    b.HasIndex("VenueId");
+
                     b.ToTable("OnlineReservations");
-                });
-
-            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Restaurant", b =>
-                {
-                    b.Property<int>("RestaurantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RestaurantId"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RestaurantId");
-
-                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("tajmautAPI.Models.EntityClasses.User", b =>
@@ -302,23 +257,71 @@ namespace tajmautAPI.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Venue", b =>
+                {
+                    b.Property<int>("VenueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VenueId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ManagerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VenueId");
+
+                    b.ToTable("Venues");
+                });
+
             modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Comment", b =>
                 {
-                    b.HasOne("tajmautAPI.Models.EntityClasses.Restaurant", "Restaurant")
-                        .WithMany("Comments")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("tajmautAPI.Models.EntityClasses.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Restaurant");
+                    b.HasOne("tajmautAPI.Models.EntityClasses.Venue", "Venue")
+                        .WithMany("Comments")
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
+
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Event", b =>
@@ -329,15 +332,15 @@ namespace tajmautAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tajmautAPI.Models.EntityClasses.Restaurant", "Restaurant")
+                    b.HasOne("tajmautAPI.Models.EntityClasses.Venue", "Venue")
                         .WithMany("Events")
-                        .HasForeignKey("RestaurantId")
+                        .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CategoryEvent");
 
-                    b.Navigation("Restaurant");
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("tajmautAPI.Models.EntityClasses.OnlineReservation", b =>
@@ -348,23 +351,23 @@ namespace tajmautAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tajmautAPI.Models.EntityClasses.Restaurant", "Restaurant")
-                        .WithMany("OnlineReservations")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("tajmautAPI.Models.EntityClasses.User", "User")
                         .WithMany("OnlineReservations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("tajmautAPI.Models.EntityClasses.Venue", "Venue")
+                        .WithMany("OnlineReservations")
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Event");
 
-                    b.Navigation("Restaurant");
-
                     b.Navigation("User");
+
+                    b.Navigation("Venue");
                 });
 
             modelBuilder.Entity("tajmautAPI.Models.EntityClasses.CategoryEvent", b =>
@@ -377,18 +380,18 @@ namespace tajmautAPI.Migrations
                     b.Navigation("OnlineReservations");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Restaurant", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.User", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("Events");
 
                     b.Navigation("OnlineReservations");
                 });
 
-            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.User", b =>
+            modelBuilder.Entity("tajmautAPI.Models.EntityClasses.Venue", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Events");
 
                     b.Navigation("OnlineReservations");
                 });
