@@ -220,8 +220,11 @@ namespace tajmautAPI.Services.Implementations
                     {
                         if (await _helper.CheckIdVenue((int)updateVenue.VenueId))
                         {
-                            var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
-                            response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
+                            if (await _repo.CheckVenueTypeId(request.VenueTypeId))
+                            {
+                                var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
+                                response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
+                            }
                         }
                     }
                 }

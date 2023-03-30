@@ -45,7 +45,7 @@ namespace tajmautAPI.Models.EntityClasses
         //N-1 Relationships
         //escape serialization
         [JsonIgnore]
-        public virtual Venue_Types VenueType { get; set; } = null!;
+        public virtual Venue_Types VenueType { get; set; }
 
         //1-N Relationships
         [JsonIgnore]
