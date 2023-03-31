@@ -14,6 +14,7 @@ using TajmautMK.Common.Services.Interfaces;
 using TajmautMK.Core.Services.Implementations;
 using TajmautMK.Repository.Implementations;
 using TajmautMK.Repository.Interfaces;
+using TajmautMK.Core.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +80,8 @@ builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 builder.Services.AddScoped<IVenueService, VenueService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<ISendMailRepository, SendMailRepository>();
+builder.Services.AddScoped<ISendMailService, SendMailService>();
 
 
 //CORS

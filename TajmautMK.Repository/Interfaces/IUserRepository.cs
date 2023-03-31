@@ -42,5 +42,6 @@ namespace TajmautMK.Repository.Interfaces
 
 
 
+
     }
 }

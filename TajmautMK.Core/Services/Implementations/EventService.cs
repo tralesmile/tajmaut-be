@@ -40,7 +40,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -75,7 +75,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -106,7 +106,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -149,7 +149,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -178,7 +178,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -213,7 +213,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -239,7 +239,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -280,7 +280,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -312,7 +312,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -440,7 +440,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -480,7 +480,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;

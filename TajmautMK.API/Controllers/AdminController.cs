@@ -26,7 +26,7 @@ namespace TajmautMK.API.Controllers
             var result = await _adminService.ChangeUserRole(request);
             if(result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
             return Ok(result.Data);
         }

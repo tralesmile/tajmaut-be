@@ -24,7 +24,7 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
@@ -41,7 +41,7 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
@@ -59,7 +59,7 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
@@ -77,7 +77,7 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
@@ -94,7 +94,7 @@ namespace tajmautAPI.Controllers
             // Check if an error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
 
             }  
             // If no error, return success with updated data
@@ -110,7 +110,7 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
@@ -127,7 +127,7 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
@@ -143,7 +143,7 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
