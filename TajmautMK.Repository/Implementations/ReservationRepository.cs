@@ -42,7 +42,7 @@ namespace TajmautMK.Repository.Implementations
             var currentUserID = _helper.GetMe();
             var reservation = new OnlineReservation
             {
-                RestaurantId = request.RestaurantId,
+                VenueId = request.VenueId,
                 UserId = currentUserID,
                 EventId = request.EventId,
                 NumberGuests = request.NumberGuests,

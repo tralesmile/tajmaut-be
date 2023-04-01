@@ -5,7 +5,7 @@ namespace tajmautAPI.Models.EntityClasses
     public class Event
     {
         public int EventId { get; set; }
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
         public int CategoryEventId { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
@@ -22,7 +22,7 @@ namespace tajmautAPI.Models.EntityClasses
         //N-1 Relationships
         //escape serialization
         [JsonIgnore]
-        public virtual Restaurant Restaurant { get; set; } = null!;
+        public virtual Venue Venue { get; set; } = null!;
 
         //escape serialization
         [JsonIgnore]

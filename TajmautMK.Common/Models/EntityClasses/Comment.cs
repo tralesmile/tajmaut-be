@@ -8,7 +8,7 @@ namespace tajmautAPI.Models.EntityClasses
         public int CommentId { get; set; }
 
         [Required]
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
 
         [Required]
         public int UserId { get; set; }
@@ -37,7 +37,7 @@ namespace tajmautAPI.Models.EntityClasses
 
         //N-1 Relationships
         [JsonIgnore]
-        public virtual Restaurant Restaurant { get; set; } = null!;
+        public virtual Venue Venue { get; set; } = null!;
         [JsonIgnore]
         public virtual User User { get; set; } = null!;
     }

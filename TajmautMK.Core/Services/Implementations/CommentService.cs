@@ -31,10 +31,10 @@ namespace tajmautAPI.Services.Implementations
             try
             {
                 //if valid id
-                if (_helper.ValidateId(request.RestaurantId))
+                if (_helper.ValidateId(request.VenueId))
                 {
                     //if restaurant exists
-                    if (await _helper.CheckIdRestaurant(request.RestaurantId))
+                    if (await _helper.CheckIdVenue(request.VenueId))
                     {
                         var resultSend = await _repo.AddToDB(request);
                         result.Data = _mapper.Map<CommentRESPONSE>(resultSend);
@@ -91,8 +91,8 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
-        //get comments by restaurant
-        public async Task<ServiceResponse<List<CommentRESPONSE>>> GetCommentsByRestaurantID(int restaurantId)
+        //get comments by venue
+        public async Task<ServiceResponse<List<CommentRESPONSE>>> GetCommentsByVenueID(int venueId)
         {
 
             ServiceResponse<List<CommentRESPONSE>> result = new();
@@ -100,10 +100,10 @@ namespace tajmautAPI.Services.Implementations
             try
             {
                 //if valid restaurant id
-                if (_helper.ValidateId(restaurantId))
+                if (_helper.ValidateId(venueId))
                 {
                     //if restarant exists
-                    if (await _helper.CheckIdRestaurant(restaurantId))
+                    if (await _helper.CheckIdVenue(venueId))
                     {
                         //all comments
                         var allComments = await _repo.GetAllComments();
@@ -111,18 +111,18 @@ namespace tajmautAPI.Services.Implementations
                         if (allComments.Count() > 0)
                         {
                             //query for restaurant comments
-                            var restaurantComments = allComments.Where(x => x.RestaurantId == restaurantId).ToList();
+                            var venueComments = allComments.Where(x => x.VenueId == venueId).ToList();
 
-                            if (restaurantComments.Count() > 0)
+                            if (venueComments.Count() > 0)
                             {
                                 //sord comments by date - newest first
-                                var sortedResComments = restaurantComments.OrderByDescending(x => x.DateTime).ToList();
+                                var sortedVenueComments = venueComments.OrderByDescending(x => x.DateTime).ToList();
 
-                                result.Data = _mapper.Map<List<CommentRESPONSE>>(sortedResComments);
+                                result.Data = _mapper.Map<List<CommentRESPONSE>>(sortedVenueComments);
                             }
                             else
                             {
-                                throw new CustomError(404, $"This restaurant has no comments");
+                                throw new CustomError(404, $"This venue has no comments");
                             }
                         }
                     }
@@ -150,7 +150,7 @@ namespace tajmautAPI.Services.Implementations
                 if (await _helper.CheckIdComment(commentId))
                 {
                     //if restaurant exists
-                    if (await _helper.CheckIdRestaurant(request.RestaurantId))
+                    if (await _helper.CheckIdVenue(request.VenueId))
                     {
 
                         var currentUserID = _helper.GetMe();

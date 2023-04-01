@@ -15,3 +15,5 @@ D:\TRAJCE\C#\TajmautMK\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Data.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Common.pdb
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Data.pdb
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.csproj.CopyComplete
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Repository.runtimeconfig.json
+D:\TRAJCE\C#\TajmautMK\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.genruntimeconfig.cache

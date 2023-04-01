@@ -7,7 +7,7 @@ namespace tajmautAPI.Models.EntityClasses
     {
         public int OnlineReservationId { get; set; }
 
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
 
         public int UserId { get; set; }
 
@@ -45,7 +45,7 @@ namespace tajmautAPI.Models.EntityClasses
         public virtual Event Event { get; set; } = null!;
 
         [JsonIgnore]
-        public virtual Restaurant Restaurant { get; set; } = null!;
+        public virtual Venue Venue { get; set; } = null!;
 
         [JsonIgnore]
         public virtual User User { get; set; } = null!;

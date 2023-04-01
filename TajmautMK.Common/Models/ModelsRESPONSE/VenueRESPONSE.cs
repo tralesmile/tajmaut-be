@@ -1,8 +1,8 @@
 ﻿namespace tajmautAPI.Models.ModelsRESPONSE
 {
-    public class RestaurantRESPONSE
+    public class VenueRESPONSE
     {
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
 
         public string Email { get; set; }
 

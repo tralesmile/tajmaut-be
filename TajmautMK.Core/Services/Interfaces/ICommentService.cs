@@ -7,7 +7,7 @@ namespace tajmautAPI.Services.Interfaces
     public interface ICommentService
     {
         Task<ServiceResponse<CommentRESPONSE>> CreateComment(CommentREQUEST request);
-        Task<ServiceResponse<List<CommentRESPONSE>>> GetCommentsByRestaurantID(int restaurantId);
+        Task<ServiceResponse<List<CommentRESPONSE>>> GetCommentsByVenueID(int venueId);
         Task<ServiceResponse<CommentRESPONSE>> DeleteComment(int commentId);
         Task<ServiceResponse<CommentRESPONSE>> UpdateComment(CommentREQUEST request, int commentId);
     }

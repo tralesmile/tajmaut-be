@@ -27,7 +27,7 @@ namespace TajmautMK.Repository.Implementations
             var currentUserID = _helper.GetMe();
             var newComment = new Comment
             {
-                RestaurantId = request.RestaurantId,
+                VenueId = request.VenueId,
                 UserId = currentUserID,
                 Body = request.Body,
                 Review = request.Review,
@@ -70,7 +70,7 @@ namespace TajmautMK.Repository.Implementations
             var currentUserID = _helper.GetMe();
 
             comment.UserId = currentUserID;
-            comment.RestaurantId = request.RestaurantId;
+            comment.VenueId = request.VenueId;
             comment.Review = request.Review;
             comment.Body = request.Body;
             comment.ModifiedAt = DateTime.Now;

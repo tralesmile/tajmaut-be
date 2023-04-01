@@ -5,7 +5,7 @@ namespace tajmautAPI.Models.ModelsREQUEST
     public class CommentREQUEST
     {
         [Required]
-        public int RestaurantId { get; set; }
+        public int VenueId { get; set; }
 
         [Required]
         public string Body { get; set; } = null!;

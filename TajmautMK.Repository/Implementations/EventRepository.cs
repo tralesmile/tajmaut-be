@@ -39,7 +39,7 @@ namespace TajmautMK.Repository.Implementations
             var currentUserID = _helper.GetMe();
             return new Event
             {
-                RestaurantId = request.RestaurantId,
+                VenueId = request.VenueId,
                 CategoryEventId = request.CategoryEventId,
                 Name = request.Name,
                 Description = request.Description,
@@ -80,8 +80,8 @@ namespace TajmautMK.Repository.Implementations
         {
             //query
             var eventsInCity = await _ctx.Events
-                .Include(e => e.Restaurant)
-                .Where(e => e.Restaurant.City == city)
+                .Include(e => e.Venue)
+                .Where(e => e.Venue.City == city)
                 .ToListAsync();
 
             if (eventsInCity.Count() > 0)
@@ -118,16 +118,16 @@ namespace TajmautMK.Repository.Implementations
         }
 
         //get restaurant by id
-        public async Task<Restaurant> GetRestaurantById(int id)
+        public async Task<Venue> GetVenueById(int id)
         {
-            return await _ctx.Restaurants.FirstOrDefaultAsync(n => n.RestaurantId == id);
+            return await _ctx.Venues.FirstOrDefaultAsync(n => n.VenueId == id);
         }
 
         //save updates in DB
         public async Task<Event> SaveUpdatesEventDB(Event getEvent, EventPostREQUEST request)
         {
             var currentUserID = _helper.GetMe();
-            getEvent.RestaurantId = request.RestaurantId;
+            getEvent.VenueId = request.VenueId;
             getEvent.CategoryEventId = request.CategoryEventId;
             getEvent.Description = request.Description;
             getEvent.EventImage = request.EventImage;

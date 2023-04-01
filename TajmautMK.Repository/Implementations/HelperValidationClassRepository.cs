@@ -109,16 +109,16 @@ namespace TajmautMK.Repository.Implementations
         }
 
         //check if restaurant exists in DB
-        public async Task<bool> CheckIdRestaurant(int id)
+        public async Task<bool> CheckIdVenue(int id)
         {
-            var check = await _ctx.Restaurants.FirstOrDefaultAsync(res => res.RestaurantId == id);
+            var check = await _ctx.Venues.FirstOrDefaultAsync(res => res.VenueId == id);
 
             if (check != null)
             {
                 return true;
             }
 
-            throw new CustomError(404, $"Restaurant not found");
+            throw new CustomError(404, $"Venue not found");
         }
 
         //check if user exists
@@ -151,6 +151,28 @@ namespace TajmautMK.Repository.Implementations
                 return user;
             }
             throw new CustomError(404, $"User not found!");
+        }
+
+        //if a specific restaurant has that event
+        public async Task<bool> CheckEventVenueRelation(int venueId, int eventId)
+        {
+            var check = await _ctx.Events.FirstOrDefaultAsync(v => v.VenueId == venueId && v.EventId==v.EventId);
+            if(check != null)
+            {
+                return true;
+            }
+            throw new CustomError(400, $"Invalid Venue or Event");
+        }
+
+        public async Task<bool> CheckVenueTypeId(int id)
+        {
+            var check = await _ctx.VenueTypes.FirstOrDefaultAsync(v => v.Venue_TypesId == id);
+            if(check!=null)
+            {
+                return true;
+            }
+
+            throw new CustomError(404, $"Venue type not found!");
         }
     }
 }
