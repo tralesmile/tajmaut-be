@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
 using MimeKit.Text;
 using System;
@@ -26,12 +27,14 @@ namespace TajmautMK.Core.Services.Implementations
         private readonly ISendMailRepository _repo;
         private readonly IMapper _mapper;
         private readonly IHelperValidationClassService _helper;
+        private readonly IConfiguration _config;
 
-        public SendMailService(ISendMailRepository repo,IMapper mapper,IHelperValidationClassService helper)
+        public SendMailService(ISendMailRepository repo,IMapper mapper,IHelperValidationClassService helper,IConfiguration config)
         {
             _repo = repo;
             _mapper = mapper;
             _helper = helper;
+            _config = config;
         }
 
         public async Task<ServiceResponse<UserRESPONSE>> ForgotPassword(string email)
@@ -49,16 +52,16 @@ namespace TajmautMK.Core.Services.Implementations
 
                     //3.Send email
                     var emailTest = new MimeMessage();
-                    emailTest.From.Add(MailboxAddress.Parse("wendy.ledner@ethereal.email"));
-                    emailTest.To.Add(MailboxAddress.Parse("wendy.ledner@ethereal.email"));
-                    emailTest.Subject = "Forgot Password Alert";
-                    emailTest.Body = new TextPart(TextFormat.Html) { Text = "<h1>Need to reset your password?</h1><br><br><h2>Use your secret code!</h2><br>" +
-                        token + "<h2><br><br>Click on the link below and enter the secret code .<br><br>[LINK]<br>" +
+                    emailTest.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUserName").Value));
+                    emailTest.To.Add(MailboxAddress.Parse(email));
+                    emailTest.Subject = "Forgot Password";
+                    emailTest.Body = new TextPart(TextFormat.Html) { Text = "<h1>Need to reset your password?</h1><br><br><h2>Use your secret token!</h2><br>" +
+                        token + "<h2><br><br>Click on the link below and enter the secret token .<br><br>[LINK]<br>" +
                         "If you did not forget your password, you can ignore this email.</h2>"};
 
                     using var smtp = new SmtpClient();
-                    smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
-                    smtp.Authenticate("wendy.ledner@ethereal.email", "vZVkRGpJ2bEKq3yUsN");
+                    smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
+                    smtp.Authenticate(_config.GetSection("EmailUserName").Value, _config.GetSection("EmailPassword").Value);
                     smtp.Send(emailTest);
 
                     smtp.Disconnect(true);
