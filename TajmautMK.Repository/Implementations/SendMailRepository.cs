@@ -84,11 +84,10 @@ namespace TajmautMK.Repository.Implementations
             throw new CustomError(404, $"User not found");
         }
 
-        public async Task<bool> DeleteFromTable(int id)
+        public async Task<bool> DeleteFromTable(ForgotPassEntity token)
         {
-            var result = await _ctx.ForgotPassEntity.FirstOrDefaultAsync(x=>x.ForgotPassEntityId== id);
 
-            _ctx.Remove(result);
+            _ctx.Remove(token);
 
             await _ctx.SaveChangesAsync();
 

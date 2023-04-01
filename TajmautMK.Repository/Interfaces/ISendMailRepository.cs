@@ -16,7 +16,7 @@ namespace TajmautMK.Repository.Interfaces
 
         //get user by id
         Task<User> GetUserByIdAsync(int id);
-        Task<bool> DeleteFromTable(int id);
+        Task<bool> DeleteFromTable(ForgotPassEntity token);
 
         Task<bool> UpdateNewPassword(User user,string password);
     }

@@ -13,6 +13,6 @@ namespace TajmautMK.Core.Services.Interfaces
     public interface ISendMailService
     {
         Task<ServiceResponse<UserRESPONSE>> ForgotPassword(string email);
-        Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(ResetPasswordREQUEST request);
+        Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(string token,ResetPasswordREQUEST request);
     }
 }

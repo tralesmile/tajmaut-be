@@ -4,6 +4,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using MimeKit.Text;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,9 +56,15 @@ namespace TajmautMK.Core.Services.Implementations
                     emailTest.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUserName").Value));
                     emailTest.To.Add(MailboxAddress.Parse(email));
                     emailTest.Subject = "Forgot Password";
-                    emailTest.Body = new TextPart(TextFormat.Html) { Text = "<h1>Need to reset your password?</h1><br><br><h2>Use your secret token!</h2><br>" +
-                        token + "<h2><br><br>Click on the link below and enter the secret token .<br><br>[LINK]<br>" +
-                        "If you did not forget your password, you can ignore this email.</h2>"};
+                    emailTest.Body = new TextPart(TextFormat.Html)
+                    {
+                        Text = "<h1>Здраво " + user.FirstName + "</h1>"
+                        + "<h2>Имаш барање за промена на лозинката!</h2>" +
+                        "<br><p>Ова е твојот токен: " + token + " </p><br>" +
+                        "<p>Кликни на оваа адреса за да ја промениш лозинката: https://tajmautmk.azurewebsites.net/api/Users/UpdateForgotPassword?token=" + token +
+                        "<br><br>Ако не си го направил/а ова барање, тогаш игнорирај ја оваа порака!<br><br>Поздрав ТајмаутМК. 😃</p>"
+
+                    };
 
                     using var smtp = new SmtpClient();
                     smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
@@ -79,19 +86,19 @@ namespace TajmautMK.Core.Services.Implementations
             return result;
         }
 
-        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(ResetPasswordREQUEST request)
+        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(string token, ResetPasswordREQUEST request)
         {
             ServiceResponse<ForgotPassEntity> result = new();
             try
             {
                 //check for token
-                var checkToken = await _repo.ValidateToken(request.Token);
+                var checkToken = await _repo.ValidateToken(token);
 
                 //check date
                 if(checkToken.Expire < DateTime.Now) 
                 {
                     //delete if expired
-                    await _repo.DeleteFromTable(checkToken.ForgotPassEntityId);
+                    await _repo.DeleteFromTable(checkToken);
                     throw new CustomError(400, $"Token expired");
                 }
 
@@ -104,7 +111,7 @@ namespace TajmautMK.Core.Services.Implementations
 
                 await _repo.UpdateNewPassword(user,request.Password);
 
-                await _repo.DeleteFromTable(checkToken.ForgotPassEntityId);
+                await _repo.DeleteFromTable(checkToken);
 
             }
             catch (CustomError ex)
