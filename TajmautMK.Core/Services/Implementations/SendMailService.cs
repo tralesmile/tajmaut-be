@@ -86,13 +86,13 @@ namespace TajmautMK.Core.Services.Implementations
             return result;
         }
 
-        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(ResetPasswordREQUEST request)
+        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(string token,ResetPasswordREQUEST request)
         {
             ServiceResponse<ForgotPassEntity> result = new();
             try
             {
                 //check for token
-                var checkToken = await _repo.ValidateToken(request.Token);
+                var checkToken = await _repo.ValidateToken(token);
 
                 //check date
                 if(checkToken.Expire < DateTime.Now) 
