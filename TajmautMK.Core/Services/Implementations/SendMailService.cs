@@ -84,9 +84,13 @@ namespace TajmautMK.Core.Services.Implementations
             ServiceResponse<ForgotPassEntity> result = new();
             try
             {
+                //check for token
                 var checkToken = await _repo.ValidateToken(request.Token);
+
+                //check date
                 if(checkToken.Expire < DateTime.Now) 
                 {
+                    //delete if expired
                     await _repo.DeleteFromTable(checkToken.ForgotPassEntityId);
                     throw new CustomError(400, $"Token expired");
                 }
@@ -99,6 +103,7 @@ namespace TajmautMK.Core.Services.Implementations
                 }
 
                 await _repo.UpdateNewPassword(user,request.Password);
+
                 await _repo.DeleteFromTable(checkToken.ForgotPassEntityId);
 
             }

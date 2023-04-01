@@ -36,7 +36,9 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<ForgotPassEntity> ValidateToken(string token)
         {
+
             var userForgotPass = await _ctx.ForgotPassEntity.FirstOrDefaultAsync(u => u.Token.ToLower() == token.ToLower());
+
             if (userForgotPass != null)
             {
                 return userForgotPass;
