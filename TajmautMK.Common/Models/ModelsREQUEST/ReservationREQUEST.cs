@@ -4,11 +4,13 @@ namespace tajmautAPI.Models.ModelsREQUEST
 {
     public class ReservationREQUEST
     {
-
+        [Required]
         public int VenueId { get; set; }
 
+        [Required]
         public int UserId { get; set; }
 
+        [Required]
         public int EventId { get; set; }
 
         [Required]

@@ -55,7 +55,7 @@ namespace TajmautMK.Core.Services.Implementations
                     var emailTest = new MimeMessage();
                     emailTest.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUserName").Value));
                     emailTest.To.Add(MailboxAddress.Parse(email));
-                    emailTest.Subject = "Forgot Password";
+                    emailTest.Subject = "Заборавена лозинка";
                     emailTest.Body = new TextPart(TextFormat.Html)
                     {
                         Text = "<h1>Здраво " + user.FirstName + "</h1>"
@@ -86,13 +86,13 @@ namespace TajmautMK.Core.Services.Implementations
             return result;
         }
 
-        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(string token, ResetPasswordREQUEST request)
+        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(ResetPasswordREQUEST request)
         {
             ServiceResponse<ForgotPassEntity> result = new();
             try
             {
                 //check for token
-                var checkToken = await _repo.ValidateToken(token);
+                var checkToken = await _repo.ValidateToken(request.Token);
 
                 //check date
                 if(checkToken.Expire < DateTime.Now) 

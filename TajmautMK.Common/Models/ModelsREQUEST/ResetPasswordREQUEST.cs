@@ -10,6 +10,8 @@ namespace TajmautMK.Common.Models.ModelsREQUEST
     public class ResetPasswordREQUEST
     {
         [Required]
+        public string Token { get; set; } = string.Empty;
+        [Required]
         public string Password { get; set; } = string.Empty;
         [Required]
         public string ConfirmPassword { get; set;} = string.Empty;

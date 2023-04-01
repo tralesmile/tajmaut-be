@@ -151,10 +151,10 @@ namespace tajmautAPI.Controllers
         }
 
         [HttpPost("UpdateForgotPassword"), AllowAnonymous]
-        public async Task<ActionResult> UpdateForgotPassword(string token,ResetPasswordREQUEST request)
+        public async Task<ActionResult> UpdateForgotPassword(ResetPasswordREQUEST request)
         {
 
-            var result = await _sendMailService.UpdateForgotPassword(token,request);
+            var result = await _sendMailService.UpdateForgotPassword(request);
 
             //check if error exists
             if (result.isError)
