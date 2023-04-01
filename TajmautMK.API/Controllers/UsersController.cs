@@ -137,20 +137,6 @@ namespace tajmautAPI.Controllers
         [HttpPost("ForgotPassword"), AllowAnonymous]
         public async Task<ActionResult> ForgotPassword(string email)
         {
-            //var email = new MimeMessage();
-            //email.From.Add(MailboxAddress.Parse("wendy.ledner@ethereal.email"));
-            //email.To.Add(MailboxAddress.Parse("wendy.ledner@ethereal.email"));
-            //email.Subject = "Test email";
-            //email.Body = new TextPart(TextFormat.Html) { Text = body };
-
-            //using var smtp = new SmtpClient();
-            //smtp.Connect("smtp.ethereal.email", 587,SecureSocketOptions.StartTls);
-            //smtp.Authenticate("wendy.ledner@ethereal.email", "vZVkRGpJ2bEKq3yUsN");
-            //smtp.Send(email);
-
-            //smtp.Disconnect(true);
-
-            //return Ok();
 
             var result = await _sendMailService.ForgotPassword(email);
 
@@ -167,20 +153,6 @@ namespace tajmautAPI.Controllers
         [HttpPost("UpdateForgotPassword"), AllowAnonymous]
         public async Task<ActionResult> UpdateForgotPassword(ResetPasswordREQUEST request)
         {
-            //var email = new MimeMessage();
-            //email.From.Add(MailboxAddress.Parse("wendy.ledner@ethereal.email"));
-            //email.To.Add(MailboxAddress.Parse("wendy.ledner@ethereal.email"));
-            //email.Subject = "Test email";
-            //email.Body = new TextPart(TextFormat.Html) { Text = body };
-
-            //using var smtp = new SmtpClient();
-            //smtp.Connect("smtp.ethereal.email", 587,SecureSocketOptions.StartTls);
-            //smtp.Authenticate("wendy.ledner@ethereal.email", "vZVkRGpJ2bEKq3yUsN");
-            //smtp.Send(email);
-
-            //smtp.Disconnect(true);
-
-            //return Ok();
 
             var result = await _sendMailService.UpdateForgotPassword(request);
 
