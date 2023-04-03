@@ -361,6 +361,7 @@ namespace tajmautAPI.Services.Implementations
                         VenueName = venue.Name,
                         VenuePhone = venue.Phone,
                         StatusEvent = statusEvent,
+                        VenueCity = venue.City,
                     });
 
                 }
@@ -417,6 +418,7 @@ namespace tajmautAPI.Services.Implementations
                                     VenueName = venue.Name,
                                     VenuePhone = venue.Phone,
                                     StatusEvent = "Upcoming",
+                                    VenueCity = venue.City,
                                 });
                             }
                         }
