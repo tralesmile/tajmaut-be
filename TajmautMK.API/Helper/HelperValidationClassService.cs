@@ -8,43 +8,72 @@ using TajmautMK.Repository.Interfaces;
 
 namespace tajmautAPI.Helper
 {
+    /// <summary>
+    /// Service for performing validation checks and getting information related to users, events, and reservations.
+    /// </summary>
     public class HelperValidationClassService : IHelperValidationClassService
     {
 
         private readonly IHelperValidationClassRepository _helperRepo;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        /// <summary>
+        /// Initializes a new instance of the HelperValidationClassService class.
+        /// </summary>
+        /// <param name="helperRepo">An instance of the IHelperValidationClassRepository interface.</param>
+        /// <param name="httpContextAccessor">An instance of the IHttpContextAccessor interface.</param>
         public HelperValidationClassService(IHelperValidationClassRepository helperRepo, IHttpContextAccessor httpContextAccessor)
         {
             _helperRepo = helperRepo;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        //check duplicates email
+        /// <summary>
+        /// Checks if an email already exists in the database.
+        /// </summary>
+        /// <param name="email">The email to check for duplicates.</param>
+        /// <returns>A User object if the email is already in use, otherwise null.</returns>
         public async Task<User> CheckDuplicatesEmail(string email)
         {
             return await _helperRepo.CheckDuplicatesEmail(email);
         }
 
-        //check duplicates of email
+        /// <summary>
+        /// Checks if an email already exists in the database, excluding the user with the specified ID.
+        /// </summary>
+        /// <param name="email">The email to check for duplicates.</param>
+        /// <param name="id">The ID of the user to exclude from the search.</param>
+        /// <returns>A User object if the email is already in use by another user, otherwise null.</returns>
         public async Task<User> CheckDuplicatesEmailWithId(string email, int id)
         {
             return await _helperRepo.CheckDuplicatesEmailWithId(email, id);
         }
 
-        //check if category exists
+        /// <summary>
+        /// Checks if a category with the specified ID exists in the database.
+        /// </summary>
+        /// <param name="id">The ID of the category to check for.</param>
+        /// <returns>True if the category exists, otherwise false.</returns>
         public async Task<bool> CheckIdCategory(int id)
         {
             return await _helperRepo.CheckIdCategory(id);
         }
 
-        //check if venue exists
+        /// <summary>
+        /// Checks if a venue with the specified ID exists in the database.
+        /// </summary>
+        /// <param name="id">The ID of the venue to check for.</param>
+        /// <returns>True if the venue exists, otherwise false.</returns>
         public async Task<bool> CheckIdVenue(int id)
         {
             return await _helperRepo.CheckIdVenue(id);
         }
 
-        //validate email
+        /// <summary>
+        /// Validates an email address using a regular expression pattern.
+        /// </summary>
+        /// <param name="emailRegex">The email address to validate.</param>
+        /// <returns>True if the email address is valid, otherwise throws a CustomError exception.</returns>
         public bool ValidateEmailRegex(string emailRegex)
         {
 
@@ -60,7 +89,10 @@ namespace tajmautAPI.Helper
             throw new CustomError(400, $"Invalid Email");
         }
 
-        //get current user id
+        /// <summary>
+        /// Gets the ID of the current user from the HttpContext.
+        /// </summary>
+        /// <returns>The ID of the current user.</returns>
         public int GetMe()
         {
             var result = string.Empty;
@@ -71,7 +103,10 @@ namespace tajmautAPI.Helper
             return int.Parse(result);
         }
 
-        //get currnet user email from token
+        /// <summary>
+        /// Gets the email of the current user from the HttpContext.
+        /// </summary>
+        /// <returns>The email address of the current user.</returns>
         public string GetCurrentUserEmail()
         {
             var result = string.Empty;
@@ -82,7 +117,10 @@ namespace tajmautAPI.Helper
             return result;
         }
 
-        //get current user role from token
+        /// <summary>
+        /// Gets the role of the current user from the HttpContext.
+        /// </summary>
+        /// <returns>The role of the current user.</returns>
         public string GetCurrentUserRole()
         {
             var result = string.Empty;
@@ -93,25 +131,42 @@ namespace tajmautAPI.Helper
             return result;
         }
 
-        //check if events exists
+        /// <summary>
+        /// Checks if an event with the specified ID exists in the database.
+        /// </summary>
+        /// <param name="id">The ID of the event to check for.</param>
+        /// <returns>True if the event exists, otherwise false.</returns>
         public async Task<bool> CheckIdEvent(int id)
         {
             return await _helperRepo.CheckIdEvent(id);
         }
 
-        //check event activity
+        /// <summary>
+        /// Checks if the specified event is canceled.
+        /// </summary>
+        /// <param name="id">The ID of the event activity to check.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task<bool> CheckIdEventActivity(int id)
         {
             return await _helperRepo.CheckIdEventActivity(id);
         }
 
-        //check date event
+        /// <summary>
+        /// Checks if the specified event ended or not.
+        /// </summary>
+        /// <param name="id">The ID of the event date to check.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task<bool> CheckIdEventDate(int id)
         {
             return await _helperRepo.CheckIdEventDate(id);
         }
 
-        //validate phone
+        /// <summary>
+        /// Validates a phone number using a regular expression.
+        /// </summary>
+        /// <param name="phone">The phone number to validate.</param>
+        /// <returns>A Boolean value indicating whether the phone number is valid.</returns>
+        /// <exception cref="CustomError">Thrown when the phone number is invalid.</exception>
         public bool ValidatePhoneRegex(string phone)
         {
             string pattern = @"^(?:07[0-9]|08[0]|080)[0-9]{6}$";
@@ -124,7 +179,12 @@ namespace tajmautAPI.Helper
             throw new CustomError(400, $"Invalid phone number!");
         }
 
-        //check if user exists
+        /// <summary>
+        /// Checks if the specified user exists in the database.
+        /// </summary>
+        /// <param name="id">The ID of the user to check.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="CustomError">Thrown when the user is not found.</exception>
         public async Task<bool> CheckIdUser(int id)
         {
             bool result = await _helperRepo.CheckIdUser(id);
@@ -136,13 +196,21 @@ namespace tajmautAPI.Helper
             throw new CustomError(404, $"User not found");
         }
 
-        //check if reservations exists
+        /// <summary>
+        /// Checks if the specified reservation exists in the database.
+        /// </summary>
+        /// <param name="id">The ID of the reservation to check.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task<OnlineReservation> CheckIdReservation(int id)
         {
             return await _helperRepo.CheckIdReservation(id);
         }
 
-        //current user admin?
+        /// <summary>
+        /// Checks if the current user is an admin.
+        /// </summary>
+        /// <returns>A Boolean value indicating whether the current user is an admin.</returns>
+        /// <exception cref="CustomError">Thrown when the current user is not an admin.</exception>
         public bool CheckUserAdmin()
         {
             string check = GetCurrentUserRole();
@@ -152,7 +220,11 @@ namespace tajmautAPI.Helper
             throw new CustomError(401, $"Current user is not Admin");
         }
 
-        //user or manager current user
+        /// <summary>
+        /// Checks if the current user is an admin or a manager.
+        /// </summary>
+        /// <returns>A Boolean value indicating whether the current user is an admin or a manager.</returns>
+        /// <exception cref="CustomError">Thrown when the current user is not an admin or a manager.</exception>
         public bool CheckUserAdminOrManager()
         {
             string check = GetCurrentUserRole();
@@ -164,7 +236,11 @@ namespace tajmautAPI.Helper
             throw new CustomError(401, $"Current user is not Admin or Manager");
         }
 
-        //check if current user is manager
+        /// <summary>
+        /// Checks if the current user is a manager.
+        /// </summary>
+        /// <returns>A Boolean value indicating whether the current user is a manager.</returns>
+        /// <exception cref="CustomError">Thrown when the current user is not a manager.</exception>
         public bool CheckUserManager()
         {
             string check = GetCurrentUserRole();
@@ -174,7 +250,12 @@ namespace tajmautAPI.Helper
             throw new CustomError(401, $"Current user is not Manager");
         }
 
-        //validate id input
+        /// <summary>
+        /// Validates an ID input.
+        /// </summary>
+        /// <param name="id">The ID to validate.</param>
+        /// <returns>A Boolean value indicating whether the ID is valid.</returns>
+        /// <exception cref="CustomError">Thrown when the ID is invalid.</exception>
         public bool ValidateId(int id)
         {
             if (id > 0)
@@ -183,28 +264,52 @@ namespace tajmautAPI.Helper
             throw new CustomError(400, $"Invalid ID");
         }
 
-        //check if comment exists
+        /// <summary>
+        /// Checks if the specified comment exists in the database.
+        /// </summary>
+        /// <param name="commentId">The ID of the comment to check.</param>
+        /// <returns>A task that represents the asynchronous operation. </returns>
         public async Task<bool> CheckIdComment(int commentId)
         {
             return await _helperRepo.CheckIdComment(commentId);
         }
 
-        //get comment with id
+        /// <summary>
+        /// Retrieves a comment with the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the comment to retrieve.</param>
+        /// <returns>The comment with the specified ID.</returns>
         public async Task<Comment> GetCommentId(int id)
         {
             return await _helperRepo.GetCommentId(id);
         }
 
+        /// <summary>
+        /// Retrieves a user with the specified email.
+        /// </summary>
+        /// <param name="email">The email of the user to retrieve.</param>
+        /// <returns>The user with the specified email.</returns>
         public async Task<User> GetUserWithEmail(string email)
         {
             return await _helperRepo.GetUserWithEmail(email);
         }
 
+        /// <summary>
+        /// Checks if a venue is related to an event.
+        /// </summary>
+        /// <param name="venueId">The ID of the venue to check.</param>
+        /// <param name="eventId">The ID of the event to check.</param>
+        /// <returns>True if the venue is related to the event; otherwise, false.</returns>
         public async Task<bool> CheckEventVenueRelation(int venueId, int eventId)
         {
             return await _helperRepo.CheckEventVenueRelation(venueId, eventId);
         }
 
+        /// <summary>
+        /// Checks if a venue type ID exists.
+        /// </summary>
+        /// <param name="id">The ID of the venue type to check.</param>
+        /// <returns>True if venue exists ,false if not.</returns>
         public async Task<bool> CheckVenueTypeId(int id)
         {
             return await _helperRepo.CheckIdVenue(id);
