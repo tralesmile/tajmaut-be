@@ -22,6 +22,7 @@ namespace tajmautAPI.Data
         public DbSet<OnlineReservation> OnlineReservations { get; set; }
         public DbSet<Venue_Types> VenueTypes { get; set; }
         public DbSet<ForgotPassEntity> ForgotPassEntity { get; set; }
+        public DbSet<Venue_City> Venue_Cities { get; set; }
 
     }
 
