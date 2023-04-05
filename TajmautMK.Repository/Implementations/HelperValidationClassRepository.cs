@@ -156,7 +156,7 @@ namespace TajmautMK.Repository.Implementations
         //if a specific restaurant has that event
         public async Task<bool> CheckEventVenueRelation(int venueId, int eventId)
         {
-            var check = await _ctx.Events.FirstOrDefaultAsync(v => v.VenueId == venueId && v.EventId==v.EventId);
+            var check = await _ctx.Events.FirstOrDefaultAsync(v => v.VenueId == venueId && v.EventId==eventId);
             if(check != null)
             {
                 return true;
@@ -173,6 +173,28 @@ namespace TajmautMK.Repository.Implementations
             }
 
             throw new CustomError(404, $"Venue type not found!");
+        }
+
+        public async Task<bool> CheckManagerVenueRelation(int venueId, int managerId)
+        {
+            var check = await _ctx.Venues.FirstOrDefaultAsync(x => x.VenueId == venueId && x.ManagerId == managerId);
+            if(check != null)
+            {
+                return true;
+            }
+
+            throw new CustomError(401, $"You dont have rights to manage this venue!");
+        }
+
+        public async Task<Event> GetEventByID(int eventId)
+        {
+            var check = await _ctx.Events.FindAsync(eventId);
+            if(check != null)
+            {
+                return check;
+            }
+
+            throw new CustomError(404, $"Event not found!");
         }
     }
 }

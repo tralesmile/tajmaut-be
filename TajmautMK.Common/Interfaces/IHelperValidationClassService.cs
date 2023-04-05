@@ -164,6 +164,20 @@ namespace tajmautAPI.Services.Interfaces
         /// <returns>The user with the given email if it exists, null otherwise.</returns>
         Task<User> GetUserWithEmail(string email);
 
+        /// <summary>
+        /// Checks if manager is related to specific venue
+        /// </summary>
+        /// <param name="venueId">The ID of the venue type to check.</param>
+        /// <param name="managerId">The ID of the venue type to check.</param>
+        /// <returns>True if a venue is related to manager, otherwise false.</returns>
+        Task<bool> CheckManagerVenueRelation(int venueId, int managerId);
+
+        /// <summary>
+        /// Gets the event by id
+        /// </summary>
+        /// <param name="eventId">The ID of the venue type to check.</param>
+        /// <returns>Event if found ,if not CustomError.</returns>
+        Task<Event> GetEventByID(int eventId);
 
     }
 }

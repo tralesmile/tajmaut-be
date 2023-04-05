@@ -101,7 +101,7 @@ namespace TajmautMK.Repository.Implementations
             {
                 return check;
             }
-            throw new CustomError(401, $"Unauthorized user");
+            throw new CustomError(404, $"Reservation not found");
         }
 
         //if reservation exists

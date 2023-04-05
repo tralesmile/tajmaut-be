@@ -53,22 +53,25 @@ namespace tajmautAPI.Services.Implementations
         public async Task<ServiceResponse<VenueRESPONSE>> DeleteVenue(int venueId)
         { 
          ServiceResponse<VenueRESPONSE> result = new();
+            var currentUserID = _helper.GetMe();
 
             try
             {
                 if (_helper.ValidateId(venueId))
                 {
-                    var currentUserID = _helper.GetMe();
-                    var currentUserRole = _helper.CheckUserAdminOrManager(); 
-
-                    if ((venueId == currentUserID) || _helper.CheckUserAdminOrManager())
+                    if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
                     {
-                        var venue = await _repo.DeleteVenueAsync(venueId);
+                        var currentUserRole = _helper.CheckUserAdminOrManager();
 
-                        if (venue != null)
+                        if ((venueId == currentUserID) || _helper.CheckUserAdminOrManager())
                         {
-                            var resultSend = await _repo.DeleteVenueDB(venue); 
-                            result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+                            var venue = await _repo.DeleteVenueAsync(venueId);
+
+                            if (venue != null)
+                            {
+                                var resultSend = await _repo.DeleteVenueDB(venue);
+                                result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+                            }
                         }
                     }
                 }
@@ -209,21 +212,24 @@ namespace tajmautAPI.Services.Implementations
         public async Task<ServiceResponse<VenueRESPONSE>> UpdateVenue(int venueId, VenuePutREQUEST request)
         {
             var response = new ServiceResponse<VenueRESPONSE>();
-
+            var currentUserID = _helper.GetMe();
             try
             {
                 if (_helper.ValidateId(venueId))
                 {
-                    var updateVenue = await _repo.UpdateVenueAsync(request, venueId);
-
-                    if (updateVenue != null)
+                    if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
                     {
-                        if (await _helper.CheckIdVenue((int)updateVenue.VenueId))
+                        var updateVenue = await _repo.UpdateVenueAsync(request, venueId);
+
+                        if (updateVenue != null)
                         {
-                            if (await _repo.CheckVenueTypeId(request.VenueTypeId))
+                            if (await _helper.CheckIdVenue((int)updateVenue.VenueId))
                             {
-                                var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
-                                response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
+                                if (await _repo.CheckVenueTypeId(request.VenueTypeId))
+                                {
+                                    var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
+                                    response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
+                                }
                             }
                         }
                     }
