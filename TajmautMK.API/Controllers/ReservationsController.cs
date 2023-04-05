@@ -5,6 +5,9 @@ using tajmautAPI.Services.Interfaces;
 
 namespace tajmautAPI.Controllers
 {
+    /// <summary>
+    /// API controller for managing reservations.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -13,12 +16,19 @@ namespace tajmautAPI.Controllers
 
         private readonly IReservationService _reservationService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReservationsController"/> class.
+        /// </summary>
+        /// <param name="reservationService">The reservation service.</param>
         public ReservationsController(IReservationService reservationService)
         {
             _reservationService = reservationService;
         }
 
-        //get all reservations - admin access
+        /// <summary>
+        /// Gets all reservations with admin access.
+        /// </summary>
+        /// <returns>The list of all reservations.</returns>
         [HttpGet("GetAllReservations"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> GetAllReservations()
         {
@@ -27,14 +37,18 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
             return Ok(result.Data);
         }
 
-        //get reservations by restaurant - admin,manager access
+        /// <summary>
+        /// Gets reservations by restaurant with admin or manager access.
+        /// </summary>
+        /// <param name="venueId">The ID of the venue.</param>
+        /// <returns>The list of reservations for the venue.</returns>
         [HttpGet("GetReservationsByVenue"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> GetReservationsByVenue(int venueId)
         {
@@ -43,14 +57,18 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
             return Ok(result.Data);
         }
 
-        //get reservations by event - admin,manager access 
+        /// <summary>
+        /// Gets reservations by event with admin or manager access.
+        /// </summary>
+        /// <param name="eventId">The ID of the event.</param>
+        /// <returns>The list of reservations for the event.</returns>
         [HttpGet("GetReservationsByEvent"), Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> GetReservationsByEvent(int eventId)
         {
@@ -59,14 +77,18 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
             return Ok(result.Data);
         }
 
-        //get reservations by user - user,admin,manager access
+        /// <summary>
+        /// Gets reservations by user with user, admin, or manager access.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>The list of reservations for the user.</returns>
         [HttpGet("GetReservationsByUser"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> GetReservationsByUser(int userId)
         {
@@ -75,14 +97,18 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
             return Ok(result.Data);
         }
 
-        //create reservation user,admin,manager access
+        /// <summary>
+        /// Creates a reservation with user, admin, or manager access.
+        /// </summary>
+        /// <param name="request">The request object containing reservation data.</param>
+        /// <returns>The created reservation.</returns>
         [HttpPost("CreateReservation"), Authorize(Roles = "Admin,Manager,User")]
         public async Task<ActionResult> CreateReservation(ReservationREQUEST request)
         {
@@ -91,14 +117,19 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
             return Ok(result.Data);
         }
 
-        //delete reservation user,admin,manager access
+        /// <summary>
+        /// Deletes a reservation identified by the given reservation ID.
+        /// </summary>
+        /// <param name="reservationId">The ID of the reservation to delete.</param>
+        /// <returns>Returns an ActionResult indicating whether the reservation was deleted successfully or not.</returns>
+        /// <remarks>This action requires the user to have admin, user or manager access.</remarks>
         [HttpDelete("DeleteReservation"), Authorize(Roles = "Admin,User,Manager")]
         public async Task<ActionResult> DeleteReservation(int reservationId)
         {
@@ -107,14 +138,18 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error
             return Ok("Deleted");
         }
 
-        //change reservation status
+        /// <summary>
+        /// Changes the status of a reservation identified by the given reservation ID.
+        /// </summary>
+        /// <param name="reservationId">The ID of the reservation to change status of.</param>
+        /// <returns>Returns an ActionResult indicating whether the status was changed successfully or not.</returns>
         [HttpPut("ManagerStatusReservation"), Authorize(Roles = "Manager,Admin")]
         public async Task<ActionResult> ManagerStatusReservation(int reservationId)
         {
@@ -123,7 +158,7 @@ namespace tajmautAPI.Controllers
             //check if error exists
             if (result.isError)
             {
-                return StatusCode((int)result.statusCode, result.errorMessage);
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
             }
 
             //if no error

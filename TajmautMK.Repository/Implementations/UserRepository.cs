@@ -172,5 +172,6 @@ namespace TajmautMK.Repository.Implementations
             await _ctx.SaveChangesAsync();
             return user;
         }
+
     }
 }

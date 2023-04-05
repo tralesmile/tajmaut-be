@@ -100,3 +100,8 @@ D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\System.CodeDom.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\System.Text.Json.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\MailKit.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\MimeKit.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\BouncyCastle.Crypto.dll
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\obj\Debug\net6.0\TajmautMK.API.Properties.Resources.resources
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\obj\Debug\net6.0\TajmautMK.API.csproj.GenerateResource.cache

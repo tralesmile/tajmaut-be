@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using tajmautAPI.Middlewares.Exceptions;
+using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Interfaces;
@@ -88,7 +89,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -100,6 +101,9 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<ReservationRESPONSE> result = new();
+            var currentUserID = _helper.GetMe();
+            var reservationByID = await _repo.GetReservationByID(reservationId);
+            var venueID = reservationByID.VenueId;
 
             try
             {
@@ -107,19 +111,21 @@ namespace tajmautAPI.Services.Implementations
                 //if reservation exists
                 if (await _repo.ReservationExistsID(reservationId))
                 {
-                    //get currnet ID,Role,Reservation
-                    var currentUserID = _helper.GetMe();
-                    var currentUserRole = _helper.GetCurrentUserRole();
-                    var currentReservation = await _repo.GetReservationByID(reservationId);
-
-                    //current user id from token is the resevation's userid or admin,manager
-                    if (currentUserID == currentReservation.UserId || _helper.CheckUserAdminOrManager())
+                    if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        //delete reservation
-                        var check = await _repo.DeleteReservation(currentReservation);
-                        if (check)
+                        //get currnet ID,Role,Reservation
+                        var currentUserRole = _helper.GetCurrentUserRole();
+                        var currentReservation = await _repo.GetReservationByID(reservationId);
+
+                        //current user id from token is the resevation's userid or admin,manager
+                        if (currentUserID == currentReservation.UserId || _helper.CheckUserAdminOrManager())
                         {
-                            result.Data = _mapper.Map<ReservationRESPONSE>(currentReservation);
+                            //delete reservation
+                            var check = await _repo.DeleteReservation(currentReservation);
+                            if (check)
+                            {
+                                result.Data = _mapper.Map<ReservationRESPONSE>(currentReservation);
+                            }
                         }
                     }
                 }
@@ -128,7 +134,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -160,7 +166,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -172,32 +178,38 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<List<ReservationRESPONSE>> result = new();
+            var currentUserID = _helper.GetMe();
+            var eventbyID = await _helper.GetEventByID(eventId);
+            var venueID = eventbyID.VenueId;
 
             try
             {
                 //if the id is valid
                 if (_helper.ValidateId(eventId))
                 {
-                    //admin or manager can access the reservations on specific event
-                    if (_helper.CheckUserAdminOrManager())
+                    if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        //if event exists
-                        if (await _helper.CheckIdEvent(eventId))
+                        //admin or manager can access the reservations on specific event
+                        if (_helper.CheckUserAdminOrManager())
                         {
-                            var listReservations = await _repo.GetAllReservations();
-
-                            if (listReservations.Count() > 0)
+                            //if event exists
+                            if (await _helper.CheckIdEvent(eventId))
                             {
-                                //search event reservations with that id
-                                var eventReservations = listReservations.Where(e => e.EventId == eventId).ToList();
+                                var listReservations = await _repo.GetAllReservations();
 
-                                if (eventReservations.Count() > 0)
+                                if (listReservations.Count() > 0)
                                 {
-                                    result.Data = _mapper.Map<List<ReservationRESPONSE>>(eventReservations);
-                                }
-                                else
-                                {
-                                    throw new CustomError(404, $"This event has no reservations");
+                                    //search event reservations with that id
+                                    var eventReservations = listReservations.Where(e => e.EventId == eventId).ToList();
+
+                                    if (eventReservations.Count() > 0)
+                                    {
+                                        result.Data = _mapper.Map<List<ReservationRESPONSE>>(eventReservations);
+                                    }
+                                    else
+                                    {
+                                        throw new CustomError(404, $"This event has no reservations");
+                                    }
                                 }
                             }
                         }
@@ -208,7 +220,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -220,31 +232,35 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<List<ReservationRESPONSE>> result = new();
+            var currentUserID = _helper.GetMe();
 
             try
             {
                 //if restaurantId is valid
                 if (_helper.ValidateId(venueId))
                 {
-                    //admin and manager access
-                    if (_helper.CheckUserAdminOrManager())
+                    if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
                     {
-                        //if restaurant exists
-                        if (await _helper.CheckIdVenue(venueId))
+                        //admin and manager access
+                        if (_helper.CheckUserAdminOrManager())
                         {
-                            var listReservations = await _repo.GetAllReservations();
-
-                            if (listReservations.Count() > 0)
+                            //if restaurant exists
+                            if (await _helper.CheckIdVenue(venueId))
                             {
-                                //search restaurants with that id
-                                var venueReservations = listReservations.Where(n => n.VenueId == venueId).ToList();
-                                if (venueReservations.Count() > 0)
+                                var listReservations = await _repo.GetAllReservations();
+
+                                if (listReservations.Count() > 0)
                                 {
-                                    result.Data = _mapper.Map<List<ReservationRESPONSE>>(venueReservations);
-                                }
-                                else
-                                {
-                                    throw new CustomError(404, $"Venue has no reservations");
+                                    //search restaurants with that id
+                                    var venueReservations = listReservations.Where(n => n.VenueId == venueId).ToList();
+                                    if (venueReservations.Count() > 0)
+                                    {
+                                        result.Data = _mapper.Map<List<ReservationRESPONSE>>(venueReservations);
+                                    }
+                                    else
+                                    {
+                                        throw new CustomError(404, $"Venue has no reservations");
+                                    }
                                 }
                             }
                         }
@@ -255,7 +271,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -311,7 +327,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -321,23 +337,28 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<ReservationRESPONSE> result = new();
+            var currentUserID = _helper.GetMe();
+            var reservationByID = await _repo.GetReservationByID(reservationId);
+            var venueID = reservationByID.VenueId;
 
             try
             {
-
-                var checkReservation = await _helper.CheckIdReservation(reservationId);
-
-                if (checkReservation != null)
+                if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                 {
-                    if (await _repo.ChangeReservationStatus(checkReservation))
-                        result.Data = _mapper.Map<ReservationRESPONSE>(checkReservation);
+                    var checkReservation = await _helper.CheckIdReservation(reservationId);
+
+                    if (checkReservation != null)
+                    {
+                        if (await _repo.ChangeReservationStatus(checkReservation))
+                            result.Data = _mapper.Map<ReservationRESPONSE>(checkReservation);
+                    }
                 }
             }
             catch (CustomError ex)
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
