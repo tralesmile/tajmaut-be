@@ -31,7 +31,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 if (await _repo.CheckVenueTypeId(request.VenueTypeId))
                 {
-                    if (await _repo.CheckVenueCityId(request.VenueCityId))
+                    if (await _repo.CheckVenueCityId(request.Venue_CityId))
                     {
 
                         var getResult = await _repo.CreateVenueAsync(request);
@@ -182,7 +182,7 @@ namespace tajmautAPI.Services.Implementations
                         {
                             if (await _helper.CheckIdVenue((int)updateVenue.VenueId))
                             {
-                                if (await _repo.CheckVenueCityId(request.VenueCityId))
+                                if (await _repo.CheckVenueCityId(request.Venue_CityId))
                                 {
                                     if (await _repo.CheckVenueTypeId(request.VenueTypeId))
                                     {
@@ -229,7 +229,7 @@ namespace tajmautAPI.Services.Implementations
 
             try
             {
-                if(await _helper.CheckIdVenue(id))
+                if(await _helper.CheckVenueTypeId(id))
                 {
                     result.Data = _mapper.Map<List<VenueRESPONSE>>(await _repo.GetAllVenuesByVenueTypeID(id));
                 }

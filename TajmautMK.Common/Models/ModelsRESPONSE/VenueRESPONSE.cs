@@ -1,17 +1,25 @@
-﻿namespace tajmautAPI.Models.ModelsRESPONSE
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace tajmautAPI.Models.ModelsRESPONSE
 {
     public class VenueRESPONSE
     {
         public int VenueId { get; set; }
 
-        public string Email { get; set; }
+        public int VenueTypeId { get; set; }
 
-        public string Name { get; set; }
+        public int Venue_CityId { get; set; }
 
-        public string Address { get; set; }
+        public string Email { get; set; } = null!;
 
-        public int VenueCityId { get; set; }
+        public string Name { get; set; } = null!;
 
-        public string Phone { get; set; }
+        public string City { get; set; } = null!;
+
+        public string Address { get; set; } = null!;
+
+        public string Phone { get; set; } = null!;
+
+        public int ManagerId { get; set; }
     }
 }

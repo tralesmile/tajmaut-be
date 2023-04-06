@@ -63,7 +63,7 @@ namespace TajmautMK.Repository.Implementations
         public async Task<Venue> CreateVenueAsync(VenuePostREQUEST request)
         {
             var currentUserID = _helper.GetMe();
-            var getVenueCity = await GetVenueCityById(request.VenueCityId);
+            var getVenueCity = await GetVenueCityById(request.Venue_CityId);
 
             return new Venue
             {
@@ -78,7 +78,7 @@ namespace TajmautMK.Repository.Implementations
                 CreatedBy = currentUserID,
                 ManagerId = currentUserID,
                 City = getVenueCity.CityName,
-                Venue_CityId = request.VenueCityId,
+                Venue_CityId = request.Venue_CityId,
             };
         }
         // updates venue
@@ -95,7 +95,7 @@ namespace TajmautMK.Repository.Implementations
         public async Task<Venue> SaveChanges(Venue venue, VenuePutREQUEST request)
         {
             var currentUserID = _helper.GetMe();
-            var getVenueCity = await GetVenueCityById(request.VenueCityId);
+            var getVenueCity = await GetVenueCityById(request.Venue_CityId);
 
             venue.Name = request.Name;
             venue.Email = request.Email;
@@ -135,7 +135,7 @@ namespace TajmautMK.Repository.Implementations
         public async Task<Venue> SaveUpdatesVenueDB(Venue getVenue, VenuePutREQUEST request)
         {
             var currentUserID = _helper.GetMe();
-            var getVenueCity = await GetVenueCityById(request.VenueCityId);
+            var getVenueCity = await GetVenueCityById(request.Venue_CityId);
 
             getVenue.VenueTypeId=request.VenueTypeId;
             getVenue.Name = request.Name;
