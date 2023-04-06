@@ -190,5 +190,24 @@ namespace tajmautAPI.Controllers
             //if no error
             return Ok(result.Data);
         }
+
+        /// <summary>
+        /// Gets all venue cities.
+        /// </summary>
+        /// <returns>The list of venue cities.</returns>
+        [HttpGet("GetAllVenueCities"), AllowAnonymous]
+        public async Task<ActionResult> GetAllVenueCities()
+        {
+            var result = await _venueService.GetAllVenueCities();
+
+            //check if error exists
+            if (result.isError)
+            {
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
+            }
+
+            //if no error
+            return Ok(result.Data);
+        }
     }
 }

@@ -10,7 +10,7 @@
 
         public string Address { get; set; }
 
-        public string City { get; set; }
+        public int VenueCityId { get; set; }
 
         public string Phone { get; set; }
     }

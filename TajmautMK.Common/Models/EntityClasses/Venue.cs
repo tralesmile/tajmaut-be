@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using TajmautMK.Common.Models.EntityClasses;
 
@@ -12,16 +13,19 @@ namespace tajmautAPI.Models.EntityClasses
         public int VenueTypeId { get; set; }
 
         [Required]
+        public int Venue_CityId { get; set; }
+
+        [Required]
         public string Email { get; set; } = null!;
 
         [Required]
         public string Name { get; set; } = null!;
 
         [Required]
-        public string Address { get; set; } = null!;
+        public string City { get; set; } = null!;
 
         [Required]
-        public string City { get; set; } = null!;
+        public string Address { get; set; } = null!;
 
         [Required]
         public string Phone { get; set; } = null!;
@@ -46,6 +50,9 @@ namespace tajmautAPI.Models.EntityClasses
         //escape serialization
         [JsonIgnore]
         public virtual Venue_Types VenueType { get; set; }
+
+        [JsonIgnore]
+        public virtual Venue_City Venue_City { get; set; }
 
         //1-N Relationships
         [JsonIgnore]

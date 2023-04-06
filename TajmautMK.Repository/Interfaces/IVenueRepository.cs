@@ -108,5 +108,25 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="id">The ID of the venue type to filter by.</param>
         /// <returns>A list of venues with the specified venue type ID.</returns>
         Task<List<Venue>> GetAllVenuesByVenueTypeID(int id);
+
+        /// <summary>
+        /// Gets all venue cities.
+        /// </summary>
+        /// <returns>A list of all venue cities.</returns>
+        Task<List<Venue_City>> GetAllVenueCities();
+
+        /// <summary>
+        /// Gets the venue city by id.
+        /// </summary>
+        /// <param name="venueCityId">The ID of the venue type to check.</param>
+        /// <returns>Returns the venue city or Custom Error.</returns>
+        Task<Venue_City> GetVenueCityById(int venueCityId);
+
+        /// <summary>
+        /// Checks if a venue city with the specified ID exists.
+        /// </summary>
+        /// <param name="venueCityId">The ID of the venue city to check.</param>
+        /// <returns>True if the venue city exists, false otherwise.</returns>
+        Task<bool> CheckVenueCityId(int venueCityId);
     }
 }

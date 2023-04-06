@@ -39,13 +39,6 @@ namespace tajmautAPI.Interfaces_Service
         Task<ServiceResponse<List<VenueRESPONSE>>> FilterVenuesByCity(string city);
 
         /// <summary>
-        /// Gets additional data for a list of venues.
-        /// </summary>
-        /// <param name="rest">The list of venues to get additional data for.</param>
-        /// <returns>A response containing the original list of venues with additional data included.</returns>
-        Task<ServiceResponse<List<VenueRESPONSE>>> GetVenuesWithOtherData(List<Venue> rest);
-
-        /// <summary>
         /// Updates an existing venue.
         /// </summary>
         /// <param name="venueId">The ID of the venue to update.</param>
@@ -72,5 +65,11 @@ namespace tajmautAPI.Interfaces_Service
         /// <param name="id">The ID of the venue type to filter by.</param>
         /// <returns>A response containing a list of venues associated with the specified venue type ID.</returns>
         Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenuesByVenueTypeID(int id);
+
+        /// <summary>
+        /// Gets all venue cities.
+        /// </summary>
+        /// <returns>A response containing a list of venues citie.</returns>
+        Task<ServiceResponse<List<Venue_City>>> GetAllVenueCities();
     }
 }

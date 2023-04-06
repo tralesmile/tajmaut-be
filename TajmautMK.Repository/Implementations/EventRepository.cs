@@ -82,7 +82,8 @@ namespace TajmautMK.Repository.Implementations
             //query
             var eventsInCity = await _ctx.Events
                 .Include(e => e.Venue)
-                .Where(e => e.Venue.City == city)
+                .Include(e => e.Venue.Venue_City)
+                .Where(e => e.Venue.Venue_City.CityName == city)
                 .ToListAsync();
 
             if (eventsInCity.Count() > 0)
