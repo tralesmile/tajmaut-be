@@ -212,7 +212,7 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<Venue_City> GetVenueCityById(int venueCityId)
         {
-            var getCity = await _context.Venue_Cities.FindAsync(venueCityId);
+            var getCity = await _context.Venue_Cities.FirstOrDefaultAsync(x=>x.Venue_CityId== venueCityId);
             if(getCity!=null)
             {
                 return getCity;

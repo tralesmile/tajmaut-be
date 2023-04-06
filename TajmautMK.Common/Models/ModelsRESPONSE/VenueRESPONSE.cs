@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Org.BouncyCastle.Bcpg;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Models.ModelsRESPONSE
 {
@@ -21,5 +25,6 @@ namespace tajmautAPI.Models.ModelsRESPONSE
         public string Phone { get; set; } = null!;
 
         public int ManagerId { get; set; }
+
     }
 }

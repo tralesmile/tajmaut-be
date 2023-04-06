@@ -7,6 +7,7 @@ namespace tajmautAPI.Models.EntityClasses
 {
     public class Venue
     {
+
         public int VenueId { get; set; }
 
         [Required]
@@ -47,7 +48,6 @@ namespace tajmautAPI.Models.EntityClasses
 
 
         //N-1 Relationships
-        //escape serialization
         [JsonIgnore]
         public virtual Venue_Types VenueType { get; set; }
 
@@ -63,9 +63,6 @@ namespace tajmautAPI.Models.EntityClasses
 
         [JsonIgnore]
         public List<OnlineReservation> OnlineReservations { get; set; }
-
-
-
 
     }
 }

@@ -99,6 +99,7 @@ namespace tajmautAPI.Services.Implementations
             try
             {
                 var resultSend = await _repo.GetAllVenuesAsync();
+
                 if (resultSend != null)
                 {
                     result.Data = _mapper.Map<List<VenueRESPONSE>>(resultSend);
@@ -127,6 +128,7 @@ namespace tajmautAPI.Services.Implementations
 
                 // filter
                 var venues = await _repo.FilterVenuesByCity(city);
+
                 if (venues.Count() > 0)
                 {
                     result.Data = _mapper.Map<List<VenueRESPONSE>>(venues);
