@@ -362,9 +362,6 @@ namespace tajmautAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VenueCityId")
-                        .HasColumnType("int");
-
                     b.Property<int>("VenueTypeId")
                         .HasColumnType("int");
 
