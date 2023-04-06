@@ -23,7 +23,7 @@ namespace tajmautAPI.Services.Implementations
             _mapper = mapper;
             _helper = helper;
         }
-        // create restaurant and checks if restaurant exist
+        // create venue and checks if venue exist
         public async Task<ServiceResponse<VenueRESPONSE>> CreateVenue(VenuePostREQUEST request)
         {
             ServiceResponse<VenueRESPONSE> result = new();
@@ -31,43 +31,14 @@ namespace tajmautAPI.Services.Implementations
             {
                 if (await _repo.CheckVenueTypeId(request.VenueTypeId))
                 {
-                    var getResult = await _repo.CreateVenueAsync(request);
-
-                    if (getResult != null)
+                    if (await _repo.CheckVenueCityId(request.Venue_CityId))
                     {
-                        var resultSend = await _repo.AddVenueToDB(getResult);
-                        result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
-                    }
-                }
-            }
-            catch (CustomError ex)
-            {
-                result.isError = true;
-                result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
-            }
-            return result;
-        }
 
-        // Deletes a specific restaurant form the DB by it's id
-        public async Task<ServiceResponse<VenueRESPONSE>> DeleteVenue(int venueId)
-        { 
-         ServiceResponse<VenueRESPONSE> result = new();
+                        var getResult = await _repo.CreateVenueAsync(request);
 
-            try
-            {
-                if (_helper.ValidateId(venueId))
-                {
-                    var currentUserID = _helper.GetMe();
-                    var currentUserRole = _helper.CheckUserAdminOrManager(); 
-
-                    if ((venueId == currentUserID) || _helper.CheckUserAdminOrManager())
-                    {
-                        var venue = await _repo.DeleteVenueAsync(venueId);
-
-                        if (venue != null)
+                        if (getResult != null)
                         {
-                            var resultSend = await _repo.DeleteVenueDB(venue); 
+                            var resultSend = await _repo.AddVenueToDB(getResult);
                             result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
                         }
                     }
@@ -77,13 +48,49 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
+            }
+            return result;
+        }
+
+        // Deletes a specific venue form the DB by it's id
+        public async Task<ServiceResponse<VenueRESPONSE>> DeleteVenue(int venueId)
+        { 
+         ServiceResponse<VenueRESPONSE> result = new();
+            var currentUserID = _helper.GetMe();
+
+            try
+            {
+                if (_helper.ValidateId(venueId))
+                {
+                    if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
+                    {
+                        var currentUserRole = _helper.CheckUserAdminOrManager();
+
+                        if ((venueId == currentUserID) || _helper.CheckUserAdminOrManager())
+                        {
+                            var venue = await _repo.DeleteVenueAsync(venueId);
+
+                            if (venue != null)
+                            {
+                                var resultSend = await _repo.DeleteVenueDB(venue);
+                                result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
         }
 
-        // gets all resraurants
+        // gets all venue
         public async Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenues()
         {
 
@@ -92,6 +99,7 @@ namespace tajmautAPI.Services.Implementations
             try
             {
                 var resultSend = await _repo.GetAllVenuesAsync();
+
                 if (resultSend != null)
                 {
                     result.Data = _mapper.Map<List<VenueRESPONSE>>(resultSend);
@@ -101,12 +109,13 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
         }
-        //filter restaurants by city
+
+        //filter venue by city
         public async Task<ServiceResponse<List<VenueRESPONSE>>> FilterVenuesByCity(string city)
         {
             ServiceResponse<List<VenueRESPONSE>> result = new();
@@ -119,71 +128,23 @@ namespace tajmautAPI.Services.Implementations
 
                 // filter
                 var venues = await _repo.FilterVenuesByCity(city);
+
                 if (venues.Count() > 0)
                 {
-                    result = await GetVenuesWithOtherData(venues);
+                    result.Data = _mapper.Map<List<VenueRESPONSE>>(venues);
                 }
             }
             catch (CustomError ex)
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
         }
 
-        //get other data for the restaurant in sorted list
-        public async Task<ServiceResponse<List<VenueRESPONSE>>> GetVenuesWithOtherData(List<Venue> venue)
-        {
-            ServiceResponse<List<VenueRESPONSE>> result = new ServiceResponse<List<VenueRESPONSE>>();
-
-            try
-            {
-                if (venue != null && venue.Any())
-                {
-                    var venueDetails = await _repo.GetAllVenuesAsync();
-
-                    var getVenue = venue.Select(venue =>
-                    {
-                        var details = venueDetails.FirstOrDefault(details => details.VenueId == venue.VenueId);
-
-                        if (details != null)
-                        {
-                            return new VenueRESPONSE
-                            {
-                                VenueId = details.VenueId,
-                                Name = details.Name,
-                                Email = details.Email,
-                                Phone = details.Phone,
-                                Address = details.Address,
-                                City = details.City,
-                            };
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }).Where(r => r != null).ToList();
-
-                    result.Data = getVenue;
-                }
-                else
-                {
-                    throw new CustomError(400, "Invalid request data");
-                }
-            }
-            catch (CustomError ex)
-            {
-                result.isError = true;
-                result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
-            }
-
-            return result;
-        }
-        //gets a specific restaurant by it's's id
+        //gets a specific venue by it's's id
         public async Task<ServiceResponse<VenueRESPONSE>> GetVenueById(int venueId)
         {
             ServiceResponse<VenueRESPONSE> result = new();
@@ -200,30 +161,37 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
         }
-        // checks if restaurant exists and updates it to the DB
+
+        // checks if venue exists and updates it to the DB
         public async Task<ServiceResponse<VenueRESPONSE>> UpdateVenue(int venueId, VenuePutREQUEST request)
         {
             var response = new ServiceResponse<VenueRESPONSE>();
-
+            var currentUserID = _helper.GetMe();
             try
             {
                 if (_helper.ValidateId(venueId))
                 {
-                    var updateVenue = await _repo.UpdateVenueAsync(request, venueId);
-
-                    if (updateVenue != null)
+                    if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
                     {
-                        if (await _helper.CheckIdVenue((int)updateVenue.VenueId))
+                        var updateVenue = await _repo.UpdateVenueAsync(request, venueId);
+
+                        if (updateVenue != null)
                         {
-                            if (await _repo.CheckVenueTypeId(request.VenueTypeId))
+                            if (await _helper.CheckIdVenue((int)updateVenue.VenueId))
                             {
-                                var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
-                                response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
+                                if (await _repo.CheckVenueCityId(request.Venue_CityId))
+                                {
+                                    if (await _repo.CheckVenueTypeId(request.VenueTypeId))
+                                    {
+                                        var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
+                                        response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
+                                    }
+                                }
                             }
                         }
                     }
@@ -233,7 +201,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 response.isError = true;
                 response.statusCode = ex.StatusCode;
-                response.errorMessage = ex.ErrorMessage;
+                response.ErrorMessage = ex.ErrorMessage;
             }
 
             return response;
@@ -251,7 +219,46 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
+            }
+
+            return result;
+        }
+
+        public async Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenuesByVenueTypeID(int id)
+        {
+            ServiceResponse<List<VenueRESPONSE>> result = new();
+
+            try
+            {
+                if(await _helper.CheckVenueTypeId(id))
+                {
+                    result.Data = _mapper.Map<List<VenueRESPONSE>>(await _repo.GetAllVenuesByVenueTypeID(id));
+                }
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.ErrorMessage = ex.ErrorMessage;
+            }
+
+            return result;
+        }
+
+        public async Task<ServiceResponse<List<Venue_City>>> GetAllVenueCities()
+        {
+            ServiceResponse<List<Venue_City>> result = new();
+
+            try
+            {
+                result.Data = await _repo.GetAllVenueCities();
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;

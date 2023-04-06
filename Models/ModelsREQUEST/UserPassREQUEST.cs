@@ -6,9 +6,11 @@ namespace tajmautAPI.Models.ModelsREQUEST
     {
         [Required]
         public string OldPassword { get; set; }
-        [Required]
+
+        [Required, MinLength(6, ErrorMessage = "Please enter at least 6 characters")]
         public string NewPassword { get; set; }
-        [Required]
+
+        [Required, MinLength(6, ErrorMessage = "Please enter at least 6 characters")]
         public string ConfirmPassword { get; set;}
     }
 }

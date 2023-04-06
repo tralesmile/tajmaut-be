@@ -15,6 +15,7 @@ namespace tajmautAPI.Models.EntityClasses
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
+        public int Duration { get; set; }
 
         //updates if event is canceled
         public bool isCanceled { get; set; } = false;

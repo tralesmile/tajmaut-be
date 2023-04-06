@@ -33,7 +33,7 @@ namespace tajmautAPI.Services.Implementations
             catch (CustomError ex)
             {
                 result.isError = true;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
                 result.statusCode = ex.StatusCode;
             }
 
@@ -58,7 +58,7 @@ namespace tajmautAPI.Services.Implementations
             catch (CustomError ex)
             {
                 result.isError = true;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
                 result.statusCode = ex.StatusCode;
             }
 
@@ -79,7 +79,7 @@ namespace tajmautAPI.Services.Implementations
             catch (CustomError ex)
             {
                 result.isError = true;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
                 result.statusCode = ex.StatusCode;
             }
 
@@ -103,7 +103,7 @@ namespace tajmautAPI.Services.Implementations
             catch (CustomError ex)
             {
                 result.isError = true;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
                 result.statusCode = ex.StatusCode;
             }
 

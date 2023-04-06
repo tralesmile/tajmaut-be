@@ -43,7 +43,7 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //creating token with secret key
-        public string CreateToken(User user)
+        private string CreateToken(User user)
         {
 
             List<Claim> claims = new List<Claim>
@@ -71,7 +71,7 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //verifying hashed password
-        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {

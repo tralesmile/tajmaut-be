@@ -26,21 +26,27 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
-
+            var currentUserID = _helper.GetMe();
             try
             {
-                var getEvent = await _repo.UpdateCancelEvent(eventId);
+                var eventByID = await _helper.GetEventByID(eventId);
+                var venueID = eventByID.VenueId;
 
-                if (getEvent != null)
+                if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                 {
-                    result.Data = _mapper.Map<EventRESPONSE>(getEvent);
+                    var getEvent = await _repo.UpdateCancelEvent(eventId);
+
+                    if (getEvent != null)
+                    {
+                        result.Data = _mapper.Map<EventRESPONSE>(getEvent);
+                    }
                 }
             }
             catch (CustomError ex)
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -51,21 +57,25 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
+            var currentUserID = _helper.GetMe();
 
             try
             {
                 //check if category and venue exist
                 if (await _helper.CheckIdVenue(request.VenueId))
                 {
-                    //if category exists
-                    if (await _helper.CheckIdCategory(request.CategoryEventId))
+                    if (await _helper.CheckManagerVenueRelation(request.VenueId, currentUserID))
                     {
-                        var getResult = await _repo.CreateEvent(request);
-
-                        if (getResult != null)
+                        //if category exists
+                        if (await _helper.CheckIdCategory(request.CategoryEventId))
                         {
-                            var resultSend = await _repo.AddToDB(getResult);
-                            result.Data = _mapper.Map<EventRESPONSE>(resultSend);
+                            var getResult = await _repo.CreateEvent(request);
+
+                            if (getResult != null)
+                            {
+                                var resultSend = await _repo.AddToDB(getResult);
+                                result.Data = _mapper.Map<EventRESPONSE>(resultSend);
+                            }
                         }
                     }
                 }
@@ -75,7 +85,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -86,19 +96,24 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
+            var currentUserID = _helper.GetMe();
+            var eventByID = await _helper.GetEventByID(eventId);
+            var venueID = eventByID.VenueId;
 
             try
             {
                 //if invalid input
                 if (_helper.ValidateId(eventId))
                 {
-
-                    var resultSend = await _repo.DeleteEvent(eventId);
-
-                    if (resultSend != null)
+                    if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        var returnResult = await _repo.DeleteEventDB(resultSend);
-                        result.Data = _mapper.Map<EventRESPONSE>(returnResult);
+                        var resultSend = await _repo.DeleteEvent(eventId);
+
+                        if (resultSend != null)
+                        {
+                            var returnResult = await _repo.DeleteEventDB(resultSend);
+                            result.Data = _mapper.Map<EventRESPONSE>(returnResult);
+                        }
                     }
                 }
             }
@@ -106,7 +121,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -149,7 +164,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -178,7 +193,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -213,7 +228,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -239,7 +254,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -280,7 +295,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -312,7 +327,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -338,9 +353,20 @@ namespace tajmautAPI.Services.Implementations
                     var statusEvent = "";
                     if (!ev.isCanceled)
                     {
-                        statusEvent = ev.DateTime > now ? "Upcoming"
-                        : ev.DateTime.AddHours(1) > now ? "Ongoing"
-                        : "Ended";
+                        if(ev.DateTime>now)
+                        {
+                            statusEvent = "Upcoming";
+                        }else if(ev.DateTime.AddHours((int)ev.Duration) > now)
+                        {
+                            statusEvent = "Ongoing";
+                        }
+                        else
+                        {
+                            statusEvent = "Ended";
+                        }
+                        //statusEvent = ev.DateTime > now ? "Upcoming"
+                        //: ev.DateTime.AddHours(1) > now ? "Ongoing"
+                        //: "Ended";
                     }
                     else
                     {
@@ -361,7 +387,8 @@ namespace tajmautAPI.Services.Implementations
                         VenueName = venue.Name,
                         VenuePhone = venue.Phone,
                         StatusEvent = statusEvent,
-                        VenueCity= venue.City,
+                        VenueCity = venue.City,
+                        Duration= ev.Duration,
                     });
 
                 }
@@ -418,7 +445,8 @@ namespace tajmautAPI.Services.Implementations
                                     VenueName = venue.Name,
                                     VenuePhone = venue.Phone,
                                     StatusEvent = "Upcoming",
-                                    VenueCity= venue.City,
+                                    VenueCity = venue.City,
+                                    Duration = ev.Duration,
                                 });
                             }
                         }
@@ -442,7 +470,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -453,26 +481,31 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
+            var currentUserID = _helper.GetMe();
+            var eventByID = await _helper.GetEventByID(eventId);
+            var venueID = eventByID.VenueId;
 
             try
             {
                 //invalid input
                 if (_helper.ValidateId(eventId))
                 {
-
-                    var resultEvent = await _repo.UpdateEvent(request, eventId);
-
-                    //if found
-                    if (resultEvent != null)
+                    if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        //check if restaurant and category exist
-                        if (await _helper.CheckIdCategory(request.CategoryEventId))
+                        var resultEvent = await _repo.UpdateEvent(request, eventId);
+
+                        //if found
+                        if (resultEvent != null)
                         {
-                            //if restaurant exists
-                            if (await _helper.CheckIdVenue(request.VenueId))
+                            //check if restaurant and category exist
+                            if (await _helper.CheckIdCategory(request.CategoryEventId))
                             {
-                                var resultSend = await _repo.SaveUpdatesEventDB(resultEvent, request);
-                                result.Data = _mapper.Map<EventRESPONSE>(resultSend);
+                                //if restaurant exists
+                                if (await _helper.CheckIdVenue(request.VenueId))
+                                {
+                                    var resultSend = await _repo.SaveUpdatesEventDB(resultEvent, request);
+                                    result.Data = _mapper.Map<EventRESPONSE>(resultSend);
+                                }
                             }
                         }
                     }
@@ -482,7 +515,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;

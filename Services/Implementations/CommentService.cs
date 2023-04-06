@@ -45,7 +45,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -56,26 +56,30 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<CommentRESPONSE> result = new();
+            var currentUserID = _helper.GetMe();
+            var commentByID = await _helper.GetCommentId(commentId);
+            var venueID = commentByID.VenueId;
 
             try
             {
                 //if comment exists
                 if (await _helper.CheckIdComment(commentId))
                 {
-
-                    var currentUserID = _helper.GetMe();
-
-                    //get comment obj
-                    var getComment = await _helper.GetCommentId(commentId);
-
-                    if (getComment != null)
+                    if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        //only comment user id or admin or manager can delete comment
-                        if (currentUserID == getComment.UserId || _helper.CheckUserAdminOrManager())
+
+                        //get comment obj
+                        var getComment = await _helper.GetCommentId(commentId);
+
+                        if (getComment != null)
                         {
-                            if (await _repo.DeleteComment(getComment))
+                            //only comment user id or admin or manager can delete comment
+                            if (currentUserID == getComment.UserId || _helper.CheckUserAdminOrManager())
                             {
-                                result.Data = _mapper.Map<CommentRESPONSE>(getComment);
+                                if (await _repo.DeleteComment(getComment))
+                                {
+                                    result.Data = _mapper.Map<CommentRESPONSE>(getComment);
+                                }
                             }
                         }
                     }
@@ -85,7 +89,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -132,7 +136,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;
@@ -174,7 +178,7 @@ namespace tajmautAPI.Services.Implementations
             {
                 result.isError = true;
                 result.statusCode = ex.StatusCode;
-                result.errorMessage = ex.ErrorMessage;
+                result.ErrorMessage = ex.ErrorMessage;
             }
 
             return result;

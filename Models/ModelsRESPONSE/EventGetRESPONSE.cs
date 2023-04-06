@@ -9,6 +9,7 @@
         public string Description { get; set; } = null!;
         public string EventImage { get; set; } = null!;
         public DateTime DateTime { get; set; }
+        public int Duration { get; set; }
 
         //updates if event is canceled
         public bool isCanceled { get; set; } = false;
