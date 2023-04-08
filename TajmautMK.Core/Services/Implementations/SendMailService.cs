@@ -61,7 +61,7 @@ namespace TajmautMK.Core.Services.Implementations
                         Text = "<h1>Здраво " + user.FirstName + "</h1>"
                         + "<h2>Имаш барање за промена на лозинката!</h2>" +
                         "<br><p>Ова е твојот токен: " + token + " </p><br>" +
-                        "<p>Кликни на оваа адреса за да ја промениш лозинката: https://tajmautmk.azurewebsites.net/api/Users/UpdateForgotPassword?token=" + token +
+                        "<p>Кликни на оваа адреса за да ја промениш лозинката: http://tajmaut.ddns.net:3000/reset-password/" + token +
                         "<br><br>Ако не си го направил/а ова барање, тогаш игнорирај ја оваа порака!<br><br>Поздрав ТајмаутМК. 😃</p>"
 
                     };
@@ -86,13 +86,13 @@ namespace TajmautMK.Core.Services.Implementations
             return result;
         }
 
-        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(string token,ResetPasswordREQUEST request)
+        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(ResetPasswordREQUEST request)
         {
             ServiceResponse<ForgotPassEntity> result = new();
             try
             {
                 //check for token
-                var checkToken = await _repo.ValidateToken(token);
+                var checkToken = await _repo.ValidateToken(request.Token);
 
                 //check date
                 if(checkToken.Expire < DateTime.Now) 

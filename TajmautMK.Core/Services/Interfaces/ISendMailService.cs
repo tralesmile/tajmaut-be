@@ -25,9 +25,8 @@ namespace TajmautMK.Core.Services.Interfaces
         /// <summary>
         /// Updates the password for the user associated with the given password reset token.
         /// </summary>
-        /// <param name="token">The password reset token.</param>
         /// <param name="request">The password reset request containing the new password.</param>
         /// <returns>A <see cref="ServiceResponse{T}"/> containing information about the operation.</returns>
-        Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(string token, ResetPasswordREQUEST request);
+        Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(ResetPasswordREQUEST request);
     }
 }

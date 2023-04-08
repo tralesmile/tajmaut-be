@@ -200,15 +200,14 @@ namespace tajmautAPI.Controllers
         /// <summary>
         /// Updates the password of the user with the provided reset password token.
         /// </summary>
-        /// <param name="token">The reset password token.</param>
-        /// <param name="request">The new password.</param>
+        /// <param name="request">The new password,confirm and token.</param>
         /// <returns>An HTTP status code indicating the result of the operation.</returns>
         /// <remarks>This endpoint can be accessed anonymously.</remarks>
         [HttpPost("UpdateForgotPassword"), AllowAnonymous]
-        public async Task<ActionResult> UpdateForgotPassword(string token, ResetPasswordREQUEST request)
+        public async Task<ActionResult> UpdateForgotPassword(ResetPasswordREQUEST request)
         {
 
-            var result = await _sendMailService.UpdateForgotPassword(token,request);
+            var result = await _sendMailService.UpdateForgotPassword(request);
 
             //check if error exists
             if (result.isError)
