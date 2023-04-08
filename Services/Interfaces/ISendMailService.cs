@@ -28,6 +28,6 @@ namespace TajmautMK.Core.Services.Interfaces
         /// <param name="token">The password reset token.</param>
         /// <param name="request">The password reset request containing the new password.</param>
         /// <returns>A <see cref="ServiceResponse{T}"/> containing information about the operation.</returns>
-        Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(string token, ResetPasswordREQUEST request);
+        Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(ResetPasswordREQUEST request);
     }
 }

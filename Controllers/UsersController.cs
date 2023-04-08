@@ -205,10 +205,10 @@ namespace tajmautAPI.Controllers
         /// <returns>An HTTP status code indicating the result of the operation.</returns>
         /// <remarks>This endpoint can be accessed anonymously.</remarks>
         [HttpPost("UpdateForgotPassword"), AllowAnonymous]
-        public async Task<ActionResult> UpdateForgotPassword(string token, ResetPasswordREQUEST request)
+        public async Task<ActionResult> UpdateForgotPassword(ResetPasswordREQUEST request)
         {
 
-            var result = await _sendMailService.UpdateForgotPassword(token,request);
+            var result = await _sendMailService.UpdateForgotPassword(request);
 
             //check if error exists
             if (result.isError)
