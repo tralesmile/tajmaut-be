@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 using System.Net;
 using System.Runtime.CompilerServices;
 using tajmautAPI.Data;
@@ -6,6 +7,7 @@ using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Repository.Implementations
@@ -74,6 +76,52 @@ namespace TajmautMK.Repository.Implementations
             await _ctx.SaveChangesAsync();
 
             return getEvent;
+        }
+
+        public async Task<List<Event>> EventFilter(EventFilterREQUEST request)
+        {
+            if(request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
+            {
+                var selectedFilter = await _ctx.Events.Include(x => x.Venue).ToListAsync();
+
+                if (request.CategoryId.HasValue)
+                {
+                    selectedFilter = selectedFilter.Where(x => x.CategoryEventId == request.CategoryId).ToList();
+                }
+
+                if (request.CityId.HasValue)
+                {
+                    selectedFilter = selectedFilter.Where(x => x.Venue.Venue_CityId == request.CityId).ToList();
+                }
+
+                if (request.StartDate.HasValue && request.EndDate.HasValue)
+                {
+                    selectedFilter = selectedFilter.Where(x => x.DateTime >= request.StartDate && x.DateTime <= request.EndDate).ToList();
+                }else if(request.StartDate.HasValue)
+                {
+                    selectedFilter = selectedFilter.Where(x=> x.DateTime>=request.StartDate).ToList();
+                }else if(request.EndDate.HasValue)
+                {
+                    selectedFilter = selectedFilter.Where(x=>x.DateTime<=request.EndDate).ToList();
+                }
+
+                if(selectedFilter.Count() > 0)
+                {
+                    return selectedFilter;
+                }
+                
+            }
+            else
+            {
+                var allEvents = await GetAllEvents();
+
+                if(allEvents.Count() > 0)
+                {
+                    return allEvents;
+                }
+
+            }
+            throw new CustomError(404, $"No events found");
         }
 
         //filter events by city
@@ -183,3 +231,12 @@ namespace TajmautMK.Repository.Implementations
         }
     }
 }
+
+
+//{
+//    "categoryId": null,
+//  "cityId": null,
+//  "startDate": null,
+//  "endDate": null
+//}
+

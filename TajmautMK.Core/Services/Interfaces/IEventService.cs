@@ -2,6 +2,8 @@
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Implementations;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Services.Interfaces
 {
@@ -55,9 +57,9 @@ namespace tajmautAPI.Services.Interfaces
         /// <summary>
         /// Filters events by category.
         /// </summary>
-        /// <param name="categoryId">The ID of the category to filter by.</param>
+        /// <param name="request">Event filters object.</param>
         /// <returns>A service response containing a list of events that match the specified category.</returns>
-        Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByCategory(int categoryId);
+        Task<ServiceResponse<EventFilterRESPONSE>> FilterEvents(EventFilterREQUEST request);
 
         /// <summary>
         /// Filters events by city.

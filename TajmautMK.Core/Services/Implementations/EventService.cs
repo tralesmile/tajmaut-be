@@ -4,6 +4,8 @@ using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Repository.Interfaces;
 
 namespace tajmautAPI.Services.Implementations
@@ -129,36 +131,67 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //filter events by category
-        public async Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByCategory(int categoryId)
+        public async Task<ServiceResponse<EventFilterRESPONSE>> FilterEvents(EventFilterREQUEST request)
         {
 
-            ServiceResponse<List<EventGetRESPONSE>> result = new();
+            ServiceResponse<EventFilterRESPONSE> result = new();
 
             try
             {
-                //invalid input
-                if (_helper.ValidateId(categoryId))
-                {
-                    //check if category exists
-                    if (await _helper.CheckIdCategory(categoryId))
-                    {
-                        var resultEvents = await _repo.GetAllEvents();
 
-                        if (resultEvents.Count() > 0)
-                        {
-                            var listEvents = resultEvents.Where(n => n.CategoryEventId == categoryId).ToList();
-                            if (listEvents.Count() > 0)
-                            {
-                                var resultSend = await GetEventsWithOtherData(listEvents);
-                                result.Data = resultSend;
-                            }
-                            else
-                            {
-                                throw new CustomError(404, $"This category has no events");
-                            }
-                        }
-                    }
+                var getFilterResult = await _repo.EventFilter(request);
+
+                var itemsPerPage = 0;
+                var pageNumber = 0;
+                var totalItems = getFilterResult.Count();
+
+                if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
+                {
+                    itemsPerPage = request.ItemsPerPage.Value;
+                    pageNumber = request.PageNumber.Value;
+
+                    var pageCount = Math.Ceiling(getFilterResult.Count() / (double)itemsPerPage);
+
+                    getFilterResult = getFilterResult
+                        .Skip((pageNumber - 1) * (int)itemsPerPage)
+                        .Take((int)itemsPerPage).ToList();
+
                 }
+
+                var response = new EventFilterRESPONSE 
+                { 
+                    Events = await GetEventsWithOtherData(getFilterResult),
+                    PageNumber = pageNumber,
+                    ItemsPerPage = itemsPerPage,
+                    TotalItems = totalItems,
+                };
+
+
+                result.Data = response;
+
+                ////invalid input
+                //if (_helper.ValidateId(categoryId))
+                //{
+                //    //check if category exists
+                //    if (await _helper.CheckIdCategory(categoryId))
+                //    {
+                //        var resultEvents = await _repo.GetAllEvents();
+
+                //        if (resultEvents.Count() > 0)
+                //        {
+                //            var listEvents = resultEvents.Where(n => n.CategoryEventId == categoryId).ToList();
+                //            if (listEvents.Count() > 0)
+                //            {
+                //                var resultSend = await GetEventsWithOtherData(listEvents);
+                //                result.Data = resultSend;
+                //            }
+                //            else
+                //            {
+                //                throw new CustomError(404, $"This category has no events");
+                //            }
+                //        }
+                //    }
+                //}
             }
             catch (CustomError ex)
             {

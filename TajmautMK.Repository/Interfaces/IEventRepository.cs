@@ -1,5 +1,6 @@
 ﻿using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace TajmautMK.Repository.Interfaces
 {
@@ -85,6 +86,11 @@ namespace TajmautMK.Repository.Interfaces
         /// <returns>The cancelled event.</returns>
         Task<Event> UpdateCancelEvent(int eventId);
 
-
+        /// <summary>
+        /// Filter events.
+        /// </summary>
+        /// <param name="request">Request object containing the filters.</param>
+        /// <returns>Returns filtered events.</returns>
+        Task<List<Event>> EventFilter(EventFilterREQUEST request);
     }
 }
