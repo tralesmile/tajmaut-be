@@ -141,9 +141,9 @@ namespace tajmautAPI.Services.Implementations
 
                 var getFilterResult = await _repo.EventFilter(request);
 
-                var itemsPerPage = 0;
-                var pageNumber = 0;
                 var totalItems = getFilterResult.Count();
+                var itemsPerPage = totalItems;
+                var pageNumber = 1;
 
                 if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
                 {
