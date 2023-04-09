@@ -4,6 +4,7 @@ using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.Enums;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Repository.Interfaces;
@@ -388,19 +389,19 @@ namespace tajmautAPI.Services.Implementations
                     var venue = await _repo.GetVenueById(ev.VenueId);
 
                     //update status of event
-                    var statusEvent = "";
+                    var statusEvent = new EventStatus();
                     if (!ev.isCanceled)
                     {
                         if(ev.DateTime>now)
                         {
-                            statusEvent = "Upcoming";
+                            statusEvent = EventStatus.Upcoming;
                         }else if(ev.DateTime.AddHours((int)ev.Duration) > now)
                         {
-                            statusEvent = "Ongoing";
+                            statusEvent = EventStatus.Ongoing;
                         }
                         else
                         {
-                            statusEvent = "Ended";
+                            statusEvent = EventStatus.Ended;
                         }
                         //statusEvent = ev.DateTime > now ? "Upcoming"
                         //: ev.DateTime.AddHours(1) > now ? "Ongoing"
@@ -408,7 +409,7 @@ namespace tajmautAPI.Services.Implementations
                     }
                     else
                     {
-                        statusEvent = "Canceled";
+                        statusEvent = EventStatus.Canceled;
                     }
 
                     //add event
@@ -424,7 +425,7 @@ namespace tajmautAPI.Services.Implementations
                         isCanceled = ev.isCanceled,
                         VenueName = venue.Name,
                         VenuePhone = venue.Phone,
-                        StatusEvent = statusEvent,
+                        StatusEvent = statusEvent.ToString(),
                         VenueCity = venue.City,
                         Duration= ev.Duration,
                     });
@@ -482,7 +483,7 @@ namespace tajmautAPI.Services.Implementations
                                     isCanceled = ev.isCanceled,
                                     VenueName = venue.Name,
                                     VenuePhone = venue.Phone,
-                                    StatusEvent = "Upcoming",
+                                    StatusEvent = EventStatus.Upcoming.ToString(),
                                     VenueCity = venue.City,
                                     Duration = ev.Duration,
                                 });
