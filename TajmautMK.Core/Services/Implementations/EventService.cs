@@ -145,6 +145,11 @@ namespace tajmautAPI.Services.Implementations
                 var itemsPerPage = totalItems;
                 var pageNumber = 1;
 
+                if(getFilterResult.Count() <= 0)
+                {
+                    throw new CustomError(404, $"No events found");
+                }
+
                 if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
                 {
                     itemsPerPage = request.ItemsPerPage.Value;
