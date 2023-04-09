@@ -17,6 +17,7 @@ using TajmautMK.Repository.Interfaces;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -136,15 +137,15 @@ namespace TajmautMK.Repository.Implementations
             return template;
         }
 
-        public string ForgotPasswordMailSend(string email,string token,string template)
+        public string ForgotPasswordMailSend(MailSendREQUEST requst)
         {
             var emailTest = new MimeMessage();
             emailTest.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUserName").Value));
-            emailTest.To.Add(MailboxAddress.Parse(email));
-            emailTest.Subject = "Заборавена лозинка";
+            emailTest.To.Add(MailboxAddress.Parse(requst.To));
+            emailTest.Subject = requst.Subject;
             emailTest.Body = new TextPart(TextFormat.Html)
             {
-                Text = template,
+                Text = requst.Template,
             };
 
             using var smtp = new SmtpClient();

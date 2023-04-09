@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using tajmautAPI.Models.EntityClasses;
 using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace TajmautMK.Repository.Interfaces
 {
@@ -64,10 +65,8 @@ namespace TajmautMK.Repository.Interfaces
         /// <summary>
         /// Forgot password mail sender.
         /// </summary>
-        /// <param name="email">The email of the user.</param>
-        /// <param name="token">The token of the user.</param>
-        /// <param name="template">The template for the mail.</param>
+        /// <param name="request">Object for mail send.</param>
         /// <returns>Messege 'Success' or fail.</returns>
-        string ForgotPasswordMailSend(string email,string token,string template);
+        string ForgotPasswordMailSend(MailSendREQUEST request);
     }
 }

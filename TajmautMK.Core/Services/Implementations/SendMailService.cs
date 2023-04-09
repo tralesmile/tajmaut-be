@@ -54,7 +54,14 @@ namespace TajmautMK.Core.Services.Implementations
                     //3.Send email
                     var template = _repo.ForgotPasswordTemplate(user, token);
 
-                    result.Data = _repo.ForgotPasswordMailSend(email,token,template);
+                    var mailSend = new MailSendREQUEST 
+                    {
+                        Template = template,
+                        To = email,
+                        Subject = "Заборавена лозинка",
+                    };
+
+                    result.Data = _repo.ForgotPasswordMailSend(mailSend);
                 }
             }
             catch (CustomError ex)
