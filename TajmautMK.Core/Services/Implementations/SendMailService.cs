@@ -38,9 +38,9 @@ namespace TajmautMK.Core.Services.Implementations
             _config = config;
         }
 
-        public async Task<ServiceResponse<UserRESPONSE>> ForgotPassword(string email)
+        public async Task<ServiceResponse<string>> ForgotPassword(string email)
         {
-            ServiceResponse<UserRESPONSE> result = new();
+            ServiceResponse<string> result = new();
             try
             {
                 if (_helper.ValidateEmailRegex(email))
@@ -52,28 +52,9 @@ namespace TajmautMK.Core.Services.Implementations
                     var token = await _repo.UpdateForgotPassTable(user);
 
                     //3.Send email
-                    var emailTest = new MimeMessage();
-                    emailTest.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUserName").Value));
-                    emailTest.To.Add(MailboxAddress.Parse(email));
-                    emailTest.Subject = "Заборавена лозинка";
-                    emailTest.Body = new TextPart(TextFormat.Html)
-                    {
-                        Text = "<h1>Здраво " + user.FirstName + "</h1>"
-                        + "<h2>Имаш барање за промена на лозинката!</h2>" +
-                        "<br><p>Ова е твојот токен: " + token + " </p><br>" +
-                        "<p>Кликни на оваа адреса за да ја промениш лозинката: http://tajmaut.ddns.net:3000/reset-password/" + token +
-                        "<br><br>Ако не си го направил/а ова барање, тогаш игнорирај ја оваа порака!<br><br>Поздрав ТајмаутМК. 😃</p>"
+                    var template = _repo.ForgotPasswordTemplate(user, token);
 
-                    };
-
-                    using var smtp = new SmtpClient();
-                    smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
-                    smtp.Authenticate(_config.GetSection("EmailUserName").Value, _config.GetSection("EmailPassword").Value);
-                    smtp.Send(emailTest);
-
-                    smtp.Disconnect(true);
-
-                    result.Data = _mapper.Map<UserRESPONSE>(user);
+                    result.Data = _repo.ForgotPasswordMailSend(email,token,template);
                 }
             }
             catch (CustomError ex)

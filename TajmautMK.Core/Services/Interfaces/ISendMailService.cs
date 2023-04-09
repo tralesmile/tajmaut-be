@@ -20,7 +20,7 @@ namespace TajmautMK.Core.Services.Interfaces
         /// </summary>
         /// <param name="email">The email address of the user.</param>
         /// <returns>A <see cref="ServiceResponse{T}"/> containing information about the operation.</returns>
-        Task<ServiceResponse<UserRESPONSE>> ForgotPassword(string email);
+        Task<ServiceResponse<string>> ForgotPassword(string email);
 
         /// <summary>
         /// Updates the password for the user associated with the given password reset token.

@@ -52,5 +52,22 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="password">The new password for the user.</param>
         /// <returns>True if the password was updated successfully, false otherwise.</returns>
         Task<bool> UpdateNewPassword(User user, string password);
+
+        /// <summary>
+        /// Forgot password template for email sending.
+        /// </summary>
+        /// <param name="user">The user to send email.</param>
+        /// <param name="token">The token for the user.</param>
+        /// <returns>String with the body</returns>
+        string ForgotPasswordTemplate(User user,string token);
+
+        /// <summary>
+        /// Forgot password mail sender.
+        /// </summary>
+        /// <param name="email">The email of the user.</param>
+        /// <param name="token">The token of the user.</param>
+        /// <param name="template">The template for the mail.</param>
+        /// <returns>Messege 'Success' or fail.</returns>
+        string ForgotPasswordMailSend(string email,string token,string template);
     }
 }

@@ -194,7 +194,7 @@ namespace tajmautAPI.Controllers
             }
 
             //if no error
-            return Ok("Success");
+            return Ok(result.Data);
         }
 
         /// <summary>
