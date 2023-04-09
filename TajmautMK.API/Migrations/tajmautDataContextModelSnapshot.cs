@@ -47,6 +47,23 @@ namespace tajmautAPI.Migrations
                     b.ToTable("ForgotPassEntity");
                 });
 
+            modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.Venue_City", b =>
+                {
+                    b.Property<int>("Venue_CityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Venue_CityId"));
+
+                    b.Property<string>("CityName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Venue_CityId");
+
+                    b.ToTable("Venue_Cities");
+                });
+
             modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.Venue_Types", b =>
                 {
                     b.Property<int>("Venue_TypesId")
@@ -161,6 +178,9 @@ namespace tajmautAPI.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
 
                     b.Property<string>("EventImage")
                         .IsRequired()
@@ -342,12 +362,20 @@ namespace tajmautAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("VenueCityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("VenueTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Venue_CityId")
                         .HasColumnType("int");
 
                     b.HasKey("VenueId");
 
                     b.HasIndex("VenueTypeId");
+
+                    b.HasIndex("Venue_CityId");
 
                     b.ToTable("Venues");
                 });
@@ -436,7 +464,20 @@ namespace tajmautAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TajmautMK.Common.Models.EntityClasses.Venue_City", "Venue_City")
+                        .WithMany("Venues")
+                        .HasForeignKey("Venue_CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("VenueType");
+
+                    b.Navigation("Venue_City");
+                });
+
+            modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.Venue_City", b =>
+                {
+                    b.Navigation("Venues");
                 });
 
             modelBuilder.Entity("TajmautMK.Common.Models.EntityClasses.Venue_Types", b =>

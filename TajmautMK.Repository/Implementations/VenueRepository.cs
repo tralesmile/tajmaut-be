@@ -37,7 +37,8 @@ namespace TajmautMK.Repository.Implementations
         public async Task<List<Venue>> FilterVenuesByCity(string city)
         {
             var cityVenues = await _context.Venues
-            .Where(e => e.City == city)
+            .Include(e=>e.Venue_City)
+            .Where(e => e.Venue_City.CityName == city)
             .ToListAsync();
 
             if (cityVenues.Count() > 0)
@@ -62,6 +63,8 @@ namespace TajmautMK.Repository.Implementations
         public async Task<Venue> CreateVenueAsync(VenuePostREQUEST request)
         {
             var currentUserID = _helper.GetMe();
+            var getVenueCity = await GetVenueCityById(request.Venue_CityId);
+
             return new Venue
             {
                 VenueTypeId = request.VenueTypeId,
@@ -69,12 +72,13 @@ namespace TajmautMK.Repository.Implementations
                 Email = request.Email,
                 Phone = request.Phone,
                 Address = request.Address,
-                City = request.City,
                 CreatedAt = DateTime.Now,
                 ModifiedAt = DateTime.Now,
                 ModifiedBy = currentUserID,
                 CreatedBy = currentUserID,
                 ManagerId = currentUserID,
+                City = getVenueCity.CityName,
+                Venue_CityId = request.Venue_CityId,
             };
         }
         // updates venue
@@ -91,11 +95,12 @@ namespace TajmautMK.Repository.Implementations
         public async Task<Venue> SaveChanges(Venue venue, VenuePutREQUEST request)
         {
             var currentUserID = _helper.GetMe();
+            var getVenueCity = await GetVenueCityById(request.Venue_CityId);
 
             venue.Name = request.Name;
             venue.Email = request.Email;
             venue.Phone = request.Phone;
-            venue.City = request.City;
+            venue.City = getVenueCity.CityName;
             venue.Address = request.Address;
             venue.ModifiedBy = currentUserID;
             venue.ModifiedAt = DateTime.Now;
@@ -130,11 +135,13 @@ namespace TajmautMK.Repository.Implementations
         public async Task<Venue> SaveUpdatesVenueDB(Venue getVenue, VenuePutREQUEST request)
         {
             var currentUserID = _helper.GetMe();
+            var getVenueCity = await GetVenueCityById(request.Venue_CityId);
+
             getVenue.VenueTypeId=request.VenueTypeId;
             getVenue.Name = request.Name;
             getVenue.Email = request.Email;
             getVenue.Address = request.Address;
-            getVenue.City = request.City;
+            getVenue.City = getVenueCity.CityName;
             getVenue.Phone = request.Phone;
             getVenue.ModifiedBy = currentUserID;
             getVenue.ModifiedAt = DateTime.Now;
@@ -190,6 +197,38 @@ namespace TajmautMK.Repository.Implementations
 
             throw new CustomError(404, $"No venues found!");
 
+        }
+
+        public async Task<List<Venue_City>> GetAllVenueCities()
+        {
+            var getCities = await _context.Venue_Cities.ToListAsync();
+            if(getCities.Count()>0)
+            {
+                return getCities;
+            }
+
+            throw new CustomError(404, $"No data found!");
+        }
+
+        public async Task<Venue_City> GetVenueCityById(int venueCityId)
+        {
+            var getCity = await _context.Venue_Cities.FirstOrDefaultAsync(x=>x.Venue_CityId== venueCityId);
+            if(getCity!=null)
+            {
+                return getCity;
+            }
+            throw new CustomError(404, $"Venue city not found!");
+        }
+
+        public async Task<bool> CheckVenueCityId(int venueCityId)
+        {
+            var check = await _context.Venue_Cities.FindAsync(venueCityId);
+            if(check!=null)
+            {
+                return true;
+            }
+
+            throw new CustomError(404, $"Venue city not found!");
         }
     }
 }

@@ -353,9 +353,20 @@ namespace tajmautAPI.Services.Implementations
                     var statusEvent = "";
                     if (!ev.isCanceled)
                     {
-                        statusEvent = ev.DateTime > now ? "Upcoming"
-                        : ev.DateTime.AddHours(1) > now ? "Ongoing"
-                        : "Ended";
+                        if(ev.DateTime>now)
+                        {
+                            statusEvent = "Upcoming";
+                        }else if(ev.DateTime.AddHours((int)ev.Duration) > now)
+                        {
+                            statusEvent = "Ongoing";
+                        }
+                        else
+                        {
+                            statusEvent = "Ended";
+                        }
+                        //statusEvent = ev.DateTime > now ? "Upcoming"
+                        //: ev.DateTime.AddHours(1) > now ? "Ongoing"
+                        //: "Ended";
                     }
                     else
                     {
@@ -377,6 +388,7 @@ namespace tajmautAPI.Services.Implementations
                         VenuePhone = venue.Phone,
                         StatusEvent = statusEvent,
                         VenueCity = venue.City,
+                        Duration= ev.Duration,
                     });
 
                 }
@@ -434,6 +446,7 @@ namespace tajmautAPI.Services.Implementations
                                     VenuePhone = venue.Phone,
                                     StatusEvent = "Upcoming",
                                     VenueCity = venue.City,
+                                    Duration = ev.Duration,
                                 });
                             }
                         }

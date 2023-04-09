@@ -21,5 +21,9 @@ namespace tajmautAPI.Models.ModelsREQUEST
 
         [Required]
         public DateTime DateTime { get; set; }
+
+        [Required]
+        [RegularExpression(@"^(1\d{2}|[1-9]\d|\b[1-9]\b)$", ErrorMessage = "The duration of the event must be between 1 and 200 hours.")]
+        public int Duration { get; set; }
     }
 }

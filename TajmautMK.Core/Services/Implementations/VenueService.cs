@@ -31,12 +31,16 @@ namespace tajmautAPI.Services.Implementations
             {
                 if (await _repo.CheckVenueTypeId(request.VenueTypeId))
                 {
-                    var getResult = await _repo.CreateVenueAsync(request);
-
-                    if (getResult != null)
+                    if (await _repo.CheckVenueCityId(request.Venue_CityId))
                     {
-                        var resultSend = await _repo.AddVenueToDB(getResult);
-                        result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+
+                        var getResult = await _repo.CreateVenueAsync(request);
+
+                        if (getResult != null)
+                        {
+                            var resultSend = await _repo.AddVenueToDB(getResult);
+                            result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+                        }
                     }
                 }
             }
@@ -95,6 +99,7 @@ namespace tajmautAPI.Services.Implementations
             try
             {
                 var resultSend = await _repo.GetAllVenuesAsync();
+
                 if (resultSend != null)
                 {
                     result.Data = _mapper.Map<List<VenueRESPONSE>>(resultSend);
@@ -109,6 +114,7 @@ namespace tajmautAPI.Services.Implementations
 
             return result;
         }
+
         //filter venue by city
         public async Task<ServiceResponse<List<VenueRESPONSE>>> FilterVenuesByCity(string city)
         {
@@ -122,9 +128,10 @@ namespace tajmautAPI.Services.Implementations
 
                 // filter
                 var venues = await _repo.FilterVenuesByCity(city);
+
                 if (venues.Count() > 0)
                 {
-                    result = await GetVenuesWithOtherData(venues);
+                    result.Data = _mapper.Map<List<VenueRESPONSE>>(venues);
                 }
             }
             catch (CustomError ex)
@@ -137,55 +144,6 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
-        //get other data for the venue in sorted list
-        public async Task<ServiceResponse<List<VenueRESPONSE>>> GetVenuesWithOtherData(List<Venue> venue)
-        {
-            ServiceResponse<List<VenueRESPONSE>> result = new ServiceResponse<List<VenueRESPONSE>>();
-
-            try
-            {
-                if (venue != null && venue.Any())
-                {
-                    var venueDetails = await _repo.GetAllVenuesAsync();
-
-                    var getVenue = venue.Select(venue =>
-                    {
-                        var details = venueDetails.FirstOrDefault(details => details.VenueId == venue.VenueId);
-
-                        if (details != null)
-                        {
-                            return new VenueRESPONSE
-                            {
-                                VenueId = details.VenueId,
-                                Name = details.Name,
-                                Email = details.Email,
-                                Phone = details.Phone,
-                                Address = details.Address,
-                                City = details.City,
-                            };
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }).Where(r => r != null).ToList();
-
-                    result.Data = getVenue;
-                }
-                else
-                {
-                    throw new CustomError(400, "Invalid request data");
-                }
-            }
-            catch (CustomError ex)
-            {
-                result.isError = true;
-                result.statusCode = ex.StatusCode;
-                result.ErrorMessage = ex.ErrorMessage;
-            }
-
-            return result;
-        }
         //gets a specific venue by it's's id
         public async Task<ServiceResponse<VenueRESPONSE>> GetVenueById(int venueId)
         {
@@ -208,6 +166,7 @@ namespace tajmautAPI.Services.Implementations
 
             return result;
         }
+
         // checks if venue exists and updates it to the DB
         public async Task<ServiceResponse<VenueRESPONSE>> UpdateVenue(int venueId, VenuePutREQUEST request)
         {
@@ -225,10 +184,13 @@ namespace tajmautAPI.Services.Implementations
                         {
                             if (await _helper.CheckIdVenue((int)updateVenue.VenueId))
                             {
-                                if (await _repo.CheckVenueTypeId(request.VenueTypeId))
+                                if (await _repo.CheckVenueCityId(request.Venue_CityId))
                                 {
-                                    var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
-                                    response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
+                                    if (await _repo.CheckVenueTypeId(request.VenueTypeId))
+                                    {
+                                        var savedVenue = await _repo.SaveUpdatesVenueDB(updateVenue, request);
+                                        response.Data = _mapper.Map<VenueRESPONSE>(savedVenue);
+                                    }
                                 }
                             }
                         }
@@ -269,10 +231,28 @@ namespace tajmautAPI.Services.Implementations
 
             try
             {
-                if(await _helper.CheckIdVenue(id))
+                if(await _helper.CheckVenueTypeId(id))
                 {
                     result.Data = _mapper.Map<List<VenueRESPONSE>>(await _repo.GetAllVenuesByVenueTypeID(id));
                 }
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.ErrorMessage = ex.ErrorMessage;
+            }
+
+            return result;
+        }
+
+        public async Task<ServiceResponse<List<Venue_City>>> GetAllVenueCities()
+        {
+            ServiceResponse<List<Venue_City>> result = new();
+
+            try
+            {
+                result.Data = await _repo.GetAllVenueCities();
             }
             catch (CustomError ex)
             {

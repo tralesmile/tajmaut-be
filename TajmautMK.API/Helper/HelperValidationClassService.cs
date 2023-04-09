@@ -312,7 +312,7 @@ namespace tajmautAPI.Helper
         /// <returns>True if venue exists ,false if not.</returns>
         public async Task<bool> CheckVenueTypeId(int id)
         {
-            return await _helperRepo.CheckIdVenue(id);
+            return await _helperRepo.CheckVenueTypeId(id);
         }
 
         public async Task<bool> CheckManagerVenueRelation(int venueId, int managerId)

@@ -49,6 +49,7 @@ namespace TajmautMK.Repository.Implementations
                 ModifiedAt = DateTime.Now,
                 ModifiedBy = currentUserID,
                 CreatedBy = currentUserID,
+                Duration = request.Duration,
             };
         }
 
@@ -81,7 +82,8 @@ namespace TajmautMK.Repository.Implementations
             //query
             var eventsInCity = await _ctx.Events
                 .Include(e => e.Venue)
-                .Where(e => e.Venue.City == city)
+                .Include(e => e.Venue.Venue_City)
+                .Where(e => e.Venue.Venue_City.CityName == city)
                 .ToListAsync();
 
             if (eventsInCity.Count() > 0)
@@ -135,6 +137,7 @@ namespace TajmautMK.Repository.Implementations
             getEvent.Name = request.Name;
             getEvent.ModifiedBy = currentUserID;
             getEvent.ModifiedAt = DateTime.Now;
+            getEvent.Duration= request.Duration;
 
             await _ctx.SaveChangesAsync();
 
