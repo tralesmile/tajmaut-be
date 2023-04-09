@@ -61,7 +61,7 @@ namespace TajmautMK.Core.Services.Implementations
                         Subject = "Заборавена лозинка",
                     };
 
-                    result.Data = _repo.ForgotPasswordMailSend(mailSend);
+                    result.Data = _repo.MailSender(mailSend);
                 }
             }
             catch (CustomError ex)

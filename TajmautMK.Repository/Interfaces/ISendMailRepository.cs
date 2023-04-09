@@ -67,6 +67,6 @@ namespace TajmautMK.Repository.Interfaces
         /// </summary>
         /// <param name="request">Object for mail send.</param>
         /// <returns>Messege 'Success' or fail.</returns>
-        string ForgotPasswordMailSend(MailSendREQUEST request);
+        string MailSender(MailSendREQUEST request);
     }
 }

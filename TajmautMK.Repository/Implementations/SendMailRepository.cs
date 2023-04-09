@@ -137,7 +137,7 @@ namespace TajmautMK.Repository.Implementations
             return template;
         }
 
-        public string ForgotPasswordMailSend(MailSendREQUEST requst)
+        public string MailSender(MailSendREQUEST requst)
         {
             var emailTest = new MimeMessage();
             emailTest.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUserName").Value));
