@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using tajmautAPI.Data;
 using tajmautAPI.Middlewares.Exceptions;
@@ -195,6 +196,18 @@ namespace TajmautMK.Repository.Implementations
             }
 
             throw new CustomError(404, $"Event not found!");
+        }
+
+        public async Task<List<Venue>> GetVenuesByCityId(int cityId)
+        {
+            var check = await _ctx.Venues.Where(x=>x.Venue_CityId == cityId).ToListAsync();
+
+            if(check.Count()>0)
+            {
+                return check;
+            }
+
+            throw new CustomError(404, $"This city has no venues!");
         }
     }
 }

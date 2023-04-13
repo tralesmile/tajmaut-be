@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using tajmautAPI.Models.EntityClasses;
 using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace TajmautMK.Repository.Interfaces
 {
@@ -52,5 +53,20 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="password">The new password for the user.</param>
         /// <returns>True if the password was updated successfully, false otherwise.</returns>
         Task<bool> UpdateNewPassword(User user, string password);
+
+        /// <summary>
+        /// Forgot password template for email sending.
+        /// </summary>
+        /// <param name="user">The user to send email.</param>
+        /// <param name="token">The token for the user.</param>
+        /// <returns>String with the body</returns>
+        string ForgotPasswordTemplate(User user,string token);
+
+        /// <summary>
+        /// Forgot password mail sender.
+        /// </summary>
+        /// <param name="request">Object for mail send.</param>
+        /// <returns>Messege 'Success' or fail.</returns>
+        string MailSender(MailSendREQUEST request);
     }
 }

@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MailKit.Security;
+using Microsoft.EntityFrameworkCore;
+using MimeKit.Text;
+using MimeKit;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +14,10 @@ using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Repository.Interfaces;
+using static Org.BouncyCastle.Math.EC.ECCurve;
+using MailKit.Net.Smtp;
+using Microsoft.Extensions.Configuration;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -17,10 +25,12 @@ namespace TajmautMK.Repository.Implementations
     {
 
         private readonly tajmautDataContext _ctx;
+        private readonly IConfiguration _config;
 
-        public SendMailRepository(tajmautDataContext ctx)
+        public SendMailRepository(tajmautDataContext ctx,IConfiguration configuration)
         {
             _ctx = ctx;
+            _config = configuration;
         }
 
         public async Task<User> GetUserByEmail(string email)
@@ -68,7 +78,7 @@ namespace TajmautMK.Repository.Implementations
 
         private string CreateRandomToken()
         {
-            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(4));
         }
 
         //get user by id
@@ -114,6 +124,37 @@ namespace TajmautMK.Repository.Implementations
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
+        }
+
+        public string ForgotPasswordTemplate(User user, string token)
+        {
+            var template = "<h1>Здраво " + user.FirstName + "</h1>"
+                        + "<h2>Имаш барање за промена на лозинката!</h2>" +
+                        "<p>Кликни на оваа адреса за да ја промениш лозинката: http://tajmaut.ddns.net:3000/reset-password/" + token +
+                        "<br><br>Ако не си го направил/а ова барање, тогаш игнорирај ја оваа порака!<br><br>Поздрав ТајмаутМК. 😃</p>";
+
+            return template;
+        }
+
+        public string MailSender(MailSendREQUEST requst)
+        {
+            var emailTest = new MimeMessage();
+            emailTest.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUserName").Value));
+            emailTest.To.Add(MailboxAddress.Parse(requst.To));
+            emailTest.Subject = requst.Subject;
+            emailTest.Body = new TextPart(TextFormat.Html)
+            {
+                Text = requst.Template,
+            };
+
+            using var smtp = new SmtpClient();
+            smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_config.GetSection("EmailUserName").Value, _config.GetSection("EmailPassword").Value);
+            smtp.Send(emailTest);
+
+            smtp.Disconnect(true);
+
+            return "Success";
         }
     }
 }

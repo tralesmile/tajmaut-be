@@ -324,5 +324,10 @@ namespace tajmautAPI.Helper
         {
             return await _helperRepo.GetEventByID(eventId);
         }
+
+        public async Task<List<Venue>> GetVenuesByCityId(int cityId)
+        {
+            return await _helperRepo.GetVenuesByCityId(cityId);
+        }
     }
 }

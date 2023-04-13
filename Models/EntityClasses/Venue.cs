@@ -23,9 +23,6 @@ namespace tajmautAPI.Models.EntityClasses
         public string Name { get; set; } = null!;
 
         [Required]
-        public string City { get; set; } = null!;
-
-        [Required]
         public string Address { get; set; } = null!;
 
         [Required]
@@ -33,6 +30,9 @@ namespace tajmautAPI.Models.EntityClasses
 
         [Required]
         public int ManagerId { get; set; }
+
+        [Required]
+        public string VenueImage { get; set; } = null!;
 
         [Required]
         public DateTime ModifiedAt { get; set; }

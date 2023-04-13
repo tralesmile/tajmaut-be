@@ -6,6 +6,7 @@ using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Controllers
 {
@@ -167,11 +168,11 @@ namespace tajmautAPI.Controllers
         /// </summary>
         /// <param name="categoryId">The ID of the category to filter events by.</param>
         /// <returns>An ActionResult containing the list of filtered events, or an error message if an error occurred.</returns>
-        [HttpGet("FilterEventsByCategory"), AllowAnonymous]
-        public async Task<ActionResult> FilterEventsByCategory(int categoryId)
+        [HttpPost("FilterEvents"), AllowAnonymous]
+        public async Task<ActionResult> FilterEvents(EventFilterREQUEST request)
         {
 
-            var result = await _eventService.FilterEventsByCategory(categoryId);
+            var result = await _eventService.FilterEvents(request);
 
             //check if error exists
             if (result.isError)
@@ -185,17 +186,17 @@ namespace tajmautAPI.Controllers
 
         }
 
-        /// <summary>
-        /// Gets events that fall within the specified date range.
-        /// </summary>
-        /// <param name="startDate">The start date of the date range.</param>
-        /// <param name="endDate">The end date of the date range.</param>
-        /// <returns>The events that fall within the specified date range.</returns>
+        ///// <summary>
+        ///// Gets events that fall within the specified date range.
+        ///// </summary>
+        ///// <param name="startDate">The start date of the date range.</param>
+        ///// <param name="endDate">The end date of the date range.</param>
+        ///// <returns>The events that fall within the specified date range.</returns>
         [HttpGet("FilterEventsByDate"), AllowAnonymous]
-        public async Task<ActionResult> FilterEventsByDate(DateTime startDate,DateTime endDate)
+        public async Task<ActionResult> FilterEventsByDate(DateTime startDate, DateTime endDate)
         {
 
-            var result = await _eventService.FilterEventsByDate(startDate,endDate);
+            var result = await _eventService.FilterEventsByDate(startDate, endDate);
 
             //check if error exists
             if (result.isError)
@@ -207,39 +208,6 @@ namespace tajmautAPI.Controllers
             return Ok(result.Data);
 
 
-        }
-
-        /// <summary>
-        /// Gets events in the specified city.
-        /// </summary>
-        /// <param name="city">The city to filter events by.</param>
-        /// <returns>The events in the specified city.</returns>
-        [HttpGet("FilterEventsByCity"), AllowAnonymous]
-        public async Task<ActionResult> FilterEventsByCity(string city)
-        {
-
-            var result = await _eventService.FilterEventsByCity(city);
-
-            //check if error exists
-            if (result.isError)
-            {
-                return StatusCode((int)result.statusCode, result.ErrorMessage);
-            }
-
-            //if no error
-            return Ok(result.Data);
-
-
-        }
-
-        /// <summary>
-        /// Gets events at venues with a rating above a specified threshold.
-        /// </summary>
-        /// <returns>The events at venues with a rating above the specified threshold.</returns>
-        [HttpGet("FilterEventsByVenueRating"), AllowAnonymous]
-        public async Task<ActionResult> FilterEventsByVenueRating()
-        {
-            return Ok();
         }
 
         /// <summary>

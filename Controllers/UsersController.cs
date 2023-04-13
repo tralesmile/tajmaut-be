@@ -194,14 +194,13 @@ namespace tajmautAPI.Controllers
             }
 
             //if no error
-            return Ok("Success");
+            return Ok(result.Data);
         }
 
         /// <summary>
         /// Updates the password of the user with the provided reset password token.
         /// </summary>
-        /// <param name="token">The reset password token.</param>
-        /// <param name="request">The new password.</param>
+        /// <param name="request">The new password,confirm and token.</param>
         /// <returns>An HTTP status code indicating the result of the operation.</returns>
         /// <remarks>This endpoint can be accessed anonymously.</remarks>
         [HttpPost("UpdateForgotPassword"), AllowAnonymous]

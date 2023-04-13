@@ -24,7 +24,7 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<List<Venue>> GetAllVenuesAsync()
         {
-            var check = await _context.Venues.ToListAsync();
+            var check = await _context.Venues.Include(x=>x.Venue_City).Include(x=>x.VenueType).ToListAsync();
             if (check.Count() > 0)
             {
                 return check;
@@ -38,6 +38,7 @@ namespace TajmautMK.Repository.Implementations
         {
             var cityVenues = await _context.Venues
             .Include(e=>e.Venue_City)
+            .Include(x=>x.VenueType)
             .Where(e => e.Venue_City.CityName == city)
             .ToListAsync();
 
@@ -51,7 +52,7 @@ namespace TajmautMK.Repository.Implementations
         // get venue by it's ID
         public async Task<Venue> GetVenuesIdAsync(int venueId)
         {
-            var venue = await _context.Venues.FirstOrDefaultAsync(r => r.VenueId == venueId);
+            var venue = await _context.Venues.Include(x => x.Venue_City).Include(x => x.VenueType).FirstOrDefaultAsync(r => r.VenueId == venueId);
             if (venue == null)
             {
                 throw new CustomError(404, $"Venue not found");
@@ -77,8 +78,8 @@ namespace TajmautMK.Repository.Implementations
                 ModifiedBy = currentUserID,
                 CreatedBy = currentUserID,
                 ManagerId = currentUserID,
-                City = getVenueCity.CityName,
                 Venue_CityId = request.Venue_CityId,
+                VenueImage = request.VenueImage,
             };
         }
         // updates venue
@@ -100,7 +101,6 @@ namespace TajmautMK.Repository.Implementations
             venue.Name = request.Name;
             venue.Email = request.Email;
             venue.Phone = request.Phone;
-            venue.City = getVenueCity.CityName;
             venue.Address = request.Address;
             venue.ModifiedBy = currentUserID;
             venue.ModifiedAt = DateTime.Now;
@@ -141,10 +141,10 @@ namespace TajmautMK.Repository.Implementations
             getVenue.Name = request.Name;
             getVenue.Email = request.Email;
             getVenue.Address = request.Address;
-            getVenue.City = getVenueCity.CityName;
             getVenue.Phone = request.Phone;
             getVenue.ModifiedBy = currentUserID;
             getVenue.ModifiedAt = DateTime.Now;
+            getVenue.VenueImage = request.VenueImage;
 
             await _context.SaveChangesAsync();
 

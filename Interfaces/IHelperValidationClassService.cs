@@ -179,5 +179,11 @@ namespace tajmautAPI.Services.Interfaces
         /// <returns>Event if found ,if not CustomError.</returns>
         Task<Event> GetEventByID(int eventId);
 
+        /// <summary>
+        /// Gets the venues by city id
+        /// </summary>
+        /// <param name="cityId">The ID of the venue city to check.</param>
+        /// <returns>List of venues or CustomError.</returns>
+        Task<List<Venue>> GetVenuesByCityId(int cityId);
     }
 }

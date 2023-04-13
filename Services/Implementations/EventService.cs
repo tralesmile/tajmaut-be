@@ -4,6 +4,9 @@ using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.Enums;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Repository.Interfaces;
 
 namespace tajmautAPI.Services.Implementations
@@ -129,36 +132,72 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //filter events by category
-        public async Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByCategory(int categoryId)
+        public async Task<ServiceResponse<EventFilterRESPONSE>> FilterEvents(EventFilterREQUEST request)
         {
 
-            ServiceResponse<List<EventGetRESPONSE>> result = new();
+            ServiceResponse<EventFilterRESPONSE> result = new();
 
             try
             {
-                //invalid input
-                if (_helper.ValidateId(categoryId))
-                {
-                    //check if category exists
-                    if (await _helper.CheckIdCategory(categoryId))
-                    {
-                        var resultEvents = await _repo.GetAllEvents();
 
-                        if (resultEvents.Count() > 0)
-                        {
-                            var listEvents = resultEvents.Where(n => n.CategoryEventId == categoryId).ToList();
-                            if (listEvents.Count() > 0)
-                            {
-                                var resultSend = await GetEventsWithOtherData(listEvents);
-                                result.Data = resultSend;
-                            }
-                            else
-                            {
-                                throw new CustomError(404, $"This category has no events");
-                            }
-                        }
-                    }
+                var getFilterResult = await _repo.EventFilter(request);
+
+                var totalItems = getFilterResult.Count();
+                var itemsPerPage = totalItems;
+                var pageNumber = 1;
+
+                if(getFilterResult.Count() <= 0)
+                {
+                    throw new CustomError(404, $"No events found");
                 }
+
+                if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
+                {
+                    itemsPerPage = request.ItemsPerPage.Value;
+                    pageNumber = request.PageNumber.Value;
+
+                    var pageCount = Math.Ceiling(getFilterResult.Count() / (double)itemsPerPage);
+
+                    getFilterResult = getFilterResult
+                        .Skip((pageNumber - 1) * (int)itemsPerPage)
+                        .Take((int)itemsPerPage).ToList();
+
+                }
+
+                var response = new EventFilterRESPONSE 
+                { 
+                    Events = await GetEventsWithOtherData(getFilterResult),
+                    PageNumber = pageNumber,
+                    ItemsPerPage = itemsPerPage,
+                    TotalItems = totalItems,
+                };
+
+
+                result.Data = response;
+
+                ////invalid input
+                //if (_helper.ValidateId(categoryId))
+                //{
+                //    //check if category exists
+                //    if (await _helper.CheckIdCategory(categoryId))
+                //    {
+                //        var resultEvents = await _repo.GetAllEvents();
+
+                //        if (resultEvents.Count() > 0)
+                //        {
+                //            var listEvents = resultEvents.Where(n => n.CategoryEventId == categoryId).ToList();
+                //            if (listEvents.Count() > 0)
+                //            {
+                //                var resultSend = await GetEventsWithOtherData(listEvents);
+                //                result.Data = resultSend;
+                //            }
+                //            else
+                //            {
+                //                throw new CustomError(404, $"This category has no events");
+                //            }
+                //        }
+                //    }
+                //}
             }
             catch (CustomError ex)
             {
@@ -350,19 +389,19 @@ namespace tajmautAPI.Services.Implementations
                     var venue = await _repo.GetVenueById(ev.VenueId);
 
                     //update status of event
-                    var statusEvent = "";
+                    var statusEvent = new EventStatus();
                     if (!ev.isCanceled)
                     {
                         if(ev.DateTime>now)
                         {
-                            statusEvent = "Upcoming";
+                            statusEvent = EventStatus.Upcoming;
                         }else if(ev.DateTime.AddHours((int)ev.Duration) > now)
                         {
-                            statusEvent = "Ongoing";
+                            statusEvent = EventStatus.Ongoing;
                         }
                         else
                         {
-                            statusEvent = "Ended";
+                            statusEvent = EventStatus.Ended;
                         }
                         //statusEvent = ev.DateTime > now ? "Upcoming"
                         //: ev.DateTime.AddHours(1) > now ? "Ongoing"
@@ -370,7 +409,7 @@ namespace tajmautAPI.Services.Implementations
                     }
                     else
                     {
-                        statusEvent = "Canceled";
+                        statusEvent = EventStatus.Canceled;
                     }
 
                     //add event
@@ -386,9 +425,9 @@ namespace tajmautAPI.Services.Implementations
                         isCanceled = ev.isCanceled,
                         VenueName = venue.Name,
                         VenuePhone = venue.Phone,
-                        StatusEvent = statusEvent,
-                        VenueCity = venue.City,
+                        StatusEvent = statusEvent.ToString(),
                         Duration= ev.Duration,
+                        VenueCity = venue.Venue_City.CityName,
                     });
 
                 }
@@ -444,9 +483,9 @@ namespace tajmautAPI.Services.Implementations
                                     isCanceled = ev.isCanceled,
                                     VenueName = venue.Name,
                                     VenuePhone = venue.Phone,
-                                    StatusEvent = "Upcoming",
-                                    VenueCity = venue.City,
+                                    StatusEvent = EventStatus.Upcoming.ToString(),
                                     Duration = ev.Duration,
+                                    VenueCity = venue.Venue_City.CityName,
                                 });
                             }
                         }
