@@ -192,56 +192,23 @@ namespace tajmautAPI.Controllers
         ///// <param name="startDate">The start date of the date range.</param>
         ///// <param name="endDate">The end date of the date range.</param>
         ///// <returns>The events that fall within the specified date range.</returns>
-        //[HttpGet("FilterEventsByDate"), AllowAnonymous]
-        //public async Task<ActionResult> FilterEventsByDate(DateTime startDate,DateTime endDate)
-        //{
+        [HttpGet("FilterEventsByDate"), AllowAnonymous]
+        public async Task<ActionResult> FilterEventsByDate(DateTime startDate, DateTime endDate)
+        {
 
-        //    var result = await _eventService.FilterEventsByDate(startDate,endDate);
+            var result = await _eventService.FilterEventsByDate(startDate, endDate);
 
-        //    //check if error exists
-        //    if (result.isError)
-        //    {
-        //        return StatusCode((int)result.statusCode, result.ErrorMessage);
-        //    }
+            //check if error exists
+            if (result.isError)
+            {
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
+            }
 
-        //    //if no error
-        //    return Ok(result.Data);
-
-
-        //}
-
-        ///// <summary>
-        ///// Gets events in the specified city.
-        ///// </summary>
-        ///// <param name="city">The city to filter events by.</param>
-        ///// <returns>The events in the specified city.</returns>
-        //[HttpGet("FilterEventsByCity"), AllowAnonymous]
-        //public async Task<ActionResult> FilterEventsByCity(string city)
-        //{
-
-        //    var result = await _eventService.FilterEventsByCity(city);
-
-        //    //check if error exists
-        //    if (result.isError)
-        //    {
-        //        return StatusCode((int)result.statusCode, result.ErrorMessage);
-        //    }
-
-        //    //if no error
-        //    return Ok(result.Data);
+            //if no error
+            return Ok(result.Data);
 
 
-        //}
-
-        /// <summary>
-        /// Gets events at venues with a rating above a specified threshold.
-        /// </summary>
-        /// <returns>The events at venues with a rating above the specified threshold.</returns>
-        //[HttpGet("FilterEventsByVenueRating"), AllowAnonymous]
-        //public async Task<ActionResult> FilterEventsByVenueRating()
-        //{
-        //    return Ok();
-        //}
+        }
 
         /// <summary>
         /// Cancels an event with the specified ID.

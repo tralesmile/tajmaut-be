@@ -24,7 +24,9 @@ namespace tajmautAPI.AutoMapper
 
             CreateMap<Venue_Types, VenueTypeRESPONSE>();
 
-            CreateMap<Venue, VenueRESPONSE>();
+            CreateMap<Venue, VenueRESPONSE>()
+                .ForMember(dest => dest.VenueType, opt => opt.MapFrom(src => src.VenueType))
+                .ForMember(dest => dest.VenueCity, opt => opt.MapFrom(src => src.Venue_City));
 
         }
     }

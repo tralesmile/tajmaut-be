@@ -170,7 +170,7 @@ namespace TajmautMK.Repository.Implementations
         //get restaurant by id
         public async Task<Venue> GetVenueById(int id)
         {
-            return await _ctx.Venues.FirstOrDefaultAsync(n => n.VenueId == id);
+            return await _ctx.Venues.Include(x=>x.Venue_City).FirstOrDefaultAsync(n => n.VenueId == id);
         }
 
         //save updates in DB
