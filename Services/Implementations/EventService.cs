@@ -141,12 +141,13 @@ namespace tajmautAPI.Services.Implementations
             {
 
                 var getFilterResult = await _repo.EventFilter(request);
+                var otherDataEvents = await GetEventsWithOtherData(getFilterResult);
 
-                var totalItems = getFilterResult.Count();
+                var totalItems = otherDataEvents.Count();
                 var itemsPerPage = totalItems;
                 var pageNumber = 1;
 
-                if(getFilterResult.Count() <= 0)
+                if (otherDataEvents.Count() <= 0)
                 {
                     throw new CustomError(404, $"No events found");
                 }
@@ -156,17 +157,17 @@ namespace tajmautAPI.Services.Implementations
                     itemsPerPage = request.ItemsPerPage.Value;
                     pageNumber = request.PageNumber.Value;
 
-                    var pageCount = Math.Ceiling(getFilterResult.Count() / (double)itemsPerPage);
+                    var pageCount = Math.Ceiling(otherDataEvents.Count() / (double)itemsPerPage);
 
-                    getFilterResult = getFilterResult
+                    otherDataEvents = otherDataEvents
                         .Skip((pageNumber - 1) * (int)itemsPerPage)
                         .Take((int)itemsPerPage).ToList();
 
                 }
 
-                var response = new EventFilterRESPONSE 
-                { 
-                    Events = await GetEventsWithOtherData(getFilterResult),
+                var response = new EventFilterRESPONSE
+                {
+                    Events = otherDataEvents,
                     PageNumber = pageNumber,
                     ItemsPerPage = itemsPerPage,
                     TotalItems = totalItems,
@@ -252,7 +253,7 @@ namespace tajmautAPI.Services.Implementations
                 if (allEvents.Count() > 0)
                 {
                     //query
-                    var sendEvents = allEvents.Where(e => e.DateTime >= startDate && e.DateTime <= endDate).ToList();
+                    var sendEvents = allEvents.Where(e => e.DateTime >= startDate && e.DateTime <= endDate.AddDays(1)).ToList();
                     if (sendEvents.Count() > 0)
                     {
                         result.Data = await GetEventsWithOtherData(sendEvents);

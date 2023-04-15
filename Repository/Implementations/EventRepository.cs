@@ -80,7 +80,7 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<List<Event>> EventFilter(EventFilterREQUEST request)
         {
-            if(request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
+            if (request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
             {
                 var selectedFilter = await _ctx.Events.Include(x => x.Venue).ToListAsync();
 
@@ -96,26 +96,28 @@ namespace TajmautMK.Repository.Implementations
 
                 if (request.StartDate.HasValue && request.EndDate.HasValue)
                 {
-                    selectedFilter = selectedFilter.Where(x => x.DateTime >= request.StartDate && x.DateTime <= request.EndDate).ToList();
-                }else if(request.StartDate.HasValue)
+                    selectedFilter = selectedFilter.Where(x => x.DateTime >= request.StartDate && x.DateTime <= request.EndDate.Value.AddDays(1)).ToList();
+                }
+                else if (request.StartDate.HasValue)
                 {
-                    selectedFilter = selectedFilter.Where(x=> x.DateTime>=request.StartDate).ToList();
-                }else if(request.EndDate.HasValue)
+                    selectedFilter = selectedFilter.Where(x => x.DateTime >= request.StartDate).ToList();
+                }
+                else if (request.EndDate.HasValue)
                 {
-                    selectedFilter = selectedFilter.Where(x=>x.DateTime<=request.EndDate).ToList();
+                    selectedFilter = selectedFilter.Where(x => x.DateTime <= request.EndDate.Value.AddDays(1)).ToList();
                 }
 
-                if(selectedFilter.Count() > 0)
+                if (selectedFilter.Count() > 0)
                 {
                     return selectedFilter;
                 }
-                
+
             }
             else
             {
                 var allEvents = await GetAllEvents();
 
-                if(allEvents.Count() > 0)
+                if (allEvents.Count() > 0)
                 {
                     return allEvents;
                 }
