@@ -252,7 +252,7 @@ namespace tajmautAPI.Services.Implementations
                 if (allEvents.Count() > 0)
                 {
                     //query
-                    var sendEvents = allEvents.Where(e => e.DateTime >= startDate && e.DateTime <= endDate).ToList();
+                    var sendEvents = allEvents.Where(e => e.DateTime >= startDate && e.DateTime <= endDate.AddDays(1)).ToList();
                     if (sendEvents.Count() > 0)
                     {
                         result.Data = await GetEventsWithOtherData(sendEvents);
