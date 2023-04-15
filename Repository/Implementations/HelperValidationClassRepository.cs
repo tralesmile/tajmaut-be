@@ -189,8 +189,8 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<Event> GetEventByID(int eventId)
         {
-            var check = await _ctx.Events.FindAsync(eventId);
-            if(check != null)
+            var check = await _ctx.Events.Include(x => x.CategoryEvent).FirstOrDefaultAsync(x=>x.EventId== eventId);
+            if (check != null)
             {
                 return check;
             }

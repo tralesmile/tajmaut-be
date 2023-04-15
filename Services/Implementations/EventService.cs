@@ -429,6 +429,7 @@ namespace tajmautAPI.Services.Implementations
                         StatusEvent = statusEvent.ToString(),
                         Duration= ev.Duration,
                         VenueCity = venue.Venue_City.CityName,
+                        CategoryName = ev.CategoryEvent.Name,
                     });
 
                 }
@@ -487,6 +488,7 @@ namespace tajmautAPI.Services.Implementations
                                     StatusEvent = EventStatus.Upcoming.ToString(),
                                     Duration = ev.Duration,
                                     VenueCity = venue.Venue_City.CityName,
+                                    CategoryName = ev.CategoryEvent.Name,
                                 });
                             }
                         }

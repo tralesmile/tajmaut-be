@@ -82,7 +82,7 @@ namespace TajmautMK.Repository.Implementations
         {
             if (request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
             {
-                var selectedFilter = await _ctx.Events.Include(x => x.Venue).ToListAsync();
+                var selectedFilter = await _ctx.Events.Include(x => x.Venue).Include(x => x.CategoryEvent).ToListAsync();
 
                 if (request.CategoryId.HasValue)
                 {
@@ -133,6 +133,7 @@ namespace TajmautMK.Repository.Implementations
             var eventsInCity = await _ctx.Events
                 .Include(e => e.Venue)
                 .Include(e => e.Venue.Venue_City)
+                .Include(x => x.CategoryEvent)
                 .Where(e => e.Venue.Venue_City.CityName == city)
                 .ToListAsync();
 
@@ -147,7 +148,7 @@ namespace TajmautMK.Repository.Implementations
         //get all events
         public async Task<List<Event>> GetAllEvents()
         {
-            var check = await _ctx.Events.ToListAsync();
+            var check = await _ctx.Events.Include(x => x.CategoryEvent).ToListAsync();
             if (check.Count() > 0)
             {
                 return check;
@@ -160,7 +161,7 @@ namespace TajmautMK.Repository.Implementations
         //get event by id
         public async Task<List<Event>> GetEventById(int eventId)
         {
-            var check = await _ctx.Events.Where(n => n.EventId == eventId).ToListAsync();
+            var check = await _ctx.Events.Include(x => x.CategoryEvent).Where(n => n.EventId == eventId).ToListAsync();
             if (check.Count() > 0)
             {
                 return check;
