@@ -68,5 +68,12 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="request">Object for mail send.</param>
         /// <returns>Messege 'Success' or fail.</returns>
         string MailSender(MailSendREQUEST request);
+
+        /// <summary>
+        /// Check if user has an active forgot pass request.
+        /// </summary>
+        /// <param name="id">The id of the user to check for active request for pass change.</param>
+        /// <returns>Returns true if the user has not an active request othewise false.</returns>
+        Task<bool> CheckActiveForgotPassRequest(int id);
     }
 }
