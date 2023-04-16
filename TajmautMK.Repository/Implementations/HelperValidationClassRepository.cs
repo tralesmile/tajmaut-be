@@ -157,8 +157,8 @@ namespace TajmautMK.Repository.Implementations
         //if a specific restaurant has that event
         public async Task<bool> CheckEventVenueRelation(int venueId, int eventId)
         {
-            var check = await _ctx.Events.FirstOrDefaultAsync(v => v.VenueId == venueId && v.EventId==eventId);
-            if(check != null)
+            var check = await _ctx.Events.FirstOrDefaultAsync(v => v.VenueId == venueId && v.EventId == eventId);
+            if (check != null)
             {
                 return true;
             }
@@ -168,7 +168,7 @@ namespace TajmautMK.Repository.Implementations
         public async Task<bool> CheckVenueTypeId(int id)
         {
             var check = await _ctx.VenueTypes.FirstOrDefaultAsync(v => v.Venue_TypesId == id);
-            if(check!=null)
+            if (check != null)
             {
                 return true;
             }
@@ -179,7 +179,7 @@ namespace TajmautMK.Repository.Implementations
         public async Task<bool> CheckManagerVenueRelation(int venueId, int managerId)
         {
             var check = await _ctx.Venues.FirstOrDefaultAsync(x => x.VenueId == venueId && x.ManagerId == managerId);
-            if(check != null)
+            if (check != null)
             {
                 return true;
             }
@@ -189,8 +189,8 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<Event> GetEventByID(int eventId)
         {
-            var check = await _ctx.Events.FindAsync(eventId);
-            if(check != null)
+            var check = await _ctx.Events.Include(x => x.CategoryEvent).FirstOrDefaultAsync(x => x.EventId == eventId);
+            if (check != null)
             {
                 return check;
             }
@@ -200,9 +200,9 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<List<Venue>> GetVenuesByCityId(int cityId)
         {
-            var check = await _ctx.Venues.Where(x=>x.Venue_CityId == cityId).ToListAsync();
+            var check = await _ctx.Venues.Where(x => x.Venue_CityId == cityId).ToListAsync();
 
-            if(check.Count()>0)
+            if (check.Count() > 0)
             {
                 return check;
             }

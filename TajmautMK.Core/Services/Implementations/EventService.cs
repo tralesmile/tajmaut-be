@@ -147,7 +147,7 @@ namespace tajmautAPI.Services.Implementations
                 var itemsPerPage = totalItems;
                 var pageNumber = 1;
 
-                if(otherDataEvents.Count() <= 0)
+                if (otherDataEvents.Count() <= 0)
                 {
                     throw new CustomError(404, $"No events found");
                 }
@@ -165,8 +165,8 @@ namespace tajmautAPI.Services.Implementations
 
                 }
 
-                var response = new EventFilterRESPONSE 
-                { 
+                var response = new EventFilterRESPONSE
+                {
                     Events = otherDataEvents,
                     PageNumber = pageNumber,
                     ItemsPerPage = itemsPerPage,
@@ -393,10 +393,11 @@ namespace tajmautAPI.Services.Implementations
                     var statusEvent = new EventStatus();
                     if (!ev.isCanceled)
                     {
-                        if(ev.DateTime>now)
+                        if (ev.DateTime > now)
                         {
                             statusEvent = EventStatus.Upcoming;
-                        }else if(ev.DateTime.AddHours((int)ev.Duration) > now)
+                        }
+                        else if (ev.DateTime.AddHours((int)ev.Duration) > now)
                         {
                             statusEvent = EventStatus.Ongoing;
                         }
@@ -427,8 +428,9 @@ namespace tajmautAPI.Services.Implementations
                         VenueName = venue.Name,
                         VenuePhone = venue.Phone,
                         StatusEvent = statusEvent.ToString(),
-                        Duration= ev.Duration,
+                        Duration = ev.Duration,
                         VenueCity = venue.Venue_City.CityName,
+                        CategoryName = ev.CategoryEvent.Name,
                     });
 
                 }
@@ -487,6 +489,7 @@ namespace tajmautAPI.Services.Implementations
                                     StatusEvent = EventStatus.Upcoming.ToString(),
                                     Duration = ev.Duration,
                                     VenueCity = venue.Venue_City.CityName,
+                                    CategoryName = ev.CategoryEvent.Name,
                                 });
                             }
                         }

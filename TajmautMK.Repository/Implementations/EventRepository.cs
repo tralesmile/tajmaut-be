@@ -80,9 +80,9 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<List<Event>> EventFilter(EventFilterREQUEST request)
         {
-            if(request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
+            if (request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
             {
-                var selectedFilter = await _ctx.Events.Include(x => x.Venue).ToListAsync();
+                var selectedFilter = await _ctx.Events.Include(x => x.Venue).Include(x => x.CategoryEvent).ToListAsync();
 
                 if (request.CategoryId.HasValue)
                 {
@@ -97,25 +97,27 @@ namespace TajmautMK.Repository.Implementations
                 if (request.StartDate.HasValue && request.EndDate.HasValue)
                 {
                     selectedFilter = selectedFilter.Where(x => x.DateTime >= request.StartDate && x.DateTime <= request.EndDate.Value.AddDays(1)).ToList();
-                }else if(request.StartDate.HasValue)
+                }
+                else if (request.StartDate.HasValue)
                 {
-                    selectedFilter = selectedFilter.Where(x=> x.DateTime>=request.StartDate).ToList();
-                }else if(request.EndDate.HasValue)
+                    selectedFilter = selectedFilter.Where(x => x.DateTime >= request.StartDate).ToList();
+                }
+                else if (request.EndDate.HasValue)
                 {
-                    selectedFilter = selectedFilter.Where(x=>x.DateTime<=request.EndDate.Value.AddDays(1)).ToList();
+                    selectedFilter = selectedFilter.Where(x => x.DateTime <= request.EndDate.Value.AddDays(1)).ToList();
                 }
 
-                if(selectedFilter.Count() > 0)
+                if (selectedFilter.Count() > 0)
                 {
                     return selectedFilter;
                 }
-                
+
             }
             else
             {
                 var allEvents = await GetAllEvents();
 
-                if(allEvents.Count() > 0)
+                if (allEvents.Count() > 0)
                 {
                     return allEvents;
                 }
@@ -131,6 +133,7 @@ namespace TajmautMK.Repository.Implementations
             var eventsInCity = await _ctx.Events
                 .Include(e => e.Venue)
                 .Include(e => e.Venue.Venue_City)
+                .Include(x => x.CategoryEvent)
                 .Where(e => e.Venue.Venue_City.CityName == city)
                 .ToListAsync();
 
@@ -145,7 +148,7 @@ namespace TajmautMK.Repository.Implementations
         //get all events
         public async Task<List<Event>> GetAllEvents()
         {
-            var check = await _ctx.Events.ToListAsync();
+            var check = await _ctx.Events.Include(x => x.CategoryEvent).ToListAsync();
             if (check.Count() > 0)
             {
                 return check;
@@ -158,7 +161,7 @@ namespace TajmautMK.Repository.Implementations
         //get event by id
         public async Task<List<Event>> GetEventById(int eventId)
         {
-            var check = await _ctx.Events.Where(n => n.EventId == eventId).ToListAsync();
+            var check = await _ctx.Events.Include(x => x.CategoryEvent).Where(n => n.EventId == eventId).ToListAsync();
             if (check.Count() > 0)
             {
                 return check;
@@ -170,7 +173,7 @@ namespace TajmautMK.Repository.Implementations
         //get restaurant by id
         public async Task<Venue> GetVenueById(int id)
         {
-            return await _ctx.Venues.Include(x=>x.Venue_City).FirstOrDefaultAsync(n => n.VenueId == id);
+            return await _ctx.Venues.Include(x => x.Venue_City).FirstOrDefaultAsync(n => n.VenueId == id);
         }
 
         //save updates in DB
@@ -185,7 +188,7 @@ namespace TajmautMK.Repository.Implementations
             getEvent.Name = request.Name;
             getEvent.ModifiedBy = currentUserID;
             getEvent.ModifiedAt = DateTime.Now;
-            getEvent.Duration= request.Duration;
+            getEvent.Duration = request.Duration;
 
             await _ctx.SaveChangesAsync();
 
