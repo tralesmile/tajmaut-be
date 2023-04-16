@@ -197,5 +197,14 @@ namespace tajmautAPI.Services.Interfaces
         /// <param name="items">Events list.</param>
         /// <returns>A list of events using pagination.</returns>
         Task<EventFilterRESPONSE> ItemsPagination(EventFilterREQUEST request,List<EventGetRESPONSE> items);
+
+        /// <summary>
+        /// Venues pagination.
+        /// </summary>
+        /// <param name="request">Venue filters object.</param>
+        /// <param name="items">Venues list.</param>
+        /// <returns>A list of venues using pagination.</returns>
+        Task<VenueFilterRESPONSE> VenuesPagination(VenueFilterREQUEST request, List<VenueRESPONSE> items);
     }
 }
+

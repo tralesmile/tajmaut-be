@@ -5,6 +5,7 @@ using tajmautAPI.Models.EntityClasses;
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Services.Interfaces;
 using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Repository.Implementations
@@ -229,6 +230,38 @@ namespace TajmautMK.Repository.Implementations
             }
 
             throw new CustomError(404, $"Venue city not found!");
+        }
+
+        public async Task<List<Venue>> VenuesFilter(VenueFilterREQUEST request)
+        {
+            if (request.CityId.HasValue || request.VenueTypeId.HasValue)
+            {
+
+                var selectedFilter = await _context.Venues
+                    .Include(x => x.Venue_City)
+                    .Include(x => x.VenueType)
+                    .Where(x =>
+                    (!request.CityId.HasValue || x.Venue_CityId == request.CityId) &&
+                    (!request.VenueTypeId.HasValue || x.VenueTypeId == request.VenueTypeId))
+                    .ToListAsync();
+
+                if (selectedFilter.Count() > 0)
+                {
+                    return selectedFilter;
+                }
+
+            }
+            else
+            {
+                var allVenues = await GetAllVenuesAsync();
+
+                if (allVenues.Count() > 0)
+                {
+                    return allVenues;
+                }
+
+            }
+            throw new CustomError(404, $"No venues found");
         }
     }
 }

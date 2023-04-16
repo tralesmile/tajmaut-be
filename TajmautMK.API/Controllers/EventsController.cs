@@ -164,10 +164,10 @@ namespace tajmautAPI.Controllers
         }
 
         /// <summary>
-        /// Filter events by category.
+        /// Filter events.
         /// </summary>
-        /// <param name="categoryId">The ID of the category to filter events by.</param>
-        /// <returns>An ActionResult containing the list of filtered events, or an error message if an error occurred.</returns>
+        /// <param name="request">Request object with filters.</param>
+        /// <returns>Filtered events or error.</returns>
         [HttpPost("FilterEvents"), AllowAnonymous]
         public async Task<ActionResult> FilterEvents(EventFilterREQUEST request)
         {

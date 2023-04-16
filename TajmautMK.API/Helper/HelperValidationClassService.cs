@@ -368,5 +368,40 @@ namespace tajmautAPI.Helper
 
             return response;
         }
+
+        public async Task<VenueFilterRESPONSE> VenuesPagination(VenueFilterREQUEST request, List<VenueRESPONSE> items)
+        {
+            var totalItems = items.Count();
+            var itemsPerPage = totalItems;
+            var pageNumber = 1;
+
+            if (items.Count() <= 0)
+            {
+                throw new CustomError(404, $"No events found");
+            }
+
+            if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
+            {
+                itemsPerPage = request.ItemsPerPage.Value;
+                pageNumber = request.PageNumber.Value;
+
+                var pageCount = Math.Ceiling(items.Count() / (double)itemsPerPage);
+
+                items = items
+                    .Skip((pageNumber - 1) * (int)itemsPerPage)
+                    .Take((int)itemsPerPage).ToList();
+
+            }
+
+            var response = new VenueFilterRESPONSE
+            {
+                Venues = items,
+                PageNumber = pageNumber,
+                ItemsPerPage = itemsPerPage,
+                TotalItems = totalItems,
+            };
+
+            return response;
+        }
     }
 }

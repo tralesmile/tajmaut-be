@@ -3,6 +3,8 @@ using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Implementations;
 using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Interfaces_Service
 {
@@ -71,5 +73,12 @@ namespace tajmautAPI.Interfaces_Service
         /// </summary>
         /// <returns>A response containing a list of venues citie.</returns>
         Task<ServiceResponse<List<Venue_City>>> GetAllVenueCities();
+
+        /// <summary>
+        /// Filters venues.
+        /// </summary>
+        /// <param name="request">Venues filters object.</param>
+        /// <returns>A service response containing a list of venues that match the specified filters.</returns>
+        Task<ServiceResponse<VenueFilterRESPONSE>> FilterVenues(VenueFilterREQUEST request);
     }
 }
