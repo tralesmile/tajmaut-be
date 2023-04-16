@@ -8,6 +8,8 @@ using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
 using Azure.Core;
 using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Services.Implementations
 {
@@ -253,6 +255,27 @@ namespace tajmautAPI.Services.Implementations
             try
             {
                 result.Data = await _repo.GetAllVenueCities();
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.ErrorMessage = ex.ErrorMessage;
+            }
+
+            return result;
+        }
+
+        public async Task<ServiceResponse<VenueFilterRESPONSE>> FilterVenues(VenueFilterREQUEST request)
+        {
+            ServiceResponse<VenueFilterRESPONSE> result = new();
+
+            try
+            {
+
+                var response = await _helper.VenuesPagination(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
+
+                result.Data = response;
             }
             catch (CustomError ex)
             {

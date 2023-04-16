@@ -38,9 +38,9 @@ namespace TajmautMK.Core.Services.Implementations
             _config = config;
         }
 
-        public async Task<ServiceResponse<UserRESPONSE>> ForgotPassword(string email)
+        public async Task<ServiceResponse<string>> ForgotPassword(string email)
         {
-            ServiceResponse<UserRESPONSE> result = new();
+            ServiceResponse<string> result = new();
             try
             {
                 if (_helper.ValidateEmailRegex(email))
@@ -48,32 +48,23 @@ namespace TajmautMK.Core.Services.Implementations
                     //1.check if user exists
                     var user = await _repo.GetUserByEmail(email);
 
-                    //2.update forgot password table & generate code
+                    //2.Check if user already has an active request
+                    await _repo.CheckActiveForgotPassRequest(user.UserId);
+
+                    //3.update forgot password table & generate code
                     var token = await _repo.UpdateForgotPassTable(user);
 
-                    //3.Send email
-                    var emailTest = new MimeMessage();
-                    emailTest.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUserName").Value));
-                    emailTest.To.Add(MailboxAddress.Parse(email));
-                    emailTest.Subject = "Заборавена лозинка";
-                    emailTest.Body = new TextPart(TextFormat.Html)
-                    {
-                        Text = "<h1>Здраво " + user.FirstName + "</h1>"
-                        + "<h2>Имаш барање за промена на лозинката!</h2>" +
-                        "<br><p>Ова е твојот токен: " + token + " </p><br>" +
-                        "<p>Кликни на оваа адреса за да ја промениш лозинката: https://tajmautmk.azurewebsites.net/api/Users/UpdateForgotPassword?token=" + token +
-                        "<br><br>Ако не си го направил/а ова барање, тогаш игнорирај ја оваа порака!<br><br>Поздрав ТајмаутМК. 😃</p>"
+                    //4.Send email
+                    var template = _repo.ForgotPasswordTemplate(user, token);
 
+                    var mailSend = new MailSendREQUEST 
+                    {
+                        Template = template,
+                        To = email,
+                        Subject = "Заборавена лозинка",
                     };
 
-                    using var smtp = new SmtpClient();
-                    smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
-                    smtp.Authenticate(_config.GetSection("EmailUserName").Value, _config.GetSection("EmailPassword").Value);
-                    smtp.Send(emailTest);
-
-                    smtp.Disconnect(true);
-
-                    result.Data = _mapper.Map<UserRESPONSE>(user);
+                    result.Data = _repo.MailSender(mailSend);
                 }
             }
             catch (CustomError ex)
@@ -86,13 +77,13 @@ namespace TajmautMK.Core.Services.Implementations
             return result;
         }
 
-        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(string token,ResetPasswordREQUEST request)
+        public async Task<ServiceResponse<ForgotPassEntity>> UpdateForgotPassword(ResetPasswordREQUEST request)
         {
             ServiceResponse<ForgotPassEntity> result = new();
             try
             {
                 //check for token
-                var checkToken = await _repo.ValidateToken(token);
+                var checkToken = await _repo.ValidateToken(request.Token);
 
                 //check date
                 if(checkToken.Expire < DateTime.Now) 

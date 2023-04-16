@@ -1,4 +1,8 @@
 ﻿using tajmautAPI.Models.EntityClasses;
+using tajmautAPI.Models.ModelsRESPONSE;
+using tajmautAPI.Services.Implementations;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Services.Interfaces
 {
@@ -179,5 +183,28 @@ namespace tajmautAPI.Services.Interfaces
         /// <returns>Event if found ,if not CustomError.</returns>
         Task<Event> GetEventByID(int eventId);
 
+        /// <summary>
+        /// Gets the venues by city id
+        /// </summary>
+        /// <param name="cityId">The ID of the venue city to check.</param>
+        /// <returns>List of venues or CustomError.</returns>
+        Task<List<Venue>> GetVenuesByCityId(int cityId);
+
+        /// <summary>
+        /// Events pagination.
+        /// </summary>
+        /// <param name="request">Event filters object.</param>
+        /// <param name="items">Events list.</param>
+        /// <returns>A list of events using pagination.</returns>
+        Task<EventFilterRESPONSE> ItemsPagination(EventFilterREQUEST request,List<EventGetRESPONSE> items);
+
+        /// <summary>
+        /// Venues pagination.
+        /// </summary>
+        /// <param name="request">Venue filters object.</param>
+        /// <param name="items">Venues list.</param>
+        /// <returns>A list of venues using pagination.</returns>
+        Task<VenueFilterRESPONSE> VenuesPagination(VenueFilterREQUEST request, List<VenueRESPONSE> items);
     }
 }
+

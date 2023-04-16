@@ -17,5 +17,6 @@
         public string VenueName { get; set; } = string.Empty;
         public string VenuePhone { get; set; } = string.Empty;
         public string VenueCity { get; set; } = string.Empty;
+        public string CategoryName { get; set; } = string.Empty;
     }
 }

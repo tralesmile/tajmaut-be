@@ -23,5 +23,8 @@ namespace tajmautAPI.Models.ModelsREQUEST
         [Required]
         public string Phone { get; set; }
 
+        [Required]
+        public string VenueImage { get; set; } = null!;
+
     }
 }

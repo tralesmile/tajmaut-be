@@ -10,21 +10,23 @@ namespace tajmautAPI.Models.ModelsRESPONSE
     {
         public int VenueId { get; set; }
 
-        public int VenueTypeId { get; set; }
-
-        public int Venue_CityId { get; set; }
-
         public string Email { get; set; } = null!;
 
         public string Name { get; set; } = null!;
-
-        public string City { get; set; } = null!;
 
         public string Address { get; set; } = null!;
 
         public string Phone { get; set; } = null!;
 
         public int ManagerId { get; set; }
+
+        public string VenueImage { get; set; } = null!;
+
+        public string VenueTypeName { get; set; } = null!;
+
+        public Venue_Types VenueType { get; set; }
+
+        public Venue_City VenueCity { get; set; }
 
     }
 }

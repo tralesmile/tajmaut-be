@@ -2,6 +2,8 @@
 using tajmautAPI.Models.ModelsREQUEST;
 using tajmautAPI.Models.ModelsRESPONSE;
 using tajmautAPI.Services.Implementations;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 
 namespace tajmautAPI.Services.Interfaces
 {
@@ -55,9 +57,9 @@ namespace tajmautAPI.Services.Interfaces
         /// <summary>
         /// Filters events by category.
         /// </summary>
-        /// <param name="categoryId">The ID of the category to filter by.</param>
+        /// <param name="request">Event filters object.</param>
         /// <returns>A service response containing a list of events that match the specified category.</returns>
-        Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByCategory(int categoryId);
+        Task<ServiceResponse<EventFilterRESPONSE>> FilterEvents(EventFilterREQUEST request);
 
         /// <summary>
         /// Filters events by city.
@@ -75,13 +77,6 @@ namespace tajmautAPI.Services.Interfaces
         Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByDate(DateTime startDate, DateTime endDate);
 
         /// <summary>
-        /// Gets additional data for a list of events.
-        /// </summary>
-        /// <param name="events">The list of events to get data for.</param>
-        /// <returns>A list of events with additional data.</returns>
-        Task<List<EventGetRESPONSE>> GetEventsWithOtherData(List<Event> events);
-
-        /// <summary>
         /// Cancels an event.
         /// </summary>
         /// <param name="id">The ID of the event to cancel.</param>
@@ -94,5 +89,12 @@ namespace tajmautAPI.Services.Interfaces
         /// <param name="numEvents">The number of events to retrieve.</param>
         /// <returns>A service response containing a list of the specified number of events.</returns>
         Task<ServiceResponse<List<EventGetRESPONSE>>> GetNumberOfEvents(int numEvents);
+
+        /// <summary>
+        /// Events sorter.
+        /// </summary>
+        /// <param name="items">The events to sort.</param>
+        /// <returns>List of sorted events.</returns>
+        List<Event> SortEvents(List<Event> items);
     }
 }
