@@ -77,13 +77,6 @@ namespace tajmautAPI.Services.Interfaces
         Task<ServiceResponse<List<EventGetRESPONSE>>> FilterEventsByDate(DateTime startDate, DateTime endDate);
 
         /// <summary>
-        /// Gets additional data for a list of events.
-        /// </summary>
-        /// <param name="events">The list of events to get data for.</param>
-        /// <returns>A list of events with additional data.</returns>
-        Task<List<EventGetRESPONSE>> GetEventsWithOtherData(List<Event> events);
-
-        /// <summary>
         /// Cancels an event.
         /// </summary>
         /// <param name="id">The ID of the event to cancel.</param>
@@ -96,5 +89,12 @@ namespace tajmautAPI.Services.Interfaces
         /// <param name="numEvents">The number of events to retrieve.</param>
         /// <returns>A service response containing a list of the specified number of events.</returns>
         Task<ServiceResponse<List<EventGetRESPONSE>>> GetNumberOfEvents(int numEvents);
+
+        /// <summary>
+        /// Events sorter.
+        /// </summary>
+        /// <param name="items">The events to sort.</param>
+        /// <returns>List of sorted events.</returns>
+        List<Event> SortEvents(List<Event> items);
     }
 }

@@ -3,7 +3,11 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using tajmautAPI.Middlewares.Exceptions;
 using tajmautAPI.Models.EntityClasses;
+using tajmautAPI.Models.ModelsRESPONSE;
+using tajmautAPI.Services.Implementations;
 using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Repository.Interfaces;
 
 namespace tajmautAPI.Helper
@@ -328,6 +332,41 @@ namespace tajmautAPI.Helper
         public async Task<List<Venue>> GetVenuesByCityId(int cityId)
         {
             return await _helperRepo.GetVenuesByCityId(cityId);
+        }
+
+        public async Task<EventFilterRESPONSE> ItemsPagination(EventFilterREQUEST request, List<EventGetRESPONSE> items)
+        {
+            var totalItems = items.Count();
+            var itemsPerPage = totalItems;
+            var pageNumber = 1;
+
+            if (items.Count() <= 0)
+            {
+                throw new CustomError(404, $"No events found");
+            }
+
+            if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
+            {
+                itemsPerPage = request.ItemsPerPage.Value;
+                pageNumber = request.PageNumber.Value;
+
+                var pageCount = Math.Ceiling(items.Count() / (double)itemsPerPage);
+
+                items = items
+                    .Skip((pageNumber - 1) * (int)itemsPerPage)
+                    .Take((int)itemsPerPage).ToList();
+
+            }
+
+            var response = new EventFilterRESPONSE
+            {
+                Events = items,
+                PageNumber = pageNumber,
+                ItemsPerPage = itemsPerPage,
+                TotalItems = totalItems,
+            };
+
+            return response;
         }
     }
 }
