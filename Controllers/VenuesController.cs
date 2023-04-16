@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using tajmautAPI.Interfaces_Service;
 using tajmautAPI.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace tajmautAPI.Controllers
 {
@@ -208,6 +209,29 @@ namespace tajmautAPI.Controllers
 
             //if no error
             return Ok(result.Data);
+        }
+
+        /// <summary>
+        /// Filter venues.
+        /// </summary>
+        /// <param name="request">The request with filters.</param>
+        /// <returns>Filtered venues or error.</returns>
+        [HttpPost("FilterVenues"), AllowAnonymous]
+        public async Task<ActionResult> FilterVenues(VenueFilterREQUEST request)
+        {
+
+            var result = await _venueService.FilterVenues(request);
+
+            //check if error exists
+            if (result.isError)
+            {
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
+            }
+
+            //if no error
+            return Ok(result.Data);
+
+
         }
     }
 }

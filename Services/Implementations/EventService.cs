@@ -140,65 +140,9 @@ namespace tajmautAPI.Services.Implementations
             try
             {
 
-                var getFilterResult = await _repo.EventFilter(request);
-                var otherDataEvents = await GetEventsWithOtherData(getFilterResult);
-
-                var totalItems = otherDataEvents.Count();
-                var itemsPerPage = totalItems;
-                var pageNumber = 1;
-
-                if (otherDataEvents.Count() <= 0)
-                {
-                    throw new CustomError(404, $"No events found");
-                }
-
-                if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
-                {
-                    itemsPerPage = request.ItemsPerPage.Value;
-                    pageNumber = request.PageNumber.Value;
-
-                    var pageCount = Math.Ceiling(otherDataEvents.Count() / (double)itemsPerPage);
-
-                    otherDataEvents = otherDataEvents
-                        .Skip((pageNumber - 1) * (int)itemsPerPage)
-                        .Take((int)itemsPerPage).ToList();
-
-                }
-
-                var response = new EventFilterRESPONSE
-                {
-                    Events = otherDataEvents,
-                    PageNumber = pageNumber,
-                    ItemsPerPage = itemsPerPage,
-                    TotalItems = totalItems,
-                };
-
+                var response = await _helper.ItemsPagination(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
 
                 result.Data = response;
-
-                ////invalid input
-                //if (_helper.ValidateId(categoryId))
-                //{
-                //    //check if category exists
-                //    if (await _helper.CheckIdCategory(categoryId))
-                //    {
-                //        var resultEvents = await _repo.GetAllEvents();
-
-                //        if (resultEvents.Count() > 0)
-                //        {
-                //            var listEvents = resultEvents.Where(n => n.CategoryEventId == categoryId).ToList();
-                //            if (listEvents.Count() > 0)
-                //            {
-                //                var resultSend = await GetEventsWithOtherData(listEvents);
-                //                result.Data = resultSend;
-                //            }
-                //            else
-                //            {
-                //                throw new CustomError(404, $"This category has no events");
-                //            }
-                //        }
-                //    }
-                //}
             }
             catch (CustomError ex)
             {
@@ -226,7 +170,8 @@ namespace tajmautAPI.Services.Implementations
                 var resultSend = await _repo.FilterEventsInCity(city);
                 if (resultSend.Count() > 0)
                 {
-                    result.Data = await GetEventsWithOtherData(resultSend);
+                    var sortEvents = SortEvents(resultSend);
+                    result.Data = _mapper.Map<List<EventGetRESPONSE>>(sortEvents);
                 }
             }
             catch (CustomError ex)
@@ -256,7 +201,8 @@ namespace tajmautAPI.Services.Implementations
                     var sendEvents = allEvents.Where(e => e.DateTime >= startDate && e.DateTime <= endDate.AddDays(1)).ToList();
                     if (sendEvents.Count() > 0)
                     {
-                        result.Data = await GetEventsWithOtherData(sendEvents);
+                        var sortEvents = SortEvents(sendEvents);
+                        result.Data = _mapper.Map<List<EventGetRESPONSE>>(sortEvents);
                     }
                     else
                     {
@@ -287,7 +233,8 @@ namespace tajmautAPI.Services.Implementations
 
                 if (getResult.Count() > 0)
                 {
-                    result.Data = await GetEventsWithOtherData(getResult);
+                    var sortedEvents = SortEvents(getResult);
+                    result.Data = _mapper.Map<List<EventGetRESPONSE>>(sortedEvents);
                 }
             }
             catch (CustomError ex)
@@ -321,7 +268,8 @@ namespace tajmautAPI.Services.Implementations
                             var listEvents = allEvents.Where(n => n.VenueId == venueId).ToList();
                             if (listEvents.Count() > 0)
                             {
-                                result.Data = await GetEventsWithOtherData(listEvents);
+                                var sortedEvents = SortEvents(listEvents);
+                                result.Data = _mapper.Map<List<EventGetRESPONSE>>(sortedEvents);
                             }
                             else
                             {
@@ -359,7 +307,7 @@ namespace tajmautAPI.Services.Implementations
 
                     if (resultSend.Count() > 0)
                     {
-                        result.Data = await GetEventsWithOtherData(resultSend);
+                        result.Data = _mapper.Map<List<EventGetRESPONSE>>(resultSend);
                     }
                 }
             }
@@ -371,75 +319,6 @@ namespace tajmautAPI.Services.Implementations
             }
 
             return result;
-        }
-
-        //get other data for the events in sorted list
-        public async Task<List<EventGetRESPONSE>> GetEventsWithOtherData(List<Event> events)
-        {
-            if (events != null)
-            {
-                //date
-                var now = DateTime.Now;
-
-                var eventsGet = new List<EventGetRESPONSE>();
-
-                //check status and add events
-                foreach (var ev in events)
-                {
-                    //to get the name and phone of the restaurant
-                    var venue = await _repo.GetVenueById(ev.VenueId);
-
-                    //update status of event
-                    var statusEvent = new EventStatus();
-                    if (!ev.isCanceled)
-                    {
-                        if(ev.DateTime>now)
-                        {
-                            statusEvent = EventStatus.Upcoming;
-                        }else if(ev.DateTime.AddHours((int)ev.Duration) > now)
-                        {
-                            statusEvent = EventStatus.Ongoing;
-                        }
-                        else
-                        {
-                            statusEvent = EventStatus.Ended;
-                        }
-                        //statusEvent = ev.DateTime > now ? "Upcoming"
-                        //: ev.DateTime.AddHours(1) > now ? "Ongoing"
-                        //: "Ended";
-                    }
-                    else
-                    {
-                        statusEvent = EventStatus.Canceled;
-                    }
-
-                    //add event
-                    eventsGet.Add(new EventGetRESPONSE
-                    {
-                        EventId = ev.EventId,
-                        CategoryEventId = ev.CategoryEventId,
-                        VenueId = ev.VenueId,
-                        Name = ev.Name,
-                        Description = ev.Description,
-                        EventImage = ev.EventImage,
-                        DateTime = ev.DateTime,
-                        isCanceled = ev.isCanceled,
-                        VenueName = venue.Name,
-                        VenuePhone = venue.Phone,
-                        StatusEvent = statusEvent.ToString(),
-                        Duration= ev.Duration,
-                        VenueCity = venue.Venue_City.CityName,
-                        CategoryName = ev.CategoryEvent.Name,
-                    });
-
-                }
-
-                //sort event
-                eventsGet.Sort((x, y) => x.DateTime.CompareTo(y.DateTime));
-
-                return eventsGet.ToList();
-            }
-            return null;
         }
 
         //get number of events
@@ -453,51 +332,18 @@ namespace tajmautAPI.Services.Implementations
                 //get all events
                 var allEvents = await _repo.GetAllEvents();
 
-                //check if any
-                if (allEvents.Count() > 0)
-                {
-                    var now = DateTime.Now;
-                    //upcoming events filter
-                    var upcomingEvents = allEvents.Where(x => x.DateTime > now).OrderBy(x => x.DateTime).ToList();
+                var now = DateTime.Now;
+                //upcoming events filter
+                var upcomingEvents = allEvents.Where(x => x.DateTime > now).OrderBy(x => x.DateTime).ToList();
 
                     //check if any
                     if (upcomingEvents.Count() > 0)
                     {
-
-                        var getEvents = new List<EventGetRESPONSE>();
-
-                        foreach (var ev in upcomingEvents)
-                        {
-                            if (!ev.isCanceled)
-                            {
-                                //get the event restaurant
-                                var venue = await _repo.GetVenueById(ev.VenueId);
-
-                                getEvents.Add(new EventGetRESPONSE
-                                {
-                                    EventId = ev.EventId,
-                                    CategoryEventId = ev.CategoryEventId,
-                                    VenueId = ev.VenueId,
-                                    Name = ev.Name,
-                                    Description = ev.Description,
-                                    EventImage = ev.EventImage,
-                                    DateTime = ev.DateTime,
-                                    isCanceled = ev.isCanceled,
-                                    VenueName = venue.Name,
-                                    VenuePhone = venue.Phone,
-                                    StatusEvent = EventStatus.Upcoming.ToString(),
-                                    Duration = ev.Duration,
-                                    VenueCity = venue.Venue_City.CityName,
-                                    CategoryName = ev.CategoryEvent.Name,
-                                });
-                            }
-                        }
-
-                        //sord events by date
-                        getEvents.Sort((x, y) => x.DateTime.CompareTo(y.DateTime));
+                        var sortEvents = _mapper.Map<List<EventGetRESPONSE>>(SortEvents(upcomingEvents));
+                        
 
                         //take num events
-                        var getNumEvents = getEvents.Take(numEvents).ToList();
+                        var getNumEvents = sortEvents.Take(numEvents).ToList();
 
                         result.Data = getNumEvents;
 
@@ -506,7 +352,7 @@ namespace tajmautAPI.Services.Implementations
                     {
                         throw new CustomError(404, $"No upcoming events");
                     }
-                }
+               
             }
             catch (CustomError ex)
             {
@@ -516,6 +362,13 @@ namespace tajmautAPI.Services.Implementations
             }
 
             return result;
+        }
+
+        public List<Event> SortEvents(List<Event> items)
+        {
+            items.Sort((x, y) => x.DateTime.CompareTo(y.DateTime));
+
+            return items.ToList();
         }
 
         //update event

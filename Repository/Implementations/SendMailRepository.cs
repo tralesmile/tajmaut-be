@@ -156,5 +156,18 @@ namespace TajmautMK.Repository.Implementations
 
             return "Success";
         }
+
+        public async Task<bool> CheckActiveForgotPassRequest(int id)
+        {
+            var now = DateTime.Now;
+            var check = await _ctx.ForgotPassEntity.FirstOrDefaultAsync(x=> x.UserId==id && x.Expire > now);
+             
+            if (check != null)
+            {
+                throw new CustomError(400, $"Email has been sent");
+            }
+
+            return true;
+        }
     }
 }

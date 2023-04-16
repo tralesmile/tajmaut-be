@@ -48,10 +48,13 @@ namespace TajmautMK.Core.Services.Implementations
                     //1.check if user exists
                     var user = await _repo.GetUserByEmail(email);
 
-                    //2.update forgot password table & generate code
+                    //2.Check if user already has an active request
+                    await _repo.CheckActiveForgotPassRequest(user.UserId);
+
+                    //3.update forgot password table & generate code
                     var token = await _repo.UpdateForgotPassTable(user);
 
-                    //3.Send email
+                    //4.Send email
                     var template = _repo.ForgotPasswordTemplate(user, token);
 
                     var mailSend = new MailSendREQUEST 

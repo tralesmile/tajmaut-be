@@ -2,6 +2,7 @@
 using tajmautAPI.Models;
 using tajmautAPI.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace TajmautMK.Repository.Interfaces
 {
@@ -128,5 +129,12 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="venueCityId">The ID of the venue city to check.</param>
         /// <returns>True if the venue city exists, false otherwise.</returns>
         Task<bool> CheckVenueCityId(int venueCityId);
+
+        /// <summary>
+        /// Filter venues.
+        /// </summary>
+        /// <param name="request">Request object containing the filters.</param>
+        /// <returns>Returns filtered venues.</returns>
+        Task<List<Venue>> VenuesFilter(VenueFilterREQUEST request);
     }
 }

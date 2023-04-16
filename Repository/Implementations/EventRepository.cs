@@ -82,30 +82,25 @@ namespace TajmautMK.Repository.Implementations
         {
             if (request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
             {
-                var selectedFilter = await _ctx.Events.Include(x => x.Venue).Include(x => x.CategoryEvent).ToListAsync();
 
-                if (request.CategoryId.HasValue)
+                if(!request.StartDate.HasValue)
                 {
-                    selectedFilter = selectedFilter.Where(x => x.CategoryEventId == request.CategoryId).ToList();
-                }
-
-                if (request.CityId.HasValue)
-                {
-                    selectedFilter = selectedFilter.Where(x => x.Venue.Venue_CityId == request.CityId).ToList();
+                    request.StartDate = _ctx.Events.Min(x=>x.DateTime);
                 }
 
-                if (request.StartDate.HasValue && request.EndDate.HasValue)
+                if(!request.EndDate.HasValue)
                 {
-                    selectedFilter = selectedFilter.Where(x => x.DateTime >= request.StartDate && x.DateTime <= request.EndDate.Value.AddDays(1)).ToList();
+                    request.EndDate = _ctx.Events.Max(x=>x.DateTime);
                 }
-                else if (request.StartDate.HasValue)
-                {
-                    selectedFilter = selectedFilter.Where(x => x.DateTime >= request.StartDate).ToList();
-                }
-                else if (request.EndDate.HasValue)
-                {
-                    selectedFilter = selectedFilter.Where(x => x.DateTime <= request.EndDate.Value.AddDays(1)).ToList();
-                }
+
+                var selectedFilter = await _ctx.Events
+                    .Include(x => x.Venue)
+                    .Include(x => x.CategoryEvent)
+                    .Where(x=>
+                    (!request.CategoryId.HasValue || x.CategoryEventId==request.CategoryId) && 
+                    (!request.CityId.HasValue || x.Venue.Venue_CityId == request.CityId) && 
+                    (x.DateTime >= request.StartDate && x.DateTime <= request.EndDate.Value.AddDays(1)))
+                    .ToListAsync();
 
                 if (selectedFilter.Count() > 0)
                 {
@@ -148,7 +143,7 @@ namespace TajmautMK.Repository.Implementations
         //get all events
         public async Task<List<Event>> GetAllEvents()
         {
-            var check = await _ctx.Events.Include(x => x.CategoryEvent).ToListAsync();
+            var check = await _ctx.Events.Include(x => x.CategoryEvent).Include(x=>x.Venue).Include(x=>x.Venue.Venue_City).ToListAsync();
             if (check.Count() > 0)
             {
                 return check;
@@ -161,7 +156,7 @@ namespace TajmautMK.Repository.Implementations
         //get event by id
         public async Task<List<Event>> GetEventById(int eventId)
         {
-            var check = await _ctx.Events.Include(x => x.CategoryEvent).Where(n => n.EventId == eventId).ToListAsync();
+            var check = await _ctx.Events.Include(x => x.CategoryEvent).Include(x=>x.Venue).Include(x=>x.Venue.Venue_City).Where(n => n.EventId == eventId).ToListAsync();
             if (check.Count() > 0)
             {
                 return check;
@@ -173,7 +168,7 @@ namespace TajmautMK.Repository.Implementations
         //get restaurant by id
         public async Task<Venue> GetVenueById(int id)
         {
-            return await _ctx.Venues.Include(x=>x.Venue_City).FirstOrDefaultAsync(n => n.VenueId == id);
+            return await _ctx.Venues.Include(x => x.Venue_City).FirstOrDefaultAsync(n => n.VenueId == id);
         }
 
         //save updates in DB
@@ -188,7 +183,7 @@ namespace TajmautMK.Repository.Implementations
             getEvent.Name = request.Name;
             getEvent.ModifiedBy = currentUserID;
             getEvent.ModifiedAt = DateTime.Now;
-            getEvent.Duration= request.Duration;
+            getEvent.Duration = request.Duration;
 
             await _ctx.SaveChangesAsync();
 
