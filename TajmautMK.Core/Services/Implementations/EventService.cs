@@ -132,15 +132,21 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //filter events by category
-        public async Task<ServiceResponse<EventFilterRESPONSE>> FilterEvents(EventFilterREQUEST request)
+        public async Task<ServiceResponse<FilterRESPONSE<EventGetRESPONSE>>> FilterEvents(EventFilterREQUEST request)
         {
 
-            ServiceResponse<EventFilterRESPONSE> result = new();
+            ServiceResponse<FilterRESPONSE<EventGetRESPONSE>> result = new();
 
             try
             {
 
-                var response = await _helper.ItemsPagination(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
+                var requestSend = new BaseFilterREQUEST
+                {
+                    ItemsPerPage = request.ItemsPerPage,
+                    PageNumber = request.PageNumber,
+                };
+
+                var response = _helper.Paginator(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
 
                 result.Data = response;
             }

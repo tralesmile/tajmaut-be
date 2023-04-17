@@ -59,7 +59,7 @@ namespace tajmautAPI.Services.Interfaces
         /// </summary>
         /// <param name="request">Event filters object.</param>
         /// <returns>A service response containing a list of events that match the specified category.</returns>
-        Task<ServiceResponse<EventFilterRESPONSE>> FilterEvents(EventFilterREQUEST request);
+        Task<ServiceResponse<FilterRESPONSE<EventGetRESPONSE>>> FilterEvents(EventFilterREQUEST request);
 
         /// <summary>
         /// Filters events by city.

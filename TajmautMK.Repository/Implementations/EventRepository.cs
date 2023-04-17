@@ -96,6 +96,7 @@ namespace TajmautMK.Repository.Implementations
                 var selectedFilter = await _ctx.Events
                     .Include(x => x.Venue)
                     .Include(x => x.CategoryEvent)
+                    .Include(x => x.Venue.Venue_City)
                     .Where(x=>
                     (!request.CategoryId.HasValue || x.CategoryEventId==request.CategoryId) && 
                     (!request.CityId.HasValue || x.Venue.Venue_CityId == request.CityId) && 

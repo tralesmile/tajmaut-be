@@ -266,16 +266,24 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
-        public async Task<ServiceResponse<VenueFilterRESPONSE>> FilterVenues(VenueFilterREQUEST request)
+        public async Task<ServiceResponse<FilterRESPONSE<VenueRESPONSE>>> FilterVenues(VenueFilterREQUEST request)
         {
-            ServiceResponse<VenueFilterRESPONSE> result = new();
+            ServiceResponse<FilterRESPONSE<VenueRESPONSE>> result = new();
 
             try
             {
 
-                var response = await _helper.VenuesPagination(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
+                var requestSend = new BaseFilterREQUEST 
+                { 
+                    ItemsPerPage= request.ItemsPerPage,
+                    PageNumber= request.PageNumber,
+                };
+
+
+                var response = _helper.Paginator(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
 
                 result.Data = response;
+
             }
             catch (CustomError ex)
             {
