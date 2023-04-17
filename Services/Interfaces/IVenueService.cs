@@ -79,6 +79,6 @@ namespace tajmautAPI.Interfaces_Service
         /// </summary>
         /// <param name="request">Venues filters object.</param>
         /// <returns>A service response containing a list of venues that match the specified filters.</returns>
-        Task<ServiceResponse<VenueFilterRESPONSE>> FilterVenues(VenueFilterREQUEST request);
+        Task<ServiceResponse<FilterRESPONSE<VenueRESPONSE>>> FilterVenues(VenueFilterREQUEST request);
     }
 }
