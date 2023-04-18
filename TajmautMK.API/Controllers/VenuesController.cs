@@ -234,6 +234,27 @@ namespace tajmautAPI.Controllers
 
         }
 
-        //TODO: Get all venues by manager
+        /// <summary>
+        /// Get all venues by manager id.
+        /// </summary>
+        /// <param name="managerId">Manager ID to search.</param>
+        /// <returns>List of all venues.</returns>
+        [HttpGet("GetAllVenuesByManager"), Authorize(Roles ="Manager,Admin")]
+        public async Task<ActionResult> GetAllVenuesByManager(int managerId)
+        {
+
+            var result = await _venueService.GetAllVenuesByManager(managerId);
+
+            //check if error exists
+            if (result.isError)
+            {
+                return StatusCode((int)result.statusCode, result.ErrorMessage);
+            }
+
+            //if no error
+            return Ok(result.Data);
+
+
+        }
     }
 }

@@ -263,5 +263,21 @@ namespace TajmautMK.Repository.Implementations
             }
             throw new CustomError(404, $"No venues found");
         }
+
+        public async Task<List<Venue>> GetAllVenuesByManager(int managerID)
+        {
+            var check = await _context.Venues
+                .Include(x=>x.Events)
+                .Include(x=>x.VenueType)
+                .Include(x=>x.Venue_City)
+                .Where(x=>x.ManagerId== managerID).ToListAsync();
+
+            if(check.Count()>0)
+            {
+                return check;
+            }
+
+            throw new CustomError(404, $"No data found");
+        }
     }
 }

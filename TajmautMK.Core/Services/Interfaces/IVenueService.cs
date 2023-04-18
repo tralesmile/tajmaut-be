@@ -80,5 +80,12 @@ namespace tajmautAPI.Interfaces_Service
         /// <param name="request">Venues filters object.</param>
         /// <returns>A service response containing a list of venues that match the specified filters.</returns>
         Task<ServiceResponse<FilterRESPONSE<VenueRESPONSE>>> FilterVenues(VenueFilterREQUEST request);
+
+        /// <summary>
+        /// Get all venues by manager ID.
+        /// </summary>
+        /// <param name="managerId">The ID of the manager to filter by.</param>
+        /// <returns>List of all venues with specified manager ID.</returns>
+        Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenuesByManager(int managerId);
     }
 }

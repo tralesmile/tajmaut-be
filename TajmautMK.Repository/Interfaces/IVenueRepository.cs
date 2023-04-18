@@ -136,5 +136,12 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="request">Request object containing the filters.</param>
         /// <returns>Returns filtered venues.</returns>
         Task<List<Venue>> VenuesFilter(VenueFilterREQUEST request);
+
+        /// <summary>
+        /// Search for the specified manager ID.
+        /// </summary>
+        /// <param name="managerID">Manager ID to check.</param>
+        /// <returns>Venue object or error.</returns>
+        Task<List<Venue>> GetAllVenuesByManager(int managerID);
     }
 }
