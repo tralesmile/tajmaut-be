@@ -233,5 +233,7 @@ namespace tajmautAPI.Controllers
 
 
         }
+
+        //TODO: Get all venues by manager
     }
 }

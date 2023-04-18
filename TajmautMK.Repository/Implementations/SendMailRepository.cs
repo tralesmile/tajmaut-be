@@ -169,5 +169,23 @@ namespace TajmautMK.Repository.Implementations
 
             return true;
         }
+
+        public string ConfirmReservationTemplate(OnlineReservation reservation)
+        {
+            var status = reservation.IsActive ? "Пpифатена" : "На чекање";
+
+            var template = "<h1>Здраво " + reservation.User.FirstName + "</h1>"
+                        + "<h2>Овој емаил содржи детали за твојата резервација на настанот " + reservation.Event.Name + " во " + reservation.Venue.Name + "!</h2>" +
+                        "<p>Статус на резервацијата: " + status +
+                        "<br>Е-пошта: " + reservation.Email +
+                        "<br>Име на резервацијата: " + reservation.FirstName + " " + reservation.LastName + 
+                        "<br>Телефон: " + reservation.Phone +
+                        "<br>Број на гости: " + reservation.NumberGuests + 
+                        "<br>Име на настан: " + reservation.Event.Name +
+                        "<br><br>За било какви информации обратете се на: " + reservation.Venue.Email + " , " + reservation.Venue.Phone + 
+                        "<br>Ако не си ја направил/а оваа резервација, тогаш игнорирај ја оваа порака!<br><br>Поздрав ТајмаутМК. 😃</p>";
+
+            return template;
+        }
     }
 }

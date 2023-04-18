@@ -96,7 +96,11 @@ namespace TajmautMK.Repository.Implementations
         //reservation by id
         public async Task<OnlineReservation> GetReservationByID(int reservationId)
         {
-            var check = await _ctx.OnlineReservations.FindAsync(reservationId);
+            var check = await _ctx.OnlineReservations
+                .Include(x=>x.Venue)
+                .Include(x=>x.User)
+                .Include(x=>x.Event)
+                .FirstOrDefaultAsync(x=>x.OnlineReservationId==reservationId);
             if (check != null)
             {
                 return check;

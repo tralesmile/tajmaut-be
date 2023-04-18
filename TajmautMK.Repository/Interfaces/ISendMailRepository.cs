@@ -63,6 +63,13 @@ namespace TajmautMK.Repository.Interfaces
         string ForgotPasswordTemplate(User user,string token);
 
         /// <summary>
+        /// Reservation confirmation email template.
+        /// </summary>
+        /// <param name="reservation">The reservation of the user.</param>
+        /// <returns>String with the body</returns>
+        string ConfirmReservationTemplate(OnlineReservation reservation);
+
+        /// <summary>
         /// Forgot password mail sender.
         /// </summary>
         /// <param name="request">Object for mail send.</param>
