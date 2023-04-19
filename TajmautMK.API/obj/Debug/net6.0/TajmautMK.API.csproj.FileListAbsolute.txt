@@ -105,3 +105,4 @@ D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\MimeKit.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\BouncyCastle.Crypto.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\obj\Debug\net6.0\TajmautMK.API.Properties.Resources.resources
 D:\TRAJCE\C#\TajmautMK\TajmautMK.API\obj\Debug\net6.0\TajmautMK.API.csproj.GenerateResource.cache
+D:\TRAJCE\C#\TajmautMK\TajmautMK.API\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

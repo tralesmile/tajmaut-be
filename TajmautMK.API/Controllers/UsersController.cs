@@ -1,15 +1,9 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MimeKit;
-using MimeKit.Text;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Core.Services.Interfaces;
 
-namespace tajmautAPI.Controllers
+namespace TajmautMK.API.Controllers
 {
     /// <summary>
     /// Controller for managing user accounts.

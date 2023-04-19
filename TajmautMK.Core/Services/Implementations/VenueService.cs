@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
 using TajmautMK.Repository.Interfaces;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Interfaces;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using Azure.Core;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Core.Services.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class VenueService : IVenueService
     {

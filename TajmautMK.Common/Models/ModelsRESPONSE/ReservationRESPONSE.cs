@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace tajmautAPI.Models.ModelsRESPONSE
+namespace TajmautMK.Common.Models.ModelsRESPONSE
 {
     public class ReservationRESPONSE
     {

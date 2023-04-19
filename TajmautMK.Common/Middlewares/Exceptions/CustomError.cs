@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace tajmautAPI.Middlewares.Exceptions
+namespace TajmautMK.Common.Middlewares.Exceptions
 {
     public class CustomError : Exception
     {

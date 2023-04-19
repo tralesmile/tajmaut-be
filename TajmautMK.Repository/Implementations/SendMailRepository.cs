@@ -2,22 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using MimeKit.Text;
 using MimeKit;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Repository.Interfaces;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Data;
+using TajmautMK.Common.Middlewares.Exceptions;
+
 
 namespace TajmautMK.Repository.Implementations
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace tajmautAPI.Models.ModelsREQUEST
+namespace TajmautMK.Common.Models.ModelsREQUEST
 {
     public class CommentREQUEST
     {

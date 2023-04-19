@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
 namespace TajmautMK.Repository.Implementations
 {

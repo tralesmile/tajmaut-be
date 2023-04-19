@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Core.Services.Interfaces;
 
-namespace tajmautAPI.Controllers
+namespace TajmautMK.API.Controllers
 {
     /// <summary>
     /// Controller responsible for handling authentication requests.

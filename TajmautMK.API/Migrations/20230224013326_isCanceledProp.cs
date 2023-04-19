@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace tajmautAPI.Migrations
+namespace TajmautMK.API.Migrations
 {
     /// <inheritdoc />
     public partial class isCanceledProp : Migration

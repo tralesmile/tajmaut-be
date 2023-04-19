@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Core.Services.Interfaces;
 
-namespace tajmautAPI.Controllers
+namespace TajmautMK.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

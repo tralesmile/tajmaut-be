@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using TajmautMK.Common.Models.EntityClasses;
 
-namespace tajmautAPI.Models.EntityClasses
+namespace TajmautMK.Common.Models.EntityClasses
 {
     public class Venue
     {

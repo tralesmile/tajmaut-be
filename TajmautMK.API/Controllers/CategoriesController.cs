@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
+using TajmautMK.Core.Services.Interfaces;
+using TajmautMK.Common.Models.ModelsREQUEST;
 
-namespace tajmautAPI.Controllers
+namespace TajmautMK.API.Controllers
 {
     /// <summary>
     /// Controller for handling category related operations.
