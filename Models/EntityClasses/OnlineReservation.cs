@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace tajmautAPI.Models.EntityClasses
+namespace TajmautMK.Common.Models.EntityClasses
 {
     public class OnlineReservation
     {

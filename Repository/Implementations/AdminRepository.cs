@@ -1,7 +1,7 @@
-﻿using tajmautAPI.Data;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Services.Interfaces;
+﻿using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Repository.Implementations

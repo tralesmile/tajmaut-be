@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using TajmautMK.Common.Models.ModelsREQUEST;
-using TajmautMK.Common.Services.Interfaces;
+using TajmautMK.Core.Services.Interfaces;
 
 namespace TajmautMK.API.Controllers
 {

@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
 using TajmautMK.Repository.Interfaces;
-using tajmautAPI.Services.Interfaces;
-using System.Security.Cryptography;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Core.Services.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class UserService : IUserService
     {

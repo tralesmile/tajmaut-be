@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace tajmautAPI.Migrations
+namespace TajmautMK.API.Migrations
 {
     /// <inheritdoc />
     public partial class updateRestaurantProps : Migration

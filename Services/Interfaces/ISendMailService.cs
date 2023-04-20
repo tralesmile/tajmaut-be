@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Implementations;
-using TajmautMK.Common.Models.EntityClasses;
+﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Services.Implementations;
 
 namespace TajmautMK.Core.Services.Interfaces
 {

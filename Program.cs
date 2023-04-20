@@ -4,17 +4,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using tajmautAPI.Services.Implementations;
-using tajmautAPI.Services.Interfaces;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Data;
-using tajmautAPI.Helper;
-using TajmautMK.Common.Services.Interfaces;
 using TajmautMK.Core.Services.Implementations;
 using TajmautMK.Repository.Implementations;
 using TajmautMK.Repository.Interfaces;
 using TajmautMK.Core.Services.Interfaces;
+using TajmautMK.API.Helper;
+using TajmautMK.Data;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 

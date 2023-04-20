@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -96,7 +95,11 @@ namespace TajmautMK.Repository.Implementations
         //reservation by id
         public async Task<OnlineReservation> GetReservationByID(int reservationId)
         {
-            var check = await _ctx.OnlineReservations.FindAsync(reservationId);
+            var check = await _ctx.OnlineReservations
+                .Include(x=>x.Venue)
+                .Include(x=>x.User)
+                .Include(x=>x.Event)
+                .FirstOrDefaultAsync(x=>x.OnlineReservationId==reservationId);
             if (check != null)
             {
                 return check;

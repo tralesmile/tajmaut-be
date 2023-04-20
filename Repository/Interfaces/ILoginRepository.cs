@@ -1,4 +1,4 @@
-﻿using tajmautAPI.Models.EntityClasses;
+﻿using TajmautMK.Common.Models.EntityClasses;
 
 namespace TajmautMK.Repository.Interfaces
 {

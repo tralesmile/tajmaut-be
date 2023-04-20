@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsRESPONSE;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.Enums;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 
-namespace tajmautAPI.AutoMapper
+namespace TajmautMK.API.AutoMapper
 {
     public class AutoMapperProfile : Profile
     {

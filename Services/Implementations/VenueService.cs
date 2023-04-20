@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
 using TajmautMK.Repository.Interfaces;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Interfaces;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using Azure.Core;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Core.Services.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class VenueService : IVenueService
     {
@@ -284,6 +281,26 @@ namespace tajmautAPI.Services.Implementations
 
                 result.Data = response;
 
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.ErrorMessage = ex.ErrorMessage;
+            }
+
+            return result;
+        }
+
+        public async Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenuesByManager(int managerId)
+        {
+            ServiceResponse<List<VenueRESPONSE>> result = new();
+
+            try
+            {
+                var venues = await _repo.GetAllVenuesByManager(managerId);
+
+                result.Data = _mapper.Map<List<VenueRESPONSE>>(venues);
             }
             catch (CustomError ex)
             {

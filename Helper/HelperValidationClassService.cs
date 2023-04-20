@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text.RegularExpressions;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Implementations;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
+using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Repository.Interfaces;
 
-namespace tajmautAPI.Helper
+namespace TajmautMK.API.Helper
 {
     /// <summary>
     /// Service for performing validation checks and getting information related to users, events, and reservations.

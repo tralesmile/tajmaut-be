@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Implementations;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 using TajmautMK.Common.Models.ModelsREQUEST;
-using TajmautMK.Common.Services.Interfaces;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Core.Services.Interfaces;
 using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Core.Services.Implementations

@@ -2,22 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using MimeKit.Text;
 using MimeKit;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Repository.Interfaces;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Data;
+using TajmautMK.Common.Middlewares.Exceptions;
+
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -168,6 +161,24 @@ namespace TajmautMK.Repository.Implementations
             }
 
             return true;
+        }
+
+        public string ConfirmReservationTemplate(OnlineReservation reservation)
+        {
+            var status = reservation.IsActive ? "Пpифатена" : "На чекање";
+
+            var template = "<h1>Здраво " + reservation.User.FirstName + "</h1>"
+                        + "<h2>Овој емаил содржи детали за твојата резервација на настанот " + reservation.Event.Name + " во " + reservation.Venue.Name + "!</h2>" +
+                        "<p>Статус на резервацијата: " + status +
+                        "<br>Е-пошта: " + reservation.Email +
+                        "<br>Име на резервацијата: " + reservation.FirstName + " " + reservation.LastName + 
+                        "<br>Телефон: " + reservation.Phone +
+                        "<br>Број на гости: " + reservation.NumberGuests + 
+                        "<br>Име на настан: " + reservation.Event.Name +
+                        "<br><br>За било какви информации обратете се на: " + reservation.Venue.Email + " , " + reservation.Venue.Phone + 
+                        "<br>Ако не си ја направил/а оваа резервација, тогаш игнорирај ја оваа порака!<br><br>Поздрав ТајмаутМК. 😃</p>";
+
+            return template;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
+﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace TajmautMK.Repository.Interfaces

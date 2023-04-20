@@ -1,10 +1,8 @@
-﻿using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Implementations;
+﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 
-namespace tajmautAPI.Services.Interfaces
+namespace TajmautMK.Common.Interfaces
 {
     /// <summary>
     /// Service for validation helper methods

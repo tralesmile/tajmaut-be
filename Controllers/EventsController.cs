@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Core.Services.Interfaces;
 
-namespace tajmautAPI.Controllers
+namespace TajmautMK.API.Controllers
 {
     /// <summary>
     /// This controller manages all operations related to events.

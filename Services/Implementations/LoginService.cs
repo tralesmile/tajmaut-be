@@ -3,12 +3,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
 using TajmautMK.Repository.Interfaces;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Core.Services.Interfaces;
+using TajmautMK.Common.Models.EntityClasses;
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class LoginService : ILoginService
     {
