@@ -142,8 +142,8 @@ namespace TajmautMK.API.Controllers
         /// Get the ID of the current user.
         /// </summary>
         /// <returns>Returns the ID of the current user.</returns>
-        [HttpGet("GetCurrentUserID"), Authorize(Roles ="Admin")]
-        public ActionResult<int> GetCurrentUserEmail()
+        [HttpGet("GetCurrentUserID"), Authorize]
+        public ActionResult<int> GetCurrentUserID()
         {
             var userEmail = _userService.GetMe();
             return Ok(userEmail);
