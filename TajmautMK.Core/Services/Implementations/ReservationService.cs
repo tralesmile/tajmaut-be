@@ -67,9 +67,12 @@ namespace TajmautMK.Core.Services.Implementations
                                                 //check if current user is the entered user || role is admin,manager
                                                 if (request.UserId == currentUserID || _helper.CheckUserAdminOrManager())
                                                 {
-                                                    var resultSend = await _repo.CreateReservation(request);
+                                                    if (await _repo.CheckNumReservations(request))
+                                                    {
+                                                        var resultSend = await _repo.CreateReservation(request);
 
-                                                    result.Data = _mapper.Map<ReservationRESPONSE>(resultSend);
+                                                        result.Data = _mapper.Map<ReservationRESPONSE>(resultSend);
+                                                    }
                                                 }
                                                 else
                                                 {
