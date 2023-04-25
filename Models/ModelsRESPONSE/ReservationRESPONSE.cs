@@ -23,5 +23,8 @@ namespace TajmautMK.Common.Models.ModelsRESPONSE
         public string Email { get; set; } = null!;
 
         public bool IsActive { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
     }
 }
