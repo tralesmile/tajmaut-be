@@ -226,12 +226,3 @@ namespace TajmautMK.Repository.Implementations
         }
     }
 }
-
-
-//{
-//    "categoryId": null,
-//  "cityId": null,
-//  "startDate": null,
-//  "endDate": null
-//}
-
