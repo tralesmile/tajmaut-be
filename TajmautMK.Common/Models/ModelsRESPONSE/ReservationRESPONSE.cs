@@ -26,5 +26,7 @@ namespace TajmautMK.Common.Models.ModelsRESPONSE
 
         public DateTime CreatedAt { get; set; }
 
+        public string EventName { get; set; } = null!;
+
     }
 }

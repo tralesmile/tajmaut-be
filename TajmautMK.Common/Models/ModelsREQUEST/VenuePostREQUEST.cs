@@ -9,6 +9,7 @@ namespace TajmautMK.Common.Models.ModelsREQUEST
         public string Email { get; set; }
 
         [Required]
+        [RegularExpression(@"^[1-9]\d*$", ErrorMessage = "The value must be greater than 0.")]
         public int VenueTypeId { get; set; }
 
         [Required]
@@ -18,6 +19,7 @@ namespace TajmautMK.Common.Models.ModelsREQUEST
         public string Address { get; set; }
 
         [Required]
+        [RegularExpression(@"^[1-9]\d*$", ErrorMessage = "The value must be greater than 0.")]
         public int Venue_CityId { get; set; }
 
         [Required]

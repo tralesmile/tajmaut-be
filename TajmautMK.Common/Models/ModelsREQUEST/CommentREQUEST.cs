@@ -5,6 +5,7 @@ namespace TajmautMK.Common.Models.ModelsREQUEST
     public class CommentREQUEST
     {
         [Required]
+        [RegularExpression(@"^[1-9]\d*$", ErrorMessage = "The value must be greater than 0.")]
         public int VenueId { get; set; }
 
         [Required]
