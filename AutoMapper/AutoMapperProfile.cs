@@ -16,6 +16,7 @@ namespace TajmautMK.API.AutoMapper
             CreateMap<OnlineReservation, ReservationRESPONSE>()
                 .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.Event.Name));
 
+
             CreateMap<Comment, CommentRESPONSE>();
 
             CreateMap<CategoryEvent, CategoryRESPONSE>();

@@ -55,5 +55,12 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="onlineReservation">The reservation to change the status for</param>
         /// <returns>True if the status was changed successfully, false otherwise</returns>
         Task<bool> ChangeReservationStatus(OnlineReservation onlineReservation);
+
+        /// <summary>
+        /// Checks if the user has less than 5 reservations on an event.The limit of users reservations on same event is 5
+        /// </summary>
+        /// <param name="request">The reservation request object</param>
+        /// <returns>True if user has less than 5 reservations otherwise false</returns>
+        Task<bool> CheckNumReservations(ReservationREQUEST request);
     }
 }

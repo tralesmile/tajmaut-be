@@ -35,6 +35,17 @@ namespace TajmautMK.Repository.Implementations
             return true;
         }
 
+        public async Task<bool> CheckNumReservations(ReservationREQUEST request)
+        {
+            var check = await _ctx.OnlineReservations.Where(x=> x.EventId == request.EventId && x.UserId == request.UserId).ToListAsync();
+            if(check.Count() < 5)
+            {
+                return true;
+            }
+
+            throw new CustomError(400, $"This user can't make more than 5 reservations on same event");
+        }
+
         //create reservations and save to DB
         public async Task<OnlineReservation> CreateReservation(ReservationREQUEST request)
         {
@@ -83,7 +94,7 @@ namespace TajmautMK.Repository.Implementations
         //all reservations
         public async Task<List<OnlineReservation>> GetAllReservations()
         {
-            var result = await _ctx.OnlineReservations.Include(x=>x.Event).ToListAsync();
+            var result = await _ctx.OnlineReservations.Include(x => x.Event).ToListAsync();
             if (result.Count() > 0)
             {
                 return result;
