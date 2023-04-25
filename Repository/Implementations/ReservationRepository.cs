@@ -83,7 +83,7 @@ namespace TajmautMK.Repository.Implementations
         //all reservations
         public async Task<List<OnlineReservation>> GetAllReservations()
         {
-            var result = await _ctx.OnlineReservations.ToListAsync();
+            var result = await _ctx.OnlineReservations.Include(x=>x.Event).ToListAsync();
             if (result.Count() > 0)
             {
                 return result;
