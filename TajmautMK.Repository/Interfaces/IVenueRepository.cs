@@ -36,12 +36,11 @@ namespace TajmautMK.Repository.Interfaces
         Task<Venue> CreateVenueAsync(VenuePostREQUEST request);
 
         /// <summary>
-        /// Updates an existing venue.
+        /// Get venue by ID.
         /// </summary>
-        /// <param name="request">The request containing updated information about the venue.</param>
         /// <param name="venueId">The ID of the venue to update.</param>
-        /// <returns>The updated venue.</returns>
-        Task<Venue> UpdateVenueAsync(VenuePutREQUEST request, int venueId);
+        /// <returns>The venue.</returns>
+        Task<Venue> GetVenueByID(int venueId);
 
         /// <summary>
         /// Saves changes to a venue.

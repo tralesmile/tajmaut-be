@@ -65,7 +65,7 @@ namespace TajmautMK.Repository.Implementations
             var currentUserID = _helper.GetMe();
             var getVenueCity = await GetVenueCityById(request.Venue_CityId);
 
-            return new Venue
+            var venue = new Venue
             {
                 VenueTypeId = request.VenueTypeId,
                 Name = request.Name,
@@ -80,9 +80,14 @@ namespace TajmautMK.Repository.Implementations
                 Venue_CityId = request.Venue_CityId,
                 VenueImage = request.VenueImage,
             };
+
+            _context.Venues.Add(venue);
+            await _context.SaveChangesAsync();
+
+            return venue;
         }
         // updates venue
-        public async Task<Venue> UpdateVenueAsync(VenuePutREQUEST request, int VenueId)
+        public async Task<Venue> GetVenueByID(int VenueId)
         {
             var venue = await _context.Venues.FindAsync(VenueId);
             if (venue != null)
@@ -115,6 +120,10 @@ namespace TajmautMK.Repository.Implementations
             var check = await _context.Venues.FirstOrDefaultAsync(venue => venue.VenueId == VenueId);
             if (check != null)
             {
+                _context.Venues.Remove(check);
+
+                await _context.SaveChangesAsync();
+
                 return check;
             }
             throw new CustomError(404, "Venue not found!");

@@ -57,12 +57,13 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<CommentRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var commentByID = await _helper.GetCommentId(commentId);
-            var venueID = commentByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var commentByID = await _helper.GetCommentId(commentId);
+                var venueID = commentByID.VenueId;
+
                 //if comment exists
                 if (await _helper.CheckIdComment(commentId))
                 {

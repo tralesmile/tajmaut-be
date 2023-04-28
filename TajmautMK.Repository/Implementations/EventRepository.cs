@@ -5,6 +5,7 @@ using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
 using TajmautMK.Common.Middlewares.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -35,7 +36,8 @@ namespace TajmautMK.Repository.Implementations
 
             //get current user id
             var currentUserID = _helper.GetMe();
-            return new Event
+
+            var createEvent = new Event
             {
                 VenueId = request.VenueId,
                 CategoryEventId = request.CategoryEventId,
@@ -49,10 +51,17 @@ namespace TajmautMK.Repository.Implementations
                 CreatedBy = currentUserID,
                 Duration = request.Duration,
             };
+
+            _ctx.Events.Add(createEvent);
+
+            await _ctx.SaveChangesAsync();
+
+            return createEvent;
+
         }
 
         //delete event
-        public async Task<Event> DeleteEvent(int eventId)
+        public async Task<Event> GetEventByID(int eventId)
         {
             //check if exists
             var check = await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
