@@ -269,16 +269,16 @@ namespace TajmautMK.Core.Services.Implementations
             try
             {
 
-                var requestSend = new BaseFilterREQUEST 
-                { 
-                    ItemsPerPage= request.ItemsPerPage,
-                    PageNumber= request.PageNumber,
-                };
+                //var requestSend = new BaseFilterREQUEST 
+                //{ 
+                //    ItemsPerPage= request.ItemsPerPage,
+                //    PageNumber= request.PageNumber,
+                //};
 
 
                 //var response = _helper.Paginator(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
 
-                var response = await _repo.VenuesFilterTest(requestSend, request);
+                var response = await _repo.VenuesFilterTest(request);
 
                 result.Data = response;
 
