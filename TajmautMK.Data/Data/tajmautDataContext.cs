@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using tajmautAPI.Models.EntityClasses;
 using TajmautMK.Common.Models.EntityClasses;
 
-namespace tajmautAPI.Data
+namespace TajmautMK.Data
 {
     public partial class tajmautDataContext : DbContext
     {

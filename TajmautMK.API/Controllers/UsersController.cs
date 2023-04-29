@@ -1,15 +1,9 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MimeKit;
-using MimeKit.Text;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Core.Services.Interfaces;
 
-namespace tajmautAPI.Controllers
+namespace TajmautMK.API.Controllers
 {
     /// <summary>
     /// Controller for managing user accounts.
@@ -148,8 +142,8 @@ namespace tajmautAPI.Controllers
         /// Get the ID of the current user.
         /// </summary>
         /// <returns>Returns the ID of the current user.</returns>
-        [HttpGet("GetCurrentUserID"), Authorize(Roles ="Admin")]
-        public ActionResult<int> GetCurrentUserEmail()
+        [HttpGet("GetCurrentUserID"), Authorize]
+        public ActionResult<int> GetCurrentUserID()
         {
             var userEmail = _userService.GetMe();
             return Ok(userEmail);

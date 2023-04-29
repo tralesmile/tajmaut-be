@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
 using TajmautMK.Repository.Interfaces;
-using tajmautAPI.Interfaces_Service;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Interfaces;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using Azure.Core;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Core.Services.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class VenueService : IVenueService
     {
@@ -40,8 +37,7 @@ namespace tajmautAPI.Services.Implementations
 
                         if (getResult != null)
                         {
-                            var resultSend = await _repo.AddVenueToDB(getResult);
-                            result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+                            result.Data = _mapper.Map<VenueRESPONSE>(getResult);
                         }
                     }
                 }
@@ -59,10 +55,11 @@ namespace tajmautAPI.Services.Implementations
         public async Task<ServiceResponse<VenueRESPONSE>> DeleteVenue(int venueId)
         { 
          ServiceResponse<VenueRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
 
             try
             {
+                var currentUserID = _helper.GetMe();
+
                 if (_helper.ValidateId(venueId))
                 {
                     if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
@@ -75,8 +72,7 @@ namespace tajmautAPI.Services.Implementations
 
                             if (venue != null)
                             {
-                                var resultSend = await _repo.DeleteVenueDB(venue);
-                                result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+                                result.Data = _mapper.Map<VenueRESPONSE>(venue);
                             }
                         }
                     }
@@ -180,7 +176,7 @@ namespace tajmautAPI.Services.Implementations
                 {
                     if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
                     {
-                        var updateVenue = await _repo.UpdateVenueAsync(request, venueId);
+                        var updateVenue = await _repo.GetVenueByID(venueId);
 
                         if (updateVenue != null)
                         {
@@ -266,16 +262,46 @@ namespace tajmautAPI.Services.Implementations
             return result;
         }
 
-        public async Task<ServiceResponse<VenueFilterRESPONSE>> FilterVenues(VenueFilterREQUEST request)
+        public async Task<ServiceResponse<FilterRESPONSE<VenueRESPONSE>>> FilterVenues(VenueFilterREQUEST request)
         {
-            ServiceResponse<VenueFilterRESPONSE> result = new();
+            ServiceResponse<FilterRESPONSE<VenueRESPONSE>> result = new();
 
             try
             {
 
-                var response = await _helper.VenuesPagination(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
+                var requestSend = new BaseFilterREQUEST 
+                { 
+                    ItemsPerPage= request.ItemsPerPage,
+                    PageNumber= request.PageNumber,
+                };
+
+
+                //var response = _helper.Paginator(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
+
+                var response = await _repo.VenuesFilterTest(requestSend, request);
 
                 result.Data = response;
+
+            }
+            catch (CustomError ex)
+            {
+                result.isError = true;
+                result.statusCode = ex.StatusCode;
+                result.ErrorMessage = ex.ErrorMessage;
+            }
+
+            return result;
+        }
+
+        public async Task<ServiceResponse<List<VenueRESPONSE>>> GetAllVenuesByManager(int managerId)
+        {
+            ServiceResponse<List<VenueRESPONSE>> result = new();
+
+            try
+            {
+                var venues = await _repo.GetAllVenuesByManager(managerId);
+
+                result.Data = _mapper.Map<List<VenueRESPONSE>>(venues);
             }
             catch (CustomError ex)
             {

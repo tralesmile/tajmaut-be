@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Core.Services.Interfaces;
 using TajmautMK.Repository.Interfaces;
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class CategoryService : ICategoryService
     {

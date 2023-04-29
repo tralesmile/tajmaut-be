@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
+
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -26,7 +27,7 @@ namespace TajmautMK.Repository.Implementations
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             //create new user
-            return new User
+            var user = new User
             {
                 Email = request.Email,
                 FirstName = request.FirstName,
@@ -36,6 +37,12 @@ namespace TajmautMK.Repository.Implementations
                 ModifiedAt = DateTime.Now,
                 CreatedAt = DateTime.Now,
             };
+
+            _ctx.Users.Add(user);
+
+            await _ctx.SaveChangesAsync();
+
+            return user;
 
         }
 

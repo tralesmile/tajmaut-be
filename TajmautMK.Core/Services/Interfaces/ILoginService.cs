@@ -1,7 +1,6 @@
-﻿using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
+﻿using TajmautMK.Common.Models.ModelsREQUEST;
 
-namespace tajmautAPI.Services.Interfaces
+namespace TajmautMK.Core.Services.Interfaces
 {
     /// <summary>
     /// Interface for the login service.

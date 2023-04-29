@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 
-namespace tajmautAPI.Models.ModelsRESPONSE
+namespace TajmautMK.Common.Models.ModelsRESPONSE
 {
     public class VenueRESPONSE
     {

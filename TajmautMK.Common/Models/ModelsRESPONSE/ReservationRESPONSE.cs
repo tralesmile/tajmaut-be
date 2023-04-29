@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace tajmautAPI.Models.ModelsRESPONSE
+namespace TajmautMK.Common.Models.ModelsRESPONSE
 {
     public class ReservationRESPONSE
     {
@@ -23,5 +23,10 @@ namespace tajmautAPI.Models.ModelsRESPONSE
         public string Email { get; set; } = null!;
 
         public bool IsActive { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public string EventName { get; set; } = null!;
+
     }
 }

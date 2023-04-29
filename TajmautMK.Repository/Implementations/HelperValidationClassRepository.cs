@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.Features;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
+﻿using Microsoft.EntityFrameworkCore;
+using TajmautMK.Common.Middlewares.Exceptions;
+using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Repository.Implementations

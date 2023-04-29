@@ -1,4 +1,4 @@
-﻿namespace tajmautAPI.Models.EntityClasses
+﻿namespace TajmautMK.Common.Models.EntityClasses
 {
     public class CategoryEvent
     {

@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -34,6 +33,17 @@ namespace TajmautMK.Repository.Implementations
             }
             await _ctx.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<bool> CheckNumReservations(ReservationREQUEST request)
+        {
+            var check = await _ctx.OnlineReservations.Where(x=> x.EventId == request.EventId && x.UserId == request.UserId).ToListAsync();
+            if(check.Count() < 5)
+            {
+                return true;
+            }
+
+            throw new CustomError(400, $"This user can't make more than 5 reservations on same event");
         }
 
         //create reservations and save to DB
@@ -84,7 +94,7 @@ namespace TajmautMK.Repository.Implementations
         //all reservations
         public async Task<List<OnlineReservation>> GetAllReservations()
         {
-            var result = await _ctx.OnlineReservations.ToListAsync();
+            var result = await _ctx.OnlineReservations.Include(x => x.Event).ToListAsync();
             if (result.Count() > 0)
             {
                 return result;
@@ -96,7 +106,11 @@ namespace TajmautMK.Repository.Implementations
         //reservation by id
         public async Task<OnlineReservation> GetReservationByID(int reservationId)
         {
-            var check = await _ctx.OnlineReservations.FindAsync(reservationId);
+            var check = await _ctx.OnlineReservations
+                .Include(x=>x.Venue)
+                .Include(x=>x.User)
+                .Include(x=>x.Event)
+                .FirstOrDefaultAsync(x=>x.OnlineReservationId==reservationId);
             if (check != null)
             {
                 return check;

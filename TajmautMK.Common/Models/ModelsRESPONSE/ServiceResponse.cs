@@ -1,4 +1,4 @@
-﻿namespace tajmautAPI.Services.Implementations
+﻿namespace TajmautMK.Common.Services.Implementations
 {
     public class ServiceResponse<T>
     {

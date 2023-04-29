@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace tajmautAPI.Middlewares.Exceptions
+namespace TajmautMK.Common.Middlewares.Exceptions
 {
     public class CustomExceptionMiddleware
     {

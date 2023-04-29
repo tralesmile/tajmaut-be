@@ -1,25 +1,30 @@
 ﻿using AutoMapper;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Core.Services.Interfaces;
 using TajmautMK.Repository.Interfaces;
 
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class ReservationService : IReservationService
     {
         private readonly IReservationRepository _repo;
         private readonly IHelperValidationClassService _helper;
         private readonly IMapper _mapper;
+        private readonly ISendMailService _sendMailService;
+        private readonly ISendMailRepository _sendMailRepo;
 
-        public ReservationService(IReservationRepository repo, IHelperValidationClassService helper, IMapper mapper)
+        public ReservationService(IReservationRepository repo, IHelperValidationClassService helper, IMapper mapper, ISendMailRepository sendMailRepo,ISendMailService sendMailService)
         {
             _repo = repo;
             _helper = helper;
             _mapper = mapper;
+            _sendMailRepo = sendMailRepo;
+            _sendMailService = sendMailService;
         }
 
         //create reservation
@@ -62,9 +67,12 @@ namespace tajmautAPI.Services.Implementations
                                                 //check if current user is the entered user || role is admin,manager
                                                 if (request.UserId == currentUserID || _helper.CheckUserAdminOrManager())
                                                 {
-                                                    var resultSend = await _repo.CreateReservation(request);
+                                                    if (await _repo.CheckNumReservations(request))
+                                                    {
+                                                        var resultSend = await _repo.CreateReservation(request);
 
-                                                    result.Data = _mapper.Map<ReservationRESPONSE>(resultSend);
+                                                        result.Data = _mapper.Map<ReservationRESPONSE>(resultSend);
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -101,12 +109,12 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<ReservationRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var reservationByID = await _repo.GetReservationByID(reservationId);
-            var venueID = reservationByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var reservationByID = await _repo.GetReservationByID(reservationId);
+                var venueID = reservationByID.VenueId;
 
                 //if reservation exists
                 if (await _repo.ReservationExistsID(reservationId))
@@ -178,12 +186,13 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<List<ReservationRESPONSE>> result = new();
-            var currentUserID = _helper.GetMe();
-            var eventbyID = await _helper.GetEventByID(eventId);
-            var venueID = eventbyID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var eventbyID = await _helper.GetEventByID(eventId);
+                var venueID = eventbyID.VenueId;
+
                 //if the id is valid
                 if (_helper.ValidateId(eventId))
                 {
@@ -232,10 +241,11 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<List<ReservationRESPONSE>> result = new();
-            var currentUserID = _helper.GetMe();
 
             try
             {
+                var currentUserID = _helper.GetMe();
+
                 //if restaurantId is valid
                 if (_helper.ValidateId(venueId))
                 {
@@ -337,20 +347,37 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<ReservationRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var reservationByID = await _repo.GetReservationByID(reservationId);
-            var venueID = reservationByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var reservationByID = await _repo.GetReservationByID(reservationId);
+                var venueID = reservationByID.VenueId;
+
                 if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                 {
-                    var checkReservation = await _helper.CheckIdReservation(reservationId);
-
-                    if (checkReservation != null)
+                    if (await _helper.CheckIdEventActivity(reservationByID.EventId))
                     {
-                        if (await _repo.ChangeReservationStatus(checkReservation))
-                            result.Data = _mapper.Map<ReservationRESPONSE>(checkReservation);
+                        if (await _helper.CheckIdEventDate(reservationByID.EventId))
+                        {
+                            if (await _repo.ChangeReservationStatus(reservationByID))
+                            {
+                                //1.Mail template
+                                var template = _sendMailRepo.ConfirmReservationTemplate(reservationByID);
+
+                                //2.Send mail
+                                var mailSend = new MailSendREQUEST
+                                {
+                                    Template = template,
+                                    To = reservationByID.Email,
+                                    Subject = "Детали за резервација",
+                                };
+
+                                var message = _sendMailRepo.MailSender(mailSend);
+
+                                result.Data = _mapper.Map<ReservationRESPONSE>(reservationByID);
+                            }
+                        }
                     }
                 }
             }

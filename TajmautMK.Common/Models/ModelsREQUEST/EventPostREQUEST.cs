@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace tajmautAPI.Models.ModelsREQUEST
+namespace TajmautMK.Common.Models.ModelsREQUEST
 {
     public class EventPostREQUEST
     {
         [Required]
+        [RegularExpression(@"^[1-9]\d*$", ErrorMessage = "The value must be greater than 0.")]
         public int VenueId { get; set; } = 0;
 
         [Required]
+        [RegularExpression(@"^[1-9]\d*$", ErrorMessage = "The value must be greater than 0.")]
         public int CategoryEventId { get; set; } = 0;
 
         [Required]

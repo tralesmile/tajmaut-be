@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using tajmautAPI.Models.EntityClasses;
-using TajmautMK.Common.Models.EntityClasses;
+﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
 
 namespace TajmautMK.Repository.Interfaces
@@ -61,6 +55,13 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="token">The token for the user.</param>
         /// <returns>String with the body</returns>
         string ForgotPasswordTemplate(User user,string token);
+
+        /// <summary>
+        /// Reservation confirmation email template.
+        /// </summary>
+        /// <param name="reservation">The reservation of the user.</param>
+        /// <returns>String with the body</returns>
+        string ConfirmReservationTemplate(OnlineReservation reservation);
 
         /// <summary>
         /// Forgot password mail sender.

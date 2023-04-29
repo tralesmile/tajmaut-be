@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text.RegularExpressions;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Implementations;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
+using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 using TajmautMK.Repository.Interfaces;
 
-namespace tajmautAPI.Helper
+namespace TajmautMK.API.Helper
 {
     /// <summary>
     /// Service for performing validation checks and getting information related to users, events, and reservations.
@@ -104,7 +101,7 @@ namespace tajmautAPI.Helper
             {
                 result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
-            return int.Parse(result);
+            throw new CustomError(404, $"User not found");
         }
 
         /// <summary>
@@ -334,7 +331,7 @@ namespace tajmautAPI.Helper
             return await _helperRepo.GetVenuesByCityId(cityId);
         }
 
-        public async Task<EventFilterRESPONSE> ItemsPagination(EventFilterREQUEST request, List<EventGetRESPONSE> items)
+        public FilterRESPONSE<T> Paginator<T>(BaseFilterREQUEST request, List<T> items)
         {
             var totalItems = items.Count();
             var itemsPerPage = totalItems;
@@ -350,52 +347,14 @@ namespace tajmautAPI.Helper
                 itemsPerPage = request.ItemsPerPage.Value;
                 pageNumber = request.PageNumber.Value;
 
-                var pageCount = Math.Ceiling(items.Count() / (double)itemsPerPage);
-
                 items = items
                     .Skip((pageNumber - 1) * (int)itemsPerPage)
                     .Take((int)itemsPerPage).ToList();
-
             }
 
-            var response = new EventFilterRESPONSE
+            var response = new FilterRESPONSE<T>
             {
-                Events = items,
-                PageNumber = pageNumber,
-                ItemsPerPage = itemsPerPage,
-                TotalItems = totalItems,
-            };
-
-            return response;
-        }
-
-        public async Task<VenueFilterRESPONSE> VenuesPagination(VenueFilterREQUEST request, List<VenueRESPONSE> items)
-        {
-            var totalItems = items.Count();
-            var itemsPerPage = totalItems;
-            var pageNumber = 1;
-
-            if (items.Count() <= 0)
-            {
-                throw new CustomError(404, $"No events found");
-            }
-
-            if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
-            {
-                itemsPerPage = request.ItemsPerPage.Value;
-                pageNumber = request.PageNumber.Value;
-
-                var pageCount = Math.Ceiling(items.Count() / (double)itemsPerPage);
-
-                items = items
-                    .Skip((pageNumber - 1) * (int)itemsPerPage)
-                    .Take((int)itemsPerPage).ToList();
-
-            }
-
-            var response = new VenueFilterRESPONSE
-            {
-                Venues = items,
+                Items = items,
                 PageNumber = pageNumber,
                 ItemsPerPage = itemsPerPage,
                 TotalItems = totalItems,

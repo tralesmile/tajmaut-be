@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using tajmautAPI.Data;
-using tajmautAPI.Models.EntityClasses;
+using TajmautMK.Common.Models.EntityClasses;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Repository.Implementations

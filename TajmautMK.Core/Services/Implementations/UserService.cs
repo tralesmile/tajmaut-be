@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
 using TajmautMK.Repository.Interfaces;
-using tajmautAPI.Services.Interfaces;
-using System.Security.Cryptography;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Core.Services.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class UserService : IUserService
     {
@@ -28,22 +29,22 @@ namespace tajmautAPI.Services.Implementations
 
             try
             {
-                //get user from repo
-                var getUser = await _repo.CreateUserAsync(user);
 
                 //check for duplicates with a method that saves data
-                var checkUser = await _helperClass.CheckDuplicatesEmail(getUser.Email);
+                var checkUser = await _helperClass.CheckDuplicatesEmail(user.Email);
 
                 //check email and phone Regex
-                if (_helperClass.ValidateEmailRegex(getUser.Email))
+                if (_helperClass.ValidateEmailRegex(user.Email))
                 {
                     //checking for duplicates
                     if (checkUser == null)
                     {
                         if (user.Password == user.ConfirmPassword)
                         {
-                            var resultSend = await _repo.AddEntity(getUser);
-                            result.Data = _mapper.Map<UserRESPONSE>(resultSend);
+                            //get user from repo
+                            var getUser = await _repo.CreateUserAsync(user);
+
+                            result.Data = _mapper.Map<UserRESPONSE>(getUser);
                         }
                         else
                         {
@@ -79,7 +80,7 @@ namespace tajmautAPI.Services.Implementations
                     if (id == currentUserID || _helperClass.CheckUserAdmin())
                     {
                         //get result from repo
-                        var user = await _repo.DeleteUserAsync(id);
+                        var user = await _repo.GetUserByIdAsync(id);
 
                         //check if there is any
                         if (user != null)
@@ -138,8 +139,6 @@ namespace tajmautAPI.Services.Implementations
                 //if id is smaller than 0
                 if (_helperClass.ValidateId(id))
                 {
-
-
                     var currentUserID = _helperClass.GetMe();
                     //current user can make changes and Admins
                     if (id == currentUserID || _helperClass.CheckUserAdmin())
@@ -183,7 +182,7 @@ namespace tajmautAPI.Services.Implementations
                 if (id == currentUserID || _helperClass.CheckUserAdmin())
                 {
                     //get result from repo
-                    var getUser = await _repo.UpdateUserAsync(request, id);
+                    var getUser = await _repo.GetUserByIdAsync(id);
 
                     //check if there is any
                     if (getUser != null)

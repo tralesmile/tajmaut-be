@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Interfaces;
-using TajmautMK.Common.Models.Enums;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
+using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Common.Services.Implementations;
+using TajmautMK.Core.Services.Interfaces;
 using TajmautMK.Repository.Interfaces;
 
-namespace tajmautAPI.Services.Implementations
+namespace TajmautMK.Core.Services.Implementations
 {
     public class EventService : IEventService
     {
@@ -29,9 +28,11 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
+
             try
             {
+                var currentUserID = _helper.GetMe();
+
                 var eventByID = await _helper.GetEventByID(eventId);
                 var venueID = eventByID.VenueId;
 
@@ -74,11 +75,8 @@ namespace tajmautAPI.Services.Implementations
                         {
                             var getResult = await _repo.CreateEvent(request);
 
-                            if (getResult != null)
-                            {
-                                var resultSend = await _repo.AddToDB(getResult);
-                                result.Data = _mapper.Map<EventRESPONSE>(resultSend);
-                            }
+                            result.Data = _mapper.Map<EventRESPONSE>(getResult);
+                            
                         }
                     }
                 }
@@ -99,18 +97,19 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var eventByID = await _helper.GetEventByID(eventId);
-            var venueID = eventByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var eventByID = await _helper.GetEventByID(eventId);
+                var venueID = eventByID.VenueId;
+
                 //if invalid input
                 if (_helper.ValidateId(eventId))
                 {
                     if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        var resultSend = await _repo.DeleteEvent(eventId);
+                        var resultSend = await _repo.GetEventByID(eventId);
 
                         if (resultSend != null)
                         {
@@ -132,15 +131,21 @@ namespace tajmautAPI.Services.Implementations
         }
 
         //filter events by category
-        public async Task<ServiceResponse<EventFilterRESPONSE>> FilterEvents(EventFilterREQUEST request)
+        public async Task<ServiceResponse<FilterRESPONSE<EventGetRESPONSE>>> FilterEvents(EventFilterREQUEST request)
         {
 
-            ServiceResponse<EventFilterRESPONSE> result = new();
+            ServiceResponse<FilterRESPONSE<EventGetRESPONSE>> result = new();
 
             try
             {
 
-                var response = await _helper.ItemsPagination(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
+                var requestSend = new BaseFilterREQUEST
+                {
+                    ItemsPerPage = request.ItemsPerPage,
+                    PageNumber = request.PageNumber,
+                };
+
+                var response = _helper.Paginator(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
 
                 result.Data = response;
             }
@@ -376,18 +381,19 @@ namespace tajmautAPI.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var eventByID = await _helper.GetEventByID(eventId);
-            var venueID = eventByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var eventByID = await _helper.GetEventByID(eventId);
+                var venueID = eventByID.VenueId;
+
                 //invalid input
                 if (_helper.ValidateId(eventId))
                 {
                     if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        var resultEvent = await _repo.UpdateEvent(request, eventId);
+                        var resultEvent = await _repo.GetEventByID(eventId);
 
                         //if found
                         if (resultEvent != null)

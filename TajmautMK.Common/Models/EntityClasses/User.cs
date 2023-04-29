@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using TajmautMK.Common.Models.EntityClasses;
 
-namespace tajmautAPI.Models.EntityClasses
+namespace TajmautMK.Common.Models.EntityClasses
 {
     public class User
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
-using tajmautAPI.Data;
+using TajmautMK.Data;
 
 namespace TajmautMK.API.Data
 {

@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
 using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
 
 namespace TajmautMK.Repository.Implementations
@@ -14,11 +14,13 @@ namespace TajmautMK.Repository.Implementations
     {
         private readonly tajmautDataContext _context;
         private readonly IHelperValidationClassService _helper;
+        private readonly IMapper _mapper;
 
-        public VenueRepository(tajmautDataContext context, IHelperValidationClassService helper)
+        public VenueRepository(tajmautDataContext context, IHelperValidationClassService helper,IMapper mapper)
         {
             _context = context;
             _helper = helper;
+            _mapper = mapper;
         }
 
         // gets all venues
@@ -67,7 +69,7 @@ namespace TajmautMK.Repository.Implementations
             var currentUserID = _helper.GetMe();
             var getVenueCity = await GetVenueCityById(request.Venue_CityId);
 
-            return new Venue
+            var venue = new Venue
             {
                 VenueTypeId = request.VenueTypeId,
                 Name = request.Name,
@@ -82,9 +84,14 @@ namespace TajmautMK.Repository.Implementations
                 Venue_CityId = request.Venue_CityId,
                 VenueImage = request.VenueImage,
             };
+
+            _context.Venues.Add(venue);
+            await _context.SaveChangesAsync();
+
+            return venue;
         }
         // updates venue
-        public async Task<Venue> UpdateVenueAsync(VenuePutREQUEST request, int VenueId)
+        public async Task<Venue> GetVenueByID(int VenueId)
         {
             var venue = await _context.Venues.FindAsync(VenueId);
             if (venue != null)
@@ -117,6 +124,10 @@ namespace TajmautMK.Repository.Implementations
             var check = await _context.Venues.FirstOrDefaultAsync(venue => venue.VenueId == VenueId);
             if (check != null)
             {
+                _context.Venues.Remove(check);
+
+                await _context.SaveChangesAsync();
+
                 return check;
             }
             throw new CustomError(404, "Venue not found!");
@@ -258,6 +269,131 @@ namespace TajmautMK.Repository.Implementations
                 if (allVenues.Count() > 0)
                 {
                     return allVenues;
+                }
+
+            }
+            throw new CustomError(404, $"No venues found");
+        }
+
+        public async Task<List<Venue>> GetAllVenuesByManager(int managerID)
+        {
+            var check = await _context.Venues
+                .Include(x=>x.Events)
+                .Include(x=>x.VenueType)
+                .Include(x=>x.Venue_City)
+                .Where(x=>x.ManagerId== managerID).ToListAsync();
+
+            if(check.Count()>0)
+            {
+                return check;
+            }
+
+            throw new CustomError(404, $"No data found");
+        }
+
+        public async Task<FilterRESPONSE<VenueRESPONSE>> VenuesFilterTest(BaseFilterREQUEST filterRequest, VenueFilterREQUEST request)
+        {
+            var response = new FilterRESPONSE<VenueRESPONSE>();
+
+            var items = new List<Venue>();
+
+            if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
+            {
+                var itemsPerPage = request.ItemsPerPage.Value;
+                var pageNumber = request.PageNumber.Value;
+                var totalItems = 0;
+
+                if (request.CityId.HasValue || request.VenueTypeId.HasValue)
+                {
+
+                    items = await _context.Venues
+                        .Include(x => x.Venue_City)
+                        .Include(x => x.VenueType)
+                        .Where(x =>
+                        (!request.CityId.HasValue || x.Venue_CityId == request.CityId) &&
+                        (!request.VenueTypeId.HasValue || x.VenueTypeId == request.VenueTypeId))
+                        .ToListAsync();
+
+                    totalItems = items.Count();
+
+                    items = items
+                        .Skip((pageNumber - 1) * (int)itemsPerPage)
+                        .Take((int)itemsPerPage)
+                        .ToList();
+
+                    if (totalItems > 0)
+                    {
+                        return new FilterRESPONSE<VenueRESPONSE>
+                        {
+                            Items = _mapper.Map<List<VenueRESPONSE>>(items),
+                            ItemsPerPage = itemsPerPage,
+                            PageNumber = pageNumber,
+                            TotalItems = totalItems,
+                        };
+                    }
+
+                }
+                else
+                {
+                    items = await GetAllVenuesAsync();
+
+                    totalItems = items.Count();
+
+                    items = items
+                        .Skip((pageNumber - 1) * (int)itemsPerPage)
+                        .Take((int)itemsPerPage)
+                        .ToList();
+
+                    if (totalItems > 0)
+                    {
+                        return new FilterRESPONSE<VenueRESPONSE>
+                        {
+                            Items = _mapper.Map<List<VenueRESPONSE>>(items),
+                            ItemsPerPage = itemsPerPage,
+                            PageNumber = pageNumber,
+                            TotalItems = totalItems,
+                        };
+                    }
+
+                }
+            }
+
+            if (request.CityId.HasValue || request.VenueTypeId.HasValue)
+            {
+
+                items = await _context.Venues
+                    .Include(x => x.Venue_City)
+                    .Include(x => x.VenueType)
+                    .Where(x =>
+                    (!request.CityId.HasValue || x.Venue_CityId == request.CityId) &&
+                    (!request.VenueTypeId.HasValue || x.VenueTypeId == request.VenueTypeId))
+                    .ToListAsync();
+
+                if (items.Count() > 0)
+                {
+                    return new FilterRESPONSE<VenueRESPONSE>
+                    {
+                        Items = _mapper.Map<List<VenueRESPONSE>>(items),
+                        ItemsPerPage = items.Count(),
+                        PageNumber = 1,
+                        TotalItems = items.Count(),
+                    };
+                }
+
+            }
+            else
+            {
+                items = await GetAllVenuesAsync();
+
+                if (items.Count() > 0)
+                {
+                    return new FilterRESPONSE<VenueRESPONSE>
+                    {
+                        Items = _mapper.Map<List<VenueRESPONSE>>(items),
+                        ItemsPerPage = items.Count(),
+                        PageNumber = 1,
+                        TotalItems = items.Count(),
+                    };
                 }
 
             }

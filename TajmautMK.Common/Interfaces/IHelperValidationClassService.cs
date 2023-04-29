@@ -1,10 +1,8 @@
-﻿using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Implementations;
+﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsRESPONSE;
 
-namespace tajmautAPI.Services.Interfaces
+namespace TajmautMK.Common.Interfaces
 {
     /// <summary>
     /// Service for validation helper methods
@@ -191,20 +189,12 @@ namespace tajmautAPI.Services.Interfaces
         Task<List<Venue>> GetVenuesByCityId(int cityId);
 
         /// <summary>
-        /// Events pagination.
+        /// Items pagination.
         /// </summary>
-        /// <param name="request">Event filters object.</param>
-        /// <param name="items">Events list.</param>
-        /// <returns>A list of events using pagination.</returns>
-        Task<EventFilterRESPONSE> ItemsPagination(EventFilterREQUEST request,List<EventGetRESPONSE> items);
-
-        /// <summary>
-        /// Venues pagination.
-        /// </summary>
-        /// <param name="request">Venue filters object.</param>
-        /// <param name="items">Venues list.</param>
-        /// <returns>A list of venues using pagination.</returns>
-        Task<VenueFilterRESPONSE> VenuesPagination(VenueFilterREQUEST request, List<VenueRESPONSE> items);
+        /// <param name="request">Pagination object.</param>
+        /// <param name="items">List of items to use pagination on.</param>
+        /// <returns>A list of items using pagination.</returns>
+        FilterRESPONSE<T> Paginator<T>(BaseFilterREQUEST request,List<T> items);
     }
 }
 

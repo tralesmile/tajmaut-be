@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Math.EC.Rfc7748;
-using System.Net;
-using System.Runtime.CompilerServices;
-using tajmautAPI.Data;
-using tajmautAPI.Middlewares.Exceptions;
-using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Services.Interfaces;
+using TajmautMK.Common.Interfaces;
+using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
+using TajmautMK.Common.Middlewares.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -39,7 +36,8 @@ namespace TajmautMK.Repository.Implementations
 
             //get current user id
             var currentUserID = _helper.GetMe();
-            return new Event
+
+            var createEvent = new Event
             {
                 VenueId = request.VenueId,
                 CategoryEventId = request.CategoryEventId,
@@ -53,10 +51,17 @@ namespace TajmautMK.Repository.Implementations
                 CreatedBy = currentUserID,
                 Duration = request.Duration,
             };
+
+            _ctx.Events.Add(createEvent);
+
+            await _ctx.SaveChangesAsync();
+
+            return createEvent;
+
         }
 
         //delete event
-        public async Task<Event> DeleteEvent(int eventId)
+        public async Task<Event> GetEventByID(int eventId)
         {
             //check if exists
             var check = await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
@@ -96,6 +101,7 @@ namespace TajmautMK.Repository.Implementations
                 var selectedFilter = await _ctx.Events
                     .Include(x => x.Venue)
                     .Include(x => x.CategoryEvent)
+                    .Include(x => x.Venue.Venue_City)
                     .Where(x=>
                     (!request.CategoryId.HasValue || x.CategoryEventId==request.CategoryId) && 
                     (!request.CityId.HasValue || x.Venue.Venue_CityId == request.CityId) && 
@@ -229,12 +235,3 @@ namespace TajmautMK.Repository.Implementations
         }
     }
 }
-
-
-//{
-//    "categoryId": null,
-//  "cityId": null,
-//  "startDate": null,
-//  "endDate": null
-//}
-

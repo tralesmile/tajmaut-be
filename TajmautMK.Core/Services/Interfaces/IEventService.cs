@@ -1,11 +1,9 @@
-﻿using tajmautAPI.Models.EntityClasses;
-using tajmautAPI.Models.ModelsREQUEST;
-using tajmautAPI.Models.ModelsRESPONSE;
-using tajmautAPI.Services.Implementations;
+﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Common.Models.ModelsRESPONSE;
+using TajmautMK.Common.Services.Implementations;
 
-namespace tajmautAPI.Services.Interfaces
+namespace TajmautMK.Core.Services.Interfaces
 {
     /// <summary>
     /// Interface for event-related services.
@@ -59,7 +57,7 @@ namespace tajmautAPI.Services.Interfaces
         /// </summary>
         /// <param name="request">Event filters object.</param>
         /// <returns>A service response containing a list of events that match the specified category.</returns>
-        Task<ServiceResponse<EventFilterRESPONSE>> FilterEvents(EventFilterREQUEST request);
+        Task<ServiceResponse<FilterRESPONSE<EventGetRESPONSE>>> FilterEvents(EventFilterREQUEST request);
 
         /// <summary>
         /// Filters events by city.
