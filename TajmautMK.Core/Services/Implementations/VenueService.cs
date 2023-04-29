@@ -276,7 +276,9 @@ namespace TajmautMK.Core.Services.Implementations
                 };
 
 
-                var response = _helper.Paginator(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
+                //var response = _helper.Paginator(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
+
+                var response = await _repo.VenuesFilterTest(requestSend, request);
 
                 result.Data = response;
 

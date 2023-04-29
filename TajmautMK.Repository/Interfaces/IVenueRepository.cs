@@ -1,5 +1,6 @@
 ﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 
 namespace TajmautMK.Repository.Interfaces
 {
@@ -132,6 +133,13 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="request">Request object containing the filters.</param>
         /// <returns>Returns filtered venues.</returns>
         Task<List<Venue>> VenuesFilter(VenueFilterREQUEST request);
+
+        /// <summary>
+        /// Filter venues.
+        /// </summary>
+        /// <param name="request">Request object containing the filters.</param>
+        /// <returns>Returns filtered venues.</returns>
+        Task<FilterRESPONSE<VenueRESPONSE>> VenuesFilterTest(BaseFilterREQUEST filterRequest,VenueFilterREQUEST request);
 
         /// <summary>
         /// Search for the specified manager ID.
