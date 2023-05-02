@@ -100,6 +100,7 @@ namespace TajmautMK.API.Helper
             if (_httpContextAccessor.HttpContext != null)
             {
                 result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                return int.Parse(result);
             }
             throw new CustomError(404, $"User not found");
         }

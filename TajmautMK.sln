@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TajmautMK.API", "TajmautMK.API\TajmautMK.API.csproj", "{C7622134-9404-467E-85F9-7D8D019500F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TajmautMK.API", "TajmautMK.API\TajmautMK.API.csproj", "{C7622134-9404-467E-85F9-7D8D019500F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TajmautMK.Core", "TajmautMK.Core\TajmautMK.Core.csproj", "{F643AFD8-BEE1-4B89-B6E7-F0E617CC06C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TajmautMK.Core", "TajmautMK.Core\TajmautMK.Core.csproj", "{F643AFD8-BEE1-4B89-B6E7-F0E617CC06C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TajmautMK.Common", "TajmautMK.Common\TajmautMK.Common.csproj", "{E2BAD959-9C5E-4217-B13B-8E2028D37370}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TajmautMK.Common", "TajmautMK.Common\TajmautMK.Common.csproj", "{E2BAD959-9C5E-4217-B13B-8E2028D37370}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TajmautMK.Data", "TajmautMK.Data\TajmautMK.Data.csproj", "{1C4F0109-C1C6-413F-AAAA-8B619919764E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TajmautMK.Data", "TajmautMK.Data\TajmautMK.Data.csproj", "{1C4F0109-C1C6-413F-AAAA-8B619919764E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TajmautMK.Repository", "TajmautMK.Repository\TajmautMK.Repository.csproj", "{5DF7636B-D793-4CCA-9199-91F7949DCB66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TajmautMK.Repository", "TajmautMK.Repository\TajmautMK.Repository.csproj", "{5DF7636B-D793-4CCA-9199-91F7949DCB66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TajmautMK.Test", "TajmautMK.Test\TajmautMK.Test.csproj", "{6AC23DAE-120C-4AB8-8270-DC8EA82CAC92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5DF7636B-D793-4CCA-9199-91F7949DCB66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DF7636B-D793-4CCA-9199-91F7949DCB66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DF7636B-D793-4CCA-9199-91F7949DCB66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AC23DAE-120C-4AB8-8270-DC8EA82CAC92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AC23DAE-120C-4AB8-8270-DC8EA82CAC92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AC23DAE-120C-4AB8-8270-DC8EA82CAC92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AC23DAE-120C-4AB8-8270-DC8EA82CAC92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
