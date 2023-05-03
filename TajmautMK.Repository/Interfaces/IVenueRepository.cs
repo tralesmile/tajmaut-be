@@ -139,7 +139,7 @@ namespace TajmautMK.Repository.Interfaces
         /// </summary>
         /// <param name="request">Request object containing the filters.</param>
         /// <returns>Returns filtered venues.</returns>
-        Task<FilterRESPONSE<VenueRESPONSE>> VenuesFilterTest(BaseFilterREQUEST filterRequest,VenueFilterREQUEST request);
+        Task<FilterRESPONSE<VenueRESPONSE>> VenuesFilterTest(VenueFilterREQUEST request);
 
         /// <summary>
         /// Search for the specified manager ID.

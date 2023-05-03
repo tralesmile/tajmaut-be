@@ -291,9 +291,8 @@ namespace TajmautMK.Repository.Implementations
             throw new CustomError(404, $"No data found");
         }
 
-        public async Task<FilterRESPONSE<VenueRESPONSE>> VenuesFilterTest(BaseFilterREQUEST filterRequest, VenueFilterREQUEST request)
+        public async Task<FilterRESPONSE<VenueRESPONSE>> VenuesFilterTest(VenueFilterREQUEST request)
         {
-            var response = new FilterRESPONSE<VenueRESPONSE>();
 
             var items = new List<Venue>();
 
