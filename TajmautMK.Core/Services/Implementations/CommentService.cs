@@ -39,6 +39,8 @@ namespace TajmautMK.Core.Services.Implementations
                     {
                         var resultSend = await _repo.AddToDB(request);
                         result.Data = _mapper.Map<CommentRESPONSE>(resultSend);
+                        result.ErrorMessage = "None";
+                        result.statusCode = 201;//Created
                     }
                 }
             }
@@ -76,7 +78,7 @@ namespace TajmautMK.Core.Services.Implementations
                         if (getComment != null)
                         {
                             //only comment user id or admin or manager can delete comment
-                            if (currentUserID == getComment.UserId || _helper.CheckUserAdminOrManager())
+                            if (_helper.CheckUserCommentRelation(getComment,currentUserID) || _helper.CheckUserAdminOrManager())
                             {
                                 if (await _repo.DeleteComment(getComment))
                                 {
@@ -152,14 +154,10 @@ namespace TajmautMK.Core.Services.Implementations
                         var getComment = await _helper.GetCommentId(commentId);
 
                         //only comment user id can update
-                        if (currentUserID == getComment.UserId)
+                        if (_helper.CheckUserCommentRelation(getComment,currentUserID))
                         {
                             var resultSend = await _repo.UpdateComment(getComment, request);
                             result.Data = _mapper.Map<CommentRESPONSE>(resultSend);
-                        }
-                        else
-                        {
-                            throw new CustomError(401, $"Unauthorized user access");
                         }
                     }
                 }

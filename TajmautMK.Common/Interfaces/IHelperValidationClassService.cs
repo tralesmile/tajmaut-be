@@ -195,6 +195,14 @@ namespace TajmautMK.Common.Interfaces
         /// <param name="items">List of items to use pagination on.</param>
         /// <returns>A list of items using pagination.</returns>
         FilterRESPONSE<T> Paginator<T>(BaseFilterREQUEST request,List<T> items);
+
+        /// <summary>
+        /// Comment , current user id relation.
+        /// </summary>
+        /// <param name="comment">The comment to check id of.</param>
+        /// <param name="currentUserID">The current user id.</param>
+        /// <returns>True if it matches the relation otherwise false.</returns>
+        bool CheckUserCommentRelation(Comment comment,int currentUserID);
     }
 }
 

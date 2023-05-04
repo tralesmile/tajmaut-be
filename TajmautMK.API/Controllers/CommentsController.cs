@@ -33,19 +33,9 @@ namespace TajmautMK.API.Controllers
         [HttpPost("CreateComment"),Authorize(Roles ="Admin,Manager,User")]
         public async Task<ActionResult> CreateComment(CommentREQUEST request)
         {
-
             var result = await _service.CreateComment(request);
 
-            //check if error exists
-            if (result.isError)
-            {
-                return StatusCode((int)result.statusCode, result.ErrorMessage);
-            }
-
-            //if no error
-            return Ok(result.Data);
-
-
+            return StatusCode(result.statusCode, result.isError ? result.ErrorMessage : result.Data);
         }
 
         /// <summary>

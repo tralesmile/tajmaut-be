@@ -363,5 +363,12 @@ namespace TajmautMK.API.Helper
 
             return response;
         }
+
+        public bool CheckUserCommentRelation(Comment comment, int currentUserID)
+        {
+            if(comment.UserId == currentUserID) return true;
+
+            throw new CustomError(401, $"Unauthorized user access");
+        }
     }
 }

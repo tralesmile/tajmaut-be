@@ -12,3 +12,17 @@ D:\TRAJCE\C#\TajmautMK\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.pdb
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Common\obj\Debug\net6.0\ref\TajmautMK.Common.dll
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.runtimeconfig.json
 D:\TRAJCE\C#\TajmautMK\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.genruntimeconfig.cache
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.deps.json
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.runtimeconfig.json
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.dll
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.pdb
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.csproj.AssemblyReference.cache
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.AssemblyInfoInputs.cache
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.AssemblyInfo.cs
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.csproj.CoreCompileInputs.cache
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.dll
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\refint\TajmautMK.Common.dll
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.pdb
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.genruntimeconfig.cache
+C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\ref\TajmautMK.Common.dll
