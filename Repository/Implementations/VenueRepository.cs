@@ -165,6 +165,7 @@ namespace TajmautMK.Repository.Implementations
             getVenue.ModifiedBy = currentUserID;
             getVenue.ModifiedAt = DateTime.Now;
             getVenue.VenueImage = request.VenueImage;
+            getVenue.Venue_CityId = request.Venue_CityId;
             getVenue.GalleryImage1 = request.GalleryImages.GalleryImage1;
             getVenue.GalleryImage2 = request.GalleryImages.GalleryImage2;
             getVenue.GalleryImage3 = request.GalleryImages.GalleryImage3;
@@ -217,7 +218,10 @@ namespace TajmautMK.Repository.Implementations
 
         public async Task<List<Venue>> GetAllVenuesByVenueTypeID(int id)
         {
-            var check = await _context.Venues.Where(v => v.VenueTypeId == id).ToListAsync();
+            var check = await _context.Venues
+                .Include(x=>x.Venue_City)
+                .Include(x=>x.VenueType)
+                .Where(v => v.VenueTypeId == id).ToListAsync();
             if(check.Count()>0)
             {
                 return check;
