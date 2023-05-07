@@ -46,6 +46,25 @@ namespace TajmautMK.Common.Models.EntityClasses
         [Required]
         public int ModifiedBy { get; set; }
 
+        [Required]
+        public double lat { get; set; }
+
+        [Required]
+        public double lng { get; set; }
+
+        [Required]
+        public string WorkingHours { get; set; }
+
+        public string? GalleryImage1 { get; set; }
+
+        public string? GalleryImage2 { get; set; }
+
+        public string? GalleryImage3 { get; set; }
+
+        public string? GalleryImage4 { get; set; }
+
+        public string? GalleryImage5 { get; set; }
+
 
         //N-1 Relationships
         [JsonIgnore]

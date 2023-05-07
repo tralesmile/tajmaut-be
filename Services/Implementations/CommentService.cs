@@ -57,12 +57,13 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<CommentRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var commentByID = await _helper.GetCommentId(commentId);
-            var venueID = commentByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var commentByID = await _helper.GetCommentId(commentId);
+                var venueID = commentByID.VenueId;
+
                 //if comment exists
                 if (await _helper.CheckIdComment(commentId))
                 {
@@ -111,25 +112,13 @@ namespace TajmautMK.Core.Services.Implementations
                     if (await _helper.CheckIdVenue(venueId))
                     {
                         //all comments
-                        var allComments = await _repo.GetAllComments();
+                        var allComments = await _repo.GetAllCommentsByVenue(venueId);
 
-                        if (allComments.Count() > 0)
-                        {
-                            //query for restaurant comments
-                            var venueComments = allComments.Where(x => x.VenueId == venueId).ToList();
+                        //sord comments by date - newest first
+                        var sortedVenueComments = allComments.OrderByDescending(x => x.DateTime).ToList();
 
-                            if (venueComments.Count() > 0)
-                            {
-                                //sord comments by date - newest first
-                                var sortedVenueComments = venueComments.OrderByDescending(x => x.DateTime).ToList();
+                        result.Data = _mapper.Map<List<CommentRESPONSE>>(sortedVenueComments);
 
-                                result.Data = _mapper.Map<List<CommentRESPONSE>>(sortedVenueComments);
-                            }
-                            else
-                            {
-                                throw new CustomError(404, $"This venue has no comments");
-                            }
-                        }
                     }
                 }
             }

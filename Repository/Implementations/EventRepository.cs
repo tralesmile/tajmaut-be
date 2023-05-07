@@ -5,6 +5,9 @@ using TajmautMK.Common.Models.ModelsREQUEST;
 using TajmautMK.Data;
 using TajmautMK.Repository.Interfaces;
 using TajmautMK.Common.Middlewares.Exceptions;
+using Microsoft.Extensions.Logging;
+using TajmautMK.Common.Models.ModelsRESPONSE;
+using AutoMapper;
 
 namespace TajmautMK.Repository.Implementations
 {
@@ -12,11 +15,13 @@ namespace TajmautMK.Repository.Implementations
     {
         private readonly tajmautDataContext _ctx;
         private readonly IHelperValidationClassService _helper;
+        private readonly IMapper _mapper;
 
-        public EventRepository(tajmautDataContext ctx, IHelperValidationClassService helper)
+        public EventRepository(tajmautDataContext ctx, IHelperValidationClassService helper,IMapper mapper)
         {
             _ctx = ctx;
             _helper = helper;
+            _mapper = mapper;
         }
 
         //add event to DB
@@ -35,7 +40,8 @@ namespace TajmautMK.Repository.Implementations
 
             //get current user id
             var currentUserID = _helper.GetMe();
-            return new Event
+
+            var createEvent = new Event
             {
                 VenueId = request.VenueId,
                 CategoryEventId = request.CategoryEventId,
@@ -49,10 +55,17 @@ namespace TajmautMK.Repository.Implementations
                 CreatedBy = currentUserID,
                 Duration = request.Duration,
             };
+
+            _ctx.Events.Add(createEvent);
+
+            await _ctx.SaveChangesAsync();
+
+            return createEvent;
+
         }
 
         //delete event
-        public async Task<Event> DeleteEvent(int eventId)
+        public async Task<Event> GetEventByID(int eventId)
         {
             //check if exists
             var check = await _ctx.Events.FirstOrDefaultAsync(n => n.EventId == eventId);
@@ -224,14 +237,136 @@ namespace TajmautMK.Repository.Implementations
             }
             return check;
         }
+
+        public async Task<FilterRESPONSE<EventGetRESPONSE>> EventFilterTest(EventFilterREQUEST request)
+        {
+
+            var items = new List<Event>();
+
+            if (request.ItemsPerPage.HasValue && request.PageNumber.HasValue)
+            {
+                var itemsPerPage = request.ItemsPerPage.Value;
+                var pageNumber = request.PageNumber.Value;
+                var totalItems = 0;
+
+                if (request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
+                {
+
+                    items = await _ctx.Events
+                        .Include(x => x.Venue)
+                        .Include(x => x.CategoryEvent)
+                        .Include(x => x.Venue.Venue_City)
+                        .Where(x =>
+                        (!request.CategoryId.HasValue || x.CategoryEventId == request.CategoryId) &&
+                        (!request.CityId.HasValue || x.Venue.Venue_CityId == request.CityId) &&
+                        (x.DateTime >= request.StartDate && x.DateTime <= request.EndDate.Value.AddDays(1)))
+                        .Skip((pageNumber - 1) * (int)itemsPerPage)
+                        .Take((int)itemsPerPage)
+                        .ToListAsync();
+
+                    totalItems = items.Count();
+
+                    items = items
+                        .Skip((pageNumber - 1) * (int)itemsPerPage)
+                        .Take((int)itemsPerPage)
+                        .ToList();
+
+                    if (totalItems > 0)
+                    {
+                        return new FilterRESPONSE<EventGetRESPONSE>
+                        {
+                            Items = _mapper.Map<List<EventGetRESPONSE>>(SortEvents(items)),
+                            ItemsPerPage = itemsPerPage,
+                            PageNumber = pageNumber,
+                            TotalItems = totalItems,
+                        };
+                    }
+
+                }
+                else
+                {
+                    items = await GetAllEvents();
+
+                    totalItems = items.Count();
+
+                    items = items
+                        .Skip((pageNumber - 1) * (int)itemsPerPage)
+                        .Take((int)itemsPerPage)
+                        .ToList();
+
+                    if (totalItems > 0)
+                    {
+                        return new FilterRESPONSE<EventGetRESPONSE>
+                        {
+                            Items = _mapper.Map<List<EventGetRESPONSE>>(SortEvents(items)),
+                            ItemsPerPage = itemsPerPage,
+                            PageNumber = pageNumber,
+                            TotalItems = totalItems,
+                        };
+                    }
+
+                }
+            }
+
+            if (request.CategoryId.HasValue || request.CityId.HasValue || request.StartDate.HasValue || request.EndDate.HasValue)
+            {
+
+                if (!request.StartDate.HasValue)
+                {
+                    request.StartDate = _ctx.Events.Min(x => x.DateTime);
+                }
+
+                if (!request.EndDate.HasValue)
+                {
+                    request.EndDate = _ctx.Events.Max(x => x.DateTime);
+                }
+
+                    items = await _ctx.Events
+                    .Include(x => x.Venue)
+                    .Include(x => x.CategoryEvent)
+                    .Include(x => x.Venue.Venue_City)
+                    .Where(x =>
+                    (!request.CategoryId.HasValue || x.CategoryEventId == request.CategoryId) &&
+                    (!request.CityId.HasValue || x.Venue.Venue_CityId == request.CityId) &&
+                    (x.DateTime >= request.StartDate && x.DateTime <= request.EndDate.Value.AddDays(1)))
+                    .ToListAsync();
+
+                if (items.Count() > 0)
+                {
+                    return new FilterRESPONSE<EventGetRESPONSE>
+                    {
+                        Items = _mapper.Map<List<EventGetRESPONSE>>(SortEvents(items)),
+                        ItemsPerPage = items.Count(),
+                        PageNumber = 1,
+                        TotalItems = items.Count(),
+                    };
+                }
+
+            }
+            else
+            {
+                items = await GetAllEvents();
+
+                if (items.Count() > 0)
+                {
+                    return new FilterRESPONSE<EventGetRESPONSE>
+                    {
+                        Items = _mapper.Map<List<EventGetRESPONSE>>(SortEvents(items)),
+                        ItemsPerPage = items.Count(),
+                        PageNumber = 1,
+                        TotalItems = items.Count(),
+                    };
+                }
+
+            }
+            throw new CustomError(404, $"No events found");
+        }
+
+        public List<Event> SortEvents(List<Event> items)
+        {
+            items.Sort((x, y) => x.DateTime.CompareTo(y.DateTime));
+
+            return items.ToList();
+        }
     }
 }
-
-
-//{
-//    "categoryId": null,
-//  "cityId": null,
-//  "startDate": null,
-//  "endDate": null
-//}
-

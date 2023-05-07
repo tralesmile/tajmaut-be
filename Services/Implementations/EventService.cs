@@ -28,9 +28,11 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
+
             try
             {
+                var currentUserID = _helper.GetMe();
+
                 var eventByID = await _helper.GetEventByID(eventId);
                 var venueID = eventByID.VenueId;
 
@@ -73,11 +75,8 @@ namespace TajmautMK.Core.Services.Implementations
                         {
                             var getResult = await _repo.CreateEvent(request);
 
-                            if (getResult != null)
-                            {
-                                var resultSend = await _repo.AddToDB(getResult);
-                                result.Data = _mapper.Map<EventRESPONSE>(resultSend);
-                            }
+                            result.Data = _mapper.Map<EventRESPONSE>(getResult);
+                            
                         }
                     }
                 }
@@ -98,18 +97,19 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var eventByID = await _helper.GetEventByID(eventId);
-            var venueID = eventByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var eventByID = await _helper.GetEventByID(eventId);
+                var venueID = eventByID.VenueId;
+
                 //if invalid input
                 if (_helper.ValidateId(eventId))
                 {
                     if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        var resultSend = await _repo.DeleteEvent(eventId);
+                        var resultSend = await _repo.GetEventByID(eventId);
 
                         if (resultSend != null)
                         {
@@ -139,13 +139,15 @@ namespace TajmautMK.Core.Services.Implementations
             try
             {
 
-                var requestSend = new BaseFilterREQUEST
-                {
-                    ItemsPerPage = request.ItemsPerPage,
-                    PageNumber = request.PageNumber,
-                };
+                //var requestSend = new BaseFilterREQUEST
+                //{
+                //    ItemsPerPage = request.ItemsPerPage,
+                //    PageNumber = request.PageNumber,
+                //};
 
-                var response = _helper.Paginator(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
+                //var response = _helper.Paginator(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
+
+                var response = await _repo.EventFilterTest(request);                
 
                 result.Data = response;
             }
@@ -381,18 +383,19 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<EventRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var eventByID = await _helper.GetEventByID(eventId);
-            var venueID = eventByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var eventByID = await _helper.GetEventByID(eventId);
+                var venueID = eventByID.VenueId;
+
                 //invalid input
                 if (_helper.ValidateId(eventId))
                 {
                     if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                     {
-                        var resultEvent = await _repo.UpdateEvent(request, eventId);
+                        var resultEvent = await _repo.GetEventByID(eventId);
 
                         //if found
                         if (resultEvent != null)

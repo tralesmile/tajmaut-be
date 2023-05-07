@@ -109,12 +109,12 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<ReservationRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var reservationByID = await _repo.GetReservationByID(reservationId);
-            var venueID = reservationByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var reservationByID = await _repo.GetReservationByID(reservationId);
+                var venueID = reservationByID.VenueId;
 
                 //if reservation exists
                 if (await _repo.ReservationExistsID(reservationId))
@@ -186,12 +186,13 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<List<ReservationRESPONSE>> result = new();
-            var currentUserID = _helper.GetMe();
-            var eventbyID = await _helper.GetEventByID(eventId);
-            var venueID = eventbyID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var eventbyID = await _helper.GetEventByID(eventId);
+                var venueID = eventbyID.VenueId;
+
                 //if the id is valid
                 if (_helper.ValidateId(eventId))
                 {
@@ -240,10 +241,11 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<List<ReservationRESPONSE>> result = new();
-            var currentUserID = _helper.GetMe();
 
             try
             {
+                var currentUserID = _helper.GetMe();
+
                 //if restaurantId is valid
                 if (_helper.ValidateId(venueId))
                 {
@@ -345,12 +347,13 @@ namespace TajmautMK.Core.Services.Implementations
         {
 
             ServiceResponse<ReservationRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
-            var reservationByID = await _repo.GetReservationByID(reservationId);
-            var venueID = reservationByID.VenueId;
 
             try
             {
+                var currentUserID = _helper.GetMe();
+                var reservationByID = await _repo.GetReservationByID(reservationId);
+                var venueID = reservationByID.VenueId;
+
                 if (await _helper.CheckManagerVenueRelation(venueID, currentUserID))
                 {
                     if (await _helper.CheckIdEventActivity(reservationByID.EventId))

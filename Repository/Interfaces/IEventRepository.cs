@@ -1,5 +1,6 @@
 ﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 
 namespace TajmautMK.Repository.Interfaces
 {
@@ -35,11 +36,11 @@ namespace TajmautMK.Repository.Interfaces
         Task<List<Event>> GetEventById(int eventId);
 
         /// <summary>
-        /// Deletes an event.
+        /// Get event by ID.
         /// </summary>
-        /// <param name="eventId">The ID of the event to delete.</param>
-        /// <returns>The deleted event.</returns>
-        Task<Event> DeleteEvent(int eventId);
+        /// <param name="eventId">The ID of the event.</param>
+        /// <returns>The event.</returns>
+        Task<Event> GetEventByID(int eventId);
 
         /// <summary>
         /// Deletes an event from the database.
@@ -91,5 +92,19 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="request">Request object containing the filters.</param>
         /// <returns>Returns filtered events.</returns>
         Task<List<Event>> EventFilter(EventFilterREQUEST request);
+
+        /// <summary>
+        /// Filter events.
+        /// </summary>
+        /// <param name="request">Request object containing the filters.</param>
+        /// <returns>Returns filtered events.</returns>
+        Task<FilterRESPONSE<EventGetRESPONSE>> EventFilterTest(EventFilterREQUEST request);
+
+        /// <summary>
+        /// Events sorter.
+        /// </summary>
+        /// <param name="items">The events to sort.</param>
+        /// <returns>List of sorted events.</returns>
+        List<Event> SortEvents(List<Event> items);
     }
 }

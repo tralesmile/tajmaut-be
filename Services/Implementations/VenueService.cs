@@ -37,8 +37,7 @@ namespace TajmautMK.Core.Services.Implementations
 
                         if (getResult != null)
                         {
-                            var resultSend = await _repo.AddVenueToDB(getResult);
-                            result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+                            result.Data = _mapper.Map<VenueRESPONSE>(getResult);
                         }
                     }
                 }
@@ -56,10 +55,11 @@ namespace TajmautMK.Core.Services.Implementations
         public async Task<ServiceResponse<VenueRESPONSE>> DeleteVenue(int venueId)
         { 
          ServiceResponse<VenueRESPONSE> result = new();
-            var currentUserID = _helper.GetMe();
 
             try
             {
+                var currentUserID = _helper.GetMe();
+
                 if (_helper.ValidateId(venueId))
                 {
                     if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
@@ -72,8 +72,7 @@ namespace TajmautMK.Core.Services.Implementations
 
                             if (venue != null)
                             {
-                                var resultSend = await _repo.DeleteVenueDB(venue);
-                                result.Data = _mapper.Map<VenueRESPONSE>(resultSend);
+                                result.Data = _mapper.Map<VenueRESPONSE>(venue);
                             }
                         }
                     }
@@ -177,7 +176,7 @@ namespace TajmautMK.Core.Services.Implementations
                 {
                     if (await _helper.CheckManagerVenueRelation(venueId, currentUserID))
                     {
-                        var updateVenue = await _repo.UpdateVenueAsync(request, venueId);
+                        var updateVenue = await _repo.GetVenueByID(venueId);
 
                         if (updateVenue != null)
                         {
@@ -270,14 +269,16 @@ namespace TajmautMK.Core.Services.Implementations
             try
             {
 
-                var requestSend = new BaseFilterREQUEST 
-                { 
-                    ItemsPerPage= request.ItemsPerPage,
-                    PageNumber= request.PageNumber,
-                };
+                //var requestSend = new BaseFilterREQUEST 
+                //{ 
+                //    ItemsPerPage= request.ItemsPerPage,
+                //    PageNumber= request.PageNumber,
+                //};
 
 
-                var response = _helper.Paginator(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
+                //var response = _helper.Paginator(request, _mapper.Map<List<VenueRESPONSE>>(await _repo.VenuesFilter(request)));
+
+                var response = await _repo.VenuesFilterTest(request);
 
                 result.Data = response;
 

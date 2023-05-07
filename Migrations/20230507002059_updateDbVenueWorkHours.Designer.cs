@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TajmautMK.Data;
 
@@ -11,9 +12,11 @@ using TajmautMK.Data;
 namespace TajmautMK.API.Migrations
 {
     [DbContext(typeof(tajmautDataContext))]
-    partial class tajmautDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230507002059_updateDbVenueWorkHours")]
+    partial class updateDbVenueWorkHours
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

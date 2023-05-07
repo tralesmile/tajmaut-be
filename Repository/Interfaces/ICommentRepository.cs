@@ -22,6 +22,13 @@ namespace TajmautMK.Repository.Interfaces
         Task<List<Comment>> GetAllComments();
 
         /// <summary>
+        /// Retrieves all comments from the database with given venue id
+        /// </summary>
+        /// <param name="id">The id of the venue</param>
+        /// <returns>A list of all comments on that venue</returns>
+        Task<List<Comment>> GetAllCommentsByVenue(int id);
+
+        /// <summary>
         /// Deletes a comment from the database
         /// </summary>
         /// <param name="comment">The comment to be deleted</param>

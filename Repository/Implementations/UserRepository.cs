@@ -27,7 +27,7 @@ namespace TajmautMK.Repository.Implementations
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             //create new user
-            return new User
+            var user = new User
             {
                 Email = request.Email,
                 FirstName = request.FirstName,
@@ -37,6 +37,12 @@ namespace TajmautMK.Repository.Implementations
                 ModifiedAt = DateTime.Now,
                 CreatedAt = DateTime.Now,
             };
+
+            _ctx.Users.Add(user);
+
+            await _ctx.SaveChangesAsync();
+
+            return user;
 
         }
 

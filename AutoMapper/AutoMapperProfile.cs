@@ -17,7 +17,9 @@ namespace TajmautMK.API.AutoMapper
                 .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.Event.Name));
 
 
-            CreateMap<Comment, CommentRESPONSE>();
+            CreateMap<Comment, CommentRESPONSE>()
+                .ForMember(dest => dest.UserFirstName, opt => opt.MapFrom(src => src.User.FirstName))
+                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User.LastName)); 
 
             CreateMap<CategoryEvent, CategoryRESPONSE>();
 
@@ -27,6 +29,15 @@ namespace TajmautMK.API.AutoMapper
 
             CreateMap<Venue, VenueRESPONSE>()
                 .ForMember(dest => dest.VenueType, opt => opt.MapFrom(src => src.VenueType))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => new Location { lat = src.lat, lng = src.lng }))
+                .ForMember(dest => dest.GalleryImages, opt => opt.MapFrom(src => new GalleryImages 
+                { 
+                    GalleryImage1= src.GalleryImage1,
+                    GalleryImage2= src.GalleryImage2,
+                    GalleryImage3= src.GalleryImage3,
+                    GalleryImage4= src.GalleryImage4,
+                    GalleryImage5= src.GalleryImage5,
+                }))
                 .ForMember(dest => dest.VenueCity, opt => opt.MapFrom(src => src.Venue_City));
 
             CreateMap<Event,EventGetRESPONSE>()
@@ -45,3 +56,4 @@ namespace TajmautMK.API.AutoMapper
         }
     }
 }
+

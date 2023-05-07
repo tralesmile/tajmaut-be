@@ -1,5 +1,6 @@
 ﻿using TajmautMK.Common.Models.EntityClasses;
 using TajmautMK.Common.Models.ModelsREQUEST;
+using TajmautMK.Common.Models.ModelsRESPONSE;
 
 namespace TajmautMK.Repository.Interfaces
 {
@@ -36,12 +37,11 @@ namespace TajmautMK.Repository.Interfaces
         Task<Venue> CreateVenueAsync(VenuePostREQUEST request);
 
         /// <summary>
-        /// Updates an existing venue.
+        /// Get venue by ID.
         /// </summary>
-        /// <param name="request">The request containing updated information about the venue.</param>
         /// <param name="venueId">The ID of the venue to update.</param>
-        /// <returns>The updated venue.</returns>
-        Task<Venue> UpdateVenueAsync(VenuePutREQUEST request, int venueId);
+        /// <returns>The venue.</returns>
+        Task<Venue> GetVenueByID(int venueId);
 
         /// <summary>
         /// Saves changes to a venue.
@@ -133,6 +133,13 @@ namespace TajmautMK.Repository.Interfaces
         /// <param name="request">Request object containing the filters.</param>
         /// <returns>Returns filtered venues.</returns>
         Task<List<Venue>> VenuesFilter(VenueFilterREQUEST request);
+
+        /// <summary>
+        /// Filter venues.
+        /// </summary>
+        /// <param name="request">Request object containing the filters.</param>
+        /// <returns>Returns filtered venues.</returns>
+        Task<FilterRESPONSE<VenueRESPONSE>> VenuesFilterTest(VenueFilterREQUEST request);
 
         /// <summary>
         /// Search for the specified manager ID.

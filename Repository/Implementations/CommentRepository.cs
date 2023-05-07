@@ -63,6 +63,18 @@ namespace TajmautMK.Repository.Implementations
             throw new CustomError(404, $"No comments found");
         }
 
+        public async Task<List<Comment>> GetAllCommentsByVenue(int id)
+        {
+            var check = await _ctx.Comments
+                .Include(x=>x.User)
+                .Where(x=> x.VenueId== id).ToListAsync();
+            if(check.Count()>0)
+            {
+                return check;
+            }
+            throw new CustomError(404, $"This venue has no comments");
+        }
+
         //update comment
         public async Task<Comment> UpdateComment(Comment comment, CommentREQUEST request)
         {

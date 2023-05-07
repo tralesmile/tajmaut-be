@@ -28,5 +28,11 @@ namespace TajmautMK.Common.Models.ModelsRESPONSE
 
         public Venue_City VenueCity { get; set; }
 
+        public string WorkingHours { get; set; }
+
+        public Location Location { get; set; }
+
+        public GalleryImages? GalleryImages { get; set; }
+
     }
 }
