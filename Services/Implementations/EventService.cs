@@ -139,15 +139,15 @@ namespace TajmautMK.Core.Services.Implementations
             try
             {
 
-                //var requestSend = new BaseFilterREQUEST
-                //{
-                //    ItemsPerPage = request.ItemsPerPage,
-                //    PageNumber = request.PageNumber,
-                //};
+                var requestSend = new BaseFilterREQUEST
+                {
+                    ItemsPerPage = request.ItemsPerPage,
+                    PageNumber = request.PageNumber,
+                };
 
-                //var response = _helper.Paginator(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
+                var response = _helper.Paginator(request, _mapper.Map<List<EventGetRESPONSE>>(SortEvents(await _repo.EventFilter(request))));
 
-                var response = await _repo.EventFilterTest(request);                
+                //var response = await _repo.EventFilterTest(request);                
 
                 result.Data = response;
             }
