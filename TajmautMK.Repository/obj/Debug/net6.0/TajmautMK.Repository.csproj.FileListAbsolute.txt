@@ -36,3 +36,22 @@ C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Repository\obj\Debu
 C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.pdb
 C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.genruntimeconfig.cache
 C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Repository\obj\Debug\net6.0\ref\TajmautMK.Repository.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Repository.deps.json
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Repository.runtimeconfig.json
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Repository.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Repository.pdb
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Common.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Data.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Common.pdb
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\bin\Debug\net6.0\TajmautMK.Data.pdb
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.csproj.AssemblyReference.cache
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.AssemblyInfoInputs.cache
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.AssemblyInfo.cs
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.csproj.CoreCompileInputs.cache
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.csproj.CopyComplete
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\refint\TajmautMK.Repository.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.pdb
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\TajmautMK.Repository.genruntimeconfig.cache
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Repository\obj\Debug\net6.0\ref\TajmautMK.Repository.dll

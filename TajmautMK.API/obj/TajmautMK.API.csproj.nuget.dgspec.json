@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.API\\TajmautMK.API.csproj": {}
+    "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.API\\TajmautMK.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.API\\TajmautMK.API.csproj": {
+    "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.API\\TajmautMK.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.API\\TajmautMK.API.csproj",
+        "projectUniqueName": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.API\\TajmautMK.API.csproj",
         "projectName": "TajmautMK.API",
-        "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.API\\TajmautMK.API.csproj",
-        "packagesPath": "C:\\Users\\Trajche.Smilevski\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.API\\obj\\",
+        "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.API\\TajmautMK.API.csproj",
+        "packagesPath": "C:\\Users\\TT\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Trajche.Smilevski\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TT\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,24 +26,23 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj"
               },
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Core\\TajmautMK.Core.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Core\\TajmautMK.Core.csproj"
               },
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Data\\TajmautMK.Data.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Data\\TajmautMK.Data.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Data\\TajmautMK.Data.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Data\\TajmautMK.Data.csproj"
               },
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Repository\\TajmautMK.Repository.csproj"
               }
             }
           }
@@ -120,24 +119,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj": {
+    "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj",
+        "projectUniqueName": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj",
         "projectName": "TajmautMK.Common",
-        "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj",
-        "packagesPath": "C:\\Users\\Trajche.Smilevski\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\obj\\",
+        "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj",
+        "packagesPath": "C:\\Users\\TT\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Trajche.Smilevski\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TT\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -146,7 +145,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -208,24 +206,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj": {
+    "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Core\\TajmautMK.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj",
+        "projectUniqueName": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Core\\TajmautMK.Core.csproj",
         "projectName": "TajmautMK.Core",
-        "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj",
-        "packagesPath": "C:\\Users\\Trajche.Smilevski\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\obj\\",
+        "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Core\\TajmautMK.Core.csproj",
+        "packagesPath": "C:\\Users\\TT\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Trajche.Smilevski\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TT\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -234,18 +232,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj"
               },
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Repository\\TajmautMK.Repository.csproj"
               }
             }
           }
@@ -307,24 +304,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Data\\TajmautMK.Data.csproj": {
+    "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Data\\TajmautMK.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Data\\TajmautMK.Data.csproj",
+        "projectUniqueName": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Data\\TajmautMK.Data.csproj",
         "projectName": "TajmautMK.Data",
-        "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Data\\TajmautMK.Data.csproj",
-        "packagesPath": "C:\\Users\\Trajche.Smilevski\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Data\\obj\\",
+        "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Data\\TajmautMK.Data.csproj",
+        "packagesPath": "C:\\Users\\TT\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Trajche.Smilevski\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TT\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -333,15 +330,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj"
               }
             }
           }
@@ -395,24 +391,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
+    "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj",
+        "projectUniqueName": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Repository\\TajmautMK.Repository.csproj",
         "projectName": "TajmautMK.Repository",
-        "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj",
-        "packagesPath": "C:\\Users\\Trajche.Smilevski\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\obj\\",
+        "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Repository\\TajmautMK.Repository.csproj",
+        "packagesPath": "C:\\Users\\TT\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Repository\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Trajche.Smilevski\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TT\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -421,18 +417,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Common\\TajmautMK.Common.csproj"
               },
-              "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Data\\TajmautMK.Data.csproj": {
-                "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Data\\TajmautMK.Data.csproj"
+              "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Data\\TajmautMK.Data.csproj": {
+                "projectPath": "C:\\Users\\TT\\source\\repos\\tajmaut test\\TajmautMK.Data\\TajmautMK.Data.csproj"
               }
             }
           }
@@ -474,7 +469,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

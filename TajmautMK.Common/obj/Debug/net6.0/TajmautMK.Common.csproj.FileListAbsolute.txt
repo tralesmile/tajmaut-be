@@ -26,3 +26,17 @@ C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\ne
 C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.pdb
 C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.genruntimeconfig.cache
 C:\Users\Trajche.Smilevski\Source\Repos\tajmaut-be\TajmautMK.Common\obj\Debug\net6.0\ref\TajmautMK.Common.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.deps.json
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.runtimeconfig.json
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\bin\Debug\net6.0\TajmautMK.Common.pdb
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.csproj.AssemblyReference.cache
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.AssemblyInfoInputs.cache
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.AssemblyInfo.cs
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.csproj.CoreCompileInputs.cache
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\refint\TajmautMK.Common.dll
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.pdb
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\TajmautMK.Common.genruntimeconfig.cache
+C:\Users\TT\source\repos\tajmaut test\TajmautMK.Common\obj\Debug\net6.0\ref\TajmautMK.Common.dll
