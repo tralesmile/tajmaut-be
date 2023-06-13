@@ -3905,9 +3905,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj",
+      "projectUniqueName": "C:\\Users\\Trajche.Smilevski\\source\\repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj",
       "projectName": "TajmautMK.Core",
-      "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj",
+      "projectPath": "C:\\Users\\Trajche.Smilevski\\source\\repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj",
       "packagesPath": "C:\\Users\\Trajche.Smilevski\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\obj\\",
       "projectStyle": "PackageReference",
@@ -3931,11 +3931,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj": {
-              "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj"
+            "C:\\Users\\Trajche.Smilevski\\source\\repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj": {
+              "projectPath": "C:\\Users\\Trajche.Smilevski\\source\\repos\\tajmaut-be\\TajmautMK.Common\\TajmautMK.Common.csproj"
             },
-            "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
-              "projectPath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj"
+            "C:\\Users\\Trajche.Smilevski\\source\\repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj": {
+              "projectPath": "C:\\Users\\Trajche.Smilevski\\source\\repos\\tajmaut-be\\TajmautMK.Repository\\TajmautMK.Repository.csproj"
             }
           }
         }

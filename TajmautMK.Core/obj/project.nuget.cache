@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CKw/gR0GN8/yHfom5w3aacagHe0Jt4PifIxfRZ7ZiYThJwQtDi8xnBJ4RT8jxijnrweXSMtPrlfA+GgzJnKvlg==",
+  "dgSpecHash": "CDGNnfcCI0BG+75csX+oNYpx9CNkhjRkXuQobgHLpfa6ydK4vf9RGwo+LgnnDEvPIUX83hb4hqcurLCjNljQjA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Trajche.Smilevski\\Source\\Repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj",
+  "projectFilePath": "C:\\Users\\Trajche.Smilevski\\source\\repos\\tajmaut-be\\TajmautMK.Core\\TajmautMK.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Trajche.Smilevski\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\Trajche.Smilevski\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
